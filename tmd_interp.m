@@ -48,7 +48,7 @@ switch lower(variable)
       error(['Unrecognized variable ',variable])
 end
 
-%% Convert transports to velocities if requested 
+%% Convert transports to velocities if requested
 
 % Lowercase first letter indicates velocity: 
 if ismember(variable(1),{'u','v'})

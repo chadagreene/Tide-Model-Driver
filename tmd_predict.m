@@ -35,6 +35,8 @@ end
 % Check constituent lists: 
 solveall = true; % solve all constituents by default. 
 conList = strsplit(ncreadatt(filename,'cons','long_name')); 
+%char(pad(conList,4,'right'))
+
 if nargin>5
    tmp = strncmpi(varargin,'constituents',3); 
    if any(tmp)
@@ -47,51 +49,55 @@ end
 if isscalar(lat)
     solntype = 'time series'; 
 else
-    if isscalar(t)
-        solntype = 'map'; 
-    else
-        solntype = 'drift track'; 
-        assert(isvector(t),'Input error: Conditions for time series, drift track, or map solution are not met. Check dimensions of lat, lon, and t.')
-        assert(isvector(lat),'Input error: Conditions for time series, drift track, or map solution are not met. Check dimensions of lat, lon, and t.')
-    end
+   if isequal(size(lat),size(lon),size(t)) & isvector(t)
+      solntype = 'drift track'; 
+   else
+      solntype = 'map'; 
+   end
 end
-
+assert(isequal(size(lat),size(lon)),'Inputs lat and lon must have the same dimensions.') 
+   
 %%
 
 if isdatetime(t)
    t = datenum(t); 
 end
 
-%% Get model parameters and prepare inputs: 
+% Columnate input coordinates for consistent behavior: 
+InputGridSize = size(lat); 
+lat = reshape(lat,[],1); 
+lon = reshape(lon,[],1); 
 
-% Initialize TS variable: 
-z=[];
+%InputTimeSize = size(t); 
+t = reshape(t,[],1); 
 
-% Columnate inputs for consistent behavior: 
-switch solntype
-    case 'time series'
-        t = t(:); 
-        
-    case 'drift track'
-        t = t(:); 
-        lat = lat(:); 
-        lon = lon(:); 
-        
-    case 'map' 
-        % No columnation necessary. 
-end
+% % Initialize TS variable: 
+% z=[];
 
 %% Solve
 
-[astrol_s,astrol_h,astrol_p,astrol_N] = tmd_astrol(t);
 
 if solveall
-   hc = squeeze(tmd_interp(filename,ptype,lat,lon));
+   hc = tmd_interp(filename,ptype,lat,lon);
 else
-   hc = squeeze(tmd_interp(filename,ptype,lat,lon,'constituents',conList));
+   hc = tmd_interp(filename,ptype,lat,lon,'constituents',conList);
 end
-   
-NCons = length(hc); 
+
+% Switch dimensions bc we've already forced dim2 to be singleton by colunating lat and lon: 
+% switch solntype
+%    case 'map'
+%       hc = permute(hc,[3 2 1]); % Dimensions are now M latpoints by Ncons
+%    otherwise
+%       hc = permute(hc,[3 1 2]); % Dimensions are now M latpoints by Ncons
+% end
+%    
+hc = permute(hc,[3 1 2]);
+
+
+[astrol_s,astrol_h,astrol_p,astrol_N] = tmd_astrol(t);
+
+% If drift track or time series: 
+d_minor = tmd_InferMinor(hc,conList,t,astrol_s,astrol_h,astrol_p,astrol_N); 
 
 if solveall % solve all constituents: 
     switch solntype 
@@ -106,7 +112,7 @@ if solveall % solve all constituents:
             
         case 'map' 
             hci = NaN(size(hc,2),size(hc,3),size(hc,1)); 
-            for k=1:NCons
+            for k=1:length(t) 
                 hci(:,:,k)=hc(k,:,:);
             end
             z=tmd_harp(t,hci,conList);
@@ -146,5 +152,9 @@ else % This is if Cid is defined by user:
     end
    
 end
+
+%% Clean up 
+
+z = reshape(z,InputGridSize(1),InputGridSize(2),[]); 
 
 end
