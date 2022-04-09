@@ -1,4 +1,4 @@
-function hhat = tmd_harp1(t,hc,constituents)
+function hhat = tmd_harp(t,hc,constituents,astrol_p,astrol_N)
 % harp1 predicts tidal time series using harmonic constants. This is the time series version of harp. 
 % Nodal corrections are included. 
 % 
@@ -27,48 +27,20 @@ function hhat = tmd_harp1(t,hc,constituents)
 % 
 % See also harp, nodal, and tmd_tide_pred. 
 
+% if isdatetime(t)
+%    t = datenum(t); 
+% end
 
-if isrow(t)
-   t = t';
-end
+time_s = (t - datenum(1992,1,1))*86400; % time (days since Jan 1, 1992) is converted to seconds by multiplying by 86400 s/yr. 
 
-if isdatetime(t)
-   t = datenum(t); 
-end
-
-t_1992 = t - datenum(1992,1,1);
-time_s = t_1992*86400; % time (days since Jan 1, 1992) is converted to seconds by multiplying by 86400 s/yr. 
-
-nc = length(constituents); % number of constituents. 
-
-[ispec,~,ph,omega,~,~] = constit(con);
+[ispec,~,ph,omega,~,~] = tmd_constit(constituents);
 
 igood=ispec~=-1;
-con1=con(igood,:);
 
-[pu1,pf1] = tmd_nodal(constituents,astrol_p,astrol_N); % time (days since Jan 1, 1992) is converted to MJD by adding 48622
+[pu,pf] = tmd_nodal(constituents(igood),astrol_p,astrol_N); % time (days since Jan 1, 1992) is converted to MJD by adding 48622
 
-% phase variables: 
-L = length(t_1992);
-pu=zeros(L,nc);
-pf=ones(L,nc);
-pu(:,igood)=pu1; 
-pf(:,igood)=pf1;
-
-hhat=zeros(size(time_s));
-
-hc_real = real(hc); 
-hc_imag = imag(hc); 
-
-for k=1:nc
-   
-   % Calculate just the frequency and phase so we won't have to calculate it twice: 
-   tmp = omega(k)*time_s + ph(k)+pu(:,k); 
-   
-   arg = pf(:,k).*(hc_real(k).*cos(tmp) - hc_imag(k).*sin(tmp));
-   hhat=hhat+arg;
-end
-
+tmp = omega(igood)'.*time_s + ph(igood)' + pu; 
+hhat = sum(pf.*(real(hc(igood,:))'.*cos(tmp) - imag(hc(igood,:))'.*sin(tmp)),2);
 
 
 end

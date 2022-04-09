@@ -17,9 +17,16 @@ function z = tmd_predict(filename,lat,lon,t,ptype,varargin)
 % 
 
 narginchk(4,Inf) 
-assert(~isnumeric(filename),'Model filename must be a string.') 
+assert(exist(filename,'file'),['Cannot find model file ',filename,'. Check the file name and make sure it is in the Matlab path or specify the full path to the .nc file.'] ) 
 assert(isequal(size(lat),size(lon)),'Dimensions of lat and lon must agree.') 
 
+% Set defaults: 
+InferMinorConstituents = true; 
+if nargin<5
+   ptype = 'h'; 
+end
+conList = strsplit(ncreadatt(filename,'cons','long_name')); 
+MapSolution = false; 
 
 % Check ptype and define 'z' as default if user has not defined ptype: 
 if nargin>4 
@@ -28,34 +35,25 @@ if nargin>4
     if strcmpi(ptype,'z')
        ptype='h'; % allows z or h as input. 
     end
-else 
-    ptype = 'h'; 
+
 end
 
 % Check constituent lists: 
-solveall = true; % solve all constituents by default. 
-conList = strsplit(ncreadatt(filename,'cons','long_name')); 
 %char(pad(conList,4,'right'))
 
 if nargin>5
    tmp = strncmpi(varargin,'constituents',3); 
    if any(tmp)
       conList = varargin{find(tmp)+1}; 
-      solveall = false; 
+      InferMinorConstituents = false; 
+      d_minor = 0; % minor constituent correction. 
    end
 end
    
 % Parse solution type: 
-if isscalar(lat)
-    solntype = 'time series'; 
-else
-   if isequal(size(lat),size(lon),size(t)) & isvector(t)
-      solntype = 'drift track'; 
-   else
-      solntype = 'map'; 
-   end
+if numel(lat)>1 & ~isequal(size(lat),size(lon),size(t))
+   MapSolution = true; 
 end
-assert(isequal(size(lat),size(lon)),'Inputs lat and lon must have the same dimensions.') 
    
 %%
 
@@ -68,93 +66,59 @@ InputGridSize = size(lat);
 lat = reshape(lat,[],1); 
 lon = reshape(lon,[],1); 
 
-%InputTimeSize = size(t); 
+InputTimeSize = size(t); 
 t = reshape(t,[],1); 
 
-% % Initialize TS variable: 
-% z=[];
+%% Load data
 
-%% Solve
+hc = tmd_interp(filename,ptype,lat,lon,'constituents',conList);
 
+hc = permute(hc,[3 1 2])/1000;
 
-if solveall
-   hc = tmd_interp(filename,ptype,lat,lon);
-else
-   hc = tmd_interp(filename,ptype,lat,lon,'constituents',conList);
-end
+hc = complex(real(hc),-imag(hc)); 
 
-% Switch dimensions bc we've already forced dim2 to be singleton by colunating lat and lon: 
-% switch solntype
-%    case 'map'
-%       hc = permute(hc,[3 2 1]); % Dimensions are now M latpoints by Ncons
-%    otherwise
-%       hc = permute(hc,[3 1 2]); % Dimensions are now M latpoints by Ncons
-% end
-%    
-hc = permute(hc,[3 1 2]);
-
+%%
 
 [astrol_s,astrol_h,astrol_p,astrol_N] = tmd_astrol(t);
 
-% If drift track or time series: 
-d_minor = tmd_InferMinor(hc,conList,t,astrol_s,astrol_h,astrol_p,astrol_N); 
-
-if solveall % solve all constituents: 
-    switch solntype 
-        case 'time series' 
-            z = tmd_harp1(t,hc,conList) + tmd_InferMinor(hc,conList,t);
-  
-        case 'drift track'
-            z = NaN(1,numel(t));  
-            for k=1:length(t)
-                z(k) = tmd_harp1(t(k),hc(:,k),conList) + tmd_InferMinor(hc(:,k),conList,t(k));
-            end
-            
-        case 'map' 
-            hci = NaN(size(hc,2),size(hc,3),size(hc,1)); 
-            for k=1:length(t) 
-                hci(:,:,k)=hc(k,:,:);
-            end
-            z=tmd_harp(t,hci,conList);
-            dh=tmd_InferMinor(hc,conList,t);
-            if ndims(hci)~=ndims(hc)
-                dh=dh';
-            end
-            if ~isequal(size(z),size(dh)) 
-               dh = dh'; 
-            end
-            z=z+dh;
-    end
- 
-else % This is if Cid is defined by user: 
-
-
-    switch solntype
-        case 'time series'
-            z=tmd_harp1(t,hc,conList(Cid,:));
-
-        case 'drift track' 
-            z = NaN(1,numel(t));  
-            for k=1:length(t)
-                z(k)=tmd_harp1(t(k),hc(:,k),conList(Cid,:));
-            end
-
-        case 'map'
-            if length(Cid)>1
-                hci = NaN(size(hc,2),size(hc,3),size(hc,1)); 
-                for k=1:length(Cid)
-                    hci(:,:,k)=hc(k,:,:);
-                end
-            else
-                hci=hc;
-            end
-            z=tmd_harp(t,hci,conList(Cid,:));
-    end
+if MapSolution
    
+   % Preallocate z: 
+   z = nan(numel(lat),numel(t));
+   
+   isf = all(isfinite(hc),1); % continent or out-of-model-domain values are nan.  
+   
+   % Solve for each timestep:
+   for k = 1:length(t)
+      
+      % Major constiuents: 
+      hhat = tmd_harp(t(k),hc(:,isf),conList,astrol_p(k),astrol_N(k));
+
+      % Minor constiuents:
+      if InferMinorConstituents
+         d_minor = tmd_InferMinor(hc(:,isf),conList,t(k),astrol_s(k),astrol_h(k),astrol_p(k),astrol_N(k)); 
+      end
+   
+      z(isf,k) = d_minor + hhat; 
+   end
+
+else % Single-location time series or drift track  
+
+   % Major constituents: 
+   hhat = tmd_harp1(t,hc,conList,astrol_p,astrol_N);
+   
+   if InferMinorConstituents
+      d_minor = tmd_InferMinor(hc,conList,t,astrol_s,astrol_h,astrol_p,astrol_N); 
+   end
+   z = d_minor + hhat; 
 end
 
 %% Clean up 
 
-z = reshape(z,InputGridSize(1),InputGridSize(2),[]); 
+if isequal(InputGridSize,[1 1])
+   z = reshape(z,InputTimeSize); 
+else
+   z = reshape(z,InputGridSize(1),InputGridSize(2),[]); 
+end
 
 end

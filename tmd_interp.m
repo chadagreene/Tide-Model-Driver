@@ -85,7 +85,7 @@ end
  
 if ~ismember(variable,{'mask','flexure'})
    mask = tmd_data(filename,'mask','bounds',[xi(:) yi(:)]); 
-   maski = interp2(x,y,mask,xi,yi,'nearest'); 
+   maski = interp2(x,y,uint8(~mask),xi,yi,'nearest')==0;
    for k = 1:size(zi,3)
       tmp = zi(:,:,k); 
       tmp(maski==0) = NaN; 
