@@ -12,34 +12,35 @@ function [Z,x_or_lon,y_or_lat] = tmd_data(filename,variable,varargin)
 % 
 % [Z,x_or_lon,y_or_lat] = tmd_data(filename,variable)
 % 
-%  h 
-%  hRe
-%  hIm
-%  hAm
-%  hPh
-%  u 
-%  uRe
-%  uIm
-%  uAm
-%  uPh
-%  U 
-%  URe
-%  UIm
-%  UAm
-%  UPh
-%  v 
-%  vRe
-%  vIm
-%  vAm
-%  vPh
-%  V 
-%  VRe
-%  VIm
-%  VAm
-%  VPh
-%  wct
-%  mask
-%  flexure 
+% 
+%  * 'h'   complex tidal height (m)  
+%  * 'hRe' real part of tidal height
+%  * 'hIm' imaginary part of tidal height 
+%  * 'hAm' amplitude of tidal height
+%  * 'hPh' phase of tidal height
+%  * 'u'   complex zonal velocity (m/s) 
+%  * 'uRe' real part of zonal velocity 
+%  * 'uIm' imaginary part of zonal velocity 
+%  * 'uAm' amplitude of zonal velocity
+%  * 'uPh' phase of zonal velocity
+%  * 'U'   complex zonal transport (m^2/s) 
+%  * 'URe  real part of zonal transport
+%  * 'UIm' imaginary part of zonal transport
+%  * 'UAm' amplitude of zonal transport
+%  * 'UPh' phase of zonal transport 
+%  * 'v'   complex meridional velocity (m/s) 
+%  * 'vRe' real part of meridional velocity 
+%  * 'vIm' imaginary part of meridional velocity
+%  * 'vAm' amplitude of meridional velocity
+%  * 'vPh' phase of meridional velocity 
+%  * 'V'   complex meridional transport (m^2/s)
+%  * 'VRe' real part of meridional transport 
+%  * 'VIm' imaginary part of meridional transport
+%  * 'VAm' amplitude of meridional transport
+%  * 'VPh' phase of meridional transport
+%  * 'wct' water column thickness (m) 
+%  * 'mask' binary land/ocean mask
+%  * 'flexure' ice shelf flexure coefficient from a linear elastic model applied to BedMachine ice thickness (can slightly exceed 1). 
 %
 % [...] = tmd_data(...,'constituents',conList)
 %
@@ -67,6 +68,9 @@ geo = false; % output geographic coordinates
 stride = Inf; 
 NCons = 1; 
 bounds = [[-Inf;Inf] [-Inf;Inf]];
+
+assert(contains(filename,'.nc'),'Input filename must end in .nc.')
+assert(exist(filename,'file'),['Cannot find ',filename,'. Check the path and try again.'])
 
 if nargin>2 
    
@@ -180,7 +184,7 @@ for k = 1:NCons
 end
 
 % Scale variables to SI meters, m/s 
-if ismember(lower(variable),{'h','hre','him','ham'});
+if ismember(lower(variable),{'h','hre','him','ham'})
    Z = Z/1000; 
 end
 
