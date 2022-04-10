@@ -40,7 +40,7 @@ igood=ispec~=-1;
 [pu,pf] = tmd_nodal(constituents(igood),astrol_p,astrol_N); % time (days since Jan 1, 1992) is converted to MJD by adding 48622
 
 tmp = omega(igood)'.*time_s + ph(igood)' + pu; 
-hhat = sum(pf.*(real(hc(igood,:))'.*cos(tmp) - imag(hc(igood,:))'.*sin(tmp)),2);
+hhat = sum(pf.*(real(hc(igood,:))'.*cos(tmp) + imag(hc(igood,:))'.*sin(tmp)),2);
 
 
 end

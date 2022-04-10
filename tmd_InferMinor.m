@@ -150,7 +150,7 @@ u(17,:) = atan2(-0.441*sinn, 1.0 + 0.441*cosn)/rad;
 %% Sum over all tides: 
 
 tmp = (arg+u)*rad; % This tmp variable prevents performing the same operation twice on the next line.
-dh = permute(sum(real(zmin).*f.*cos(tmp) - imag(zmin).*f.*sin(tmp)),[2 3 1]); 
+dh = permute(sum(real(zmin).*f.*cos(tmp) + imag(zmin).*f.*sin(tmp)),[2 3 1]); 
 
 end
 

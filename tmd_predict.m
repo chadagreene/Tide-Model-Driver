@@ -22,11 +22,12 @@ assert(isequal(size(lat),size(lon)),'Dimensions of lat and lon must agree.')
 
 % Set defaults: 
 InferMinorConstituents = true; 
+MapSolution = false; 
+flexure = false; % ice shelf flexure zone 
+conList = strsplit(ncreadatt(filename,'cons','long_name')); 
 if nargin<5
    ptype = 'h'; 
 end
-conList = strsplit(ncreadatt(filename,'cons','long_name')); 
-MapSolution = false; 
 
 % Check ptype and define 'z' as default if user has not defined ptype: 
 if nargin>4 
@@ -38,15 +39,16 @@ if nargin>4
 
 end
 
-% Check constituent lists: 
-%char(pad(conList,4,'right'))
-
 if nargin>5
    tmp = strncmpi(varargin,'constituents',3); 
    if any(tmp)
       conList = varargin{find(tmp)+1}; 
       InferMinorConstituents = false; 
       d_minor = 0; % minor constituent correction. 
+   end
+   
+   if any(strncmpi(varargin,'flexure',4)) 
+      flexure = true; 
    end
 end
    
@@ -72,10 +74,11 @@ t = reshape(t,[],1);
 %% Load data
 
 hc = tmd_interp(filename,ptype,lat,lon,'constituents',conList);
+hc = permute(hc,[3 1 2]); % puts constituents in first column. 
 
-hc = permute(hc,[3 1 2])/1000;
-
-hc = complex(real(hc),-imag(hc)); 
+if flexure 
+   flex = tmd_interp(filename,'flexure',lat,lon); 
+end
 
 %%
 
@@ -105,12 +108,17 @@ if MapSolution
 else % Single-location time series or drift track  
 
    % Major constituents: 
-   hhat = tmd_harp1(t,hc,conList,astrol_p,astrol_N);
+   hhat = tmd_harp(t,hc,conList,astrol_p,astrol_N);
    
    if InferMinorConstituents
       d_minor = tmd_InferMinor(hc,conList,t,astrol_s,astrol_h,astrol_p,astrol_N); 
    end
    z = d_minor + hhat; 
+end
+
+% Account for ice shelf flexure in the grounding zone: 
+if flexure 
+   z = z.*flex; 
 end
 
 %% Clean up 

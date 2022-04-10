@@ -4,34 +4,22 @@ addpath(genpath('/Users/cgreene/Downloads/TMD3.00_alpha'))
 addpath(genpath('/Users/cgreene/Downloads/CATS2008'))
 
 
-fn = '/Users/cgreene/Documents/GitHub/Tide-Model-Driver/doc/h189.nc'; 
+% fn = '/Users/cgreene/Documents/GitHub/Tide-Model-Driver/doc/h127.nc'; bad
+fn = '/Users/cgreene/Documents/GitHub/Tide-Model-Driver/doc/h189.nc'; % good
+fn = '/Users/cgreene/Documents/GitHub/Tide-Model-Driver/doc/h700.nc'; 
 lat = ncread(fn,'lat');
 lon = ncread(fn,'lon');
 t = ncdateread(fn,'time');
 sl = ncread(fn,'sea_level')/1000; 
-sl = sl-mean(sl,'omitnan'); 
 
 plot(t,sl)
 
-%%
-
-
-ptype = 'h'; 
-filename = 'CATS2022_02-21.nc';
-
-%%
-
-
-%sl_old = tmd_tide_pred('Model_CATS2008',datenum(t),lat*ones(size(t)),lon*ones(size(t)),'z'); 
 tic
 sl_old = tmd_tide_pred('Model_CATS2008',datenum(t),lat,lon,'z'); 
 toc 
 
 tic
-profile clear 
-profile on
 sl_new = tmd_predict('CATS2022_02-21.nc',lat,lon,t);
-profile viewer
 toc
 
 hold on
@@ -66,7 +54,7 @@ plot(t,sl_new2)
 ptype = 'h'; 
 filename = 'CATS2022_02-21.nc';
 
-[lat,lon] = psgrid('south pole',5000,2); 
+[lat,lon] = psgrid('amundsen sea',900,1); 
 
 t = datenum(1984,5,27,2,17,0); 
 
@@ -79,21 +67,34 @@ toc % 21 sec
 
 %
 tic
-z = tmd_predict('CATS2022_02-21.nc',lat,lon,t); 
+z = tmd_predict('CATS2022_02-21.nc',lat,lon,t,'h','flexure'); 
 toc
 
 %%
+
+mx = max(abs([sl_old(:);z(:)])); 
 
 figure
 subplot(1,2,1)
 pcolorps(lat,lon,sl_old)
 colorbar
+axis image off
 bedmachine
+ax(1) = gca; 
+caxis([-1 1]*mx)
+cmocean bal
+shading interp
 
 subplot(1,2,2)
 pcolorps(lat,lon,z)
 colorbar
+axis image off
 bedmachine
+ax(2) = gca; 
+linkaxes(ax,'xy')
+caxis([-1 1]*mx)
+cmocean bal
+shading interp
 
 %%
 

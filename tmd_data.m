@@ -141,17 +141,17 @@ for k = 1:NCons
          Z = logical(permute(ncread(filename,variable,[ci(1) ri(1)],[numel(ci) numel(ri)]),[2 1]));
          
       case {'flexure','wct'}
-         Z = double(permute(ncread(filename,variable,[ci(1) ri(1)],[numel(ci) numel(ri)]),[2 1]));
+         Z = double(permute(ncread(filename,variable,[ci(1) ri(1)],[numel(ci) numel(ri)]),[2 1]))/100;
 
       case {'hre','him','ure','uim','vre','vim'}
          Z(:,:,placInd) = double(permute(ncread(filename,variable,[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]));
 
       case 'h'
          Z(:,:,placInd) = complex(double(permute(ncread(filename,'hRe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])),...
-                                  double(permute(ncread(filename,'hIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])))/1000;
+                                  double(permute(ncread(filename,'hIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])));
       case 'ham' 
          Z(:,:,placInd) = abs(complex(double(permute(ncread(filename,'hRe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])),...
-                                      double(permute(ncread(filename,'hIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]))))/1000;
+                                      double(permute(ncread(filename,'hIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]))));
       case 'hph'
           Z(:,:,placInd) = -angle(complex(double(permute(ncread(filename,'hRe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])),...
                                           double(permute(ncread(filename,'hIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]))));
@@ -177,6 +177,11 @@ for k = 1:NCons
          error(['The requested variable ',variable,' is not a variable in file ',filename,'.'])
    end
    
+end
+
+% Scale variables to SI meters, m/s 
+if ismember(lower(variable),{'h','hre','him','ham'});
+   Z = Z/1000; 
 end
 
 if ismember(variable,{'uRe','uIm','u','uAm','uPh','vRe','vIm','v','vAm','vPh'})
