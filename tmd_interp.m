@@ -24,7 +24,7 @@ function zi = tmd_interp(filename,variable,lati,loni,varargin)
 %  * 'uAm' amplitude of zonal velocity
 %  * 'uPh' phase of zonal velocity
 %  * 'U'   complex zonal transport (m^2/s) 
-%  * 'URe  real part of zonal transport
+%  * 'URe' real part of zonal transport
 %  * 'UIm' imaginary part of zonal transport
 %  * 'UAm' amplitude of zonal transport
 %  * 'UPh' phase of zonal transport 
@@ -75,7 +75,7 @@ if nargin>4
       if isnan(MaskingMethod)
          MaskingMethod = 'nan'; % making it a string for later. 
       end
-      assert(ismember(MaskingMethod,{'nan','flex','flexure','unmask'},'Coastal masking method can only be NaN, ''flexure'', or ''unmask''. Try again.')
+      assert(ismember(MaskingMethod,{'nan','flex','flexure','unmask'}),'Coastal masking method can only be NaN, ''flexure'', or ''unmask''. Try again.')
       tmp(find(tmp)+1) = true; 
       varargin = varargin(~tmp); 
    end
@@ -146,9 +146,9 @@ switch lower(variable)
 
 end
 
-%% NaN out land areas 
+%% Mask out land areas 
  
-if ~ismember(variable,{'mask','flexure'})
+if ~ismember(variable,{'mask','flexure','wct'})
    switch lower(MaskingMethod)
       case 'nan' % default 
          mask = tmd_data(filename,'mask','bounds',[xi(:) yi(:)]); 

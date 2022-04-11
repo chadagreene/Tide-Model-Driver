@@ -4,9 +4,9 @@ addpath(genpath('/Users/cgreene/Downloads/TMD3.00_alpha'))
 addpath(genpath('/Users/cgreene/Downloads/CATS2008'))
 
 
-% fn = '/Users/cgreene/Documents/GitHub/Tide-Model-Driver/doc/h127.nc'; bad
-fn = '/Users/cgreene/Documents/GitHub/Tide-Model-Driver/doc/h189.nc'; % good
-fn = '/Users/cgreene/Documents/GitHub/Tide-Model-Driver/doc/h700.nc'; 
+ fn = '/Users/cgreene/Documents/GitHub/Tide-Model-Driver/doc/h127.nc';% bad
+%fn = '/Users/cgreene/Documents/GitHub/Tide-Model-Driver/doc/h189.nc'; % good
+%fn = '/Users/cgreene/Documents/GitHub/Tide-Model-Driver/doc/h700.nc'; 
 lat = ncread(fn,'lat');
 lon = ncread(fn,'lon');
 t = ncdateread(fn,'time');
@@ -14,22 +14,66 @@ sl = ncread(fn,'sea_level')/1000;
 
 plot(t,sl)
 
-tic
 sl_old = tmd_tide_pred('Model_CATS2008',datenum(t),lat,lon,'z'); 
-toc 
 
-tic
 sl_new = tmd_predict('CATS2022_02-21.nc',lat,lon,t);
-toc
+
+sl_new = tmd_predict('CATS2022_02-21.nc',lat,lon,t,'h','coast','unmask');
 
 hold on
 plot(t,sl_old)
 plot(t,sl_new)
 
-isf = isfinite(sl) & isfinite(sl_old);
-%corr(sl(isf),sl_old(isf)).^2
 
-return
+figure
+plot(t,sl)
+hold on
+plot(t,sl-sl_new)
+
+%% Example: NaNs near the coast 
+% In some cases, you may be interested in a tide gauge close to the coast
+% that gets NaN'd out because it's closest to a land mask pixel by the
+% default nearest-neighbor interpolation. Here's an example:
+
+fn = '/Users/cgreene/Documents/GitHub/Tide-Model-Driver/doc/h127.nc';% bad
+
+lat = ncread(fn,'lat');
+lon = ncread(fn,'lon');
+t = ncdateread(fn,'time');
+sl = ncread(fn,'sea_level')/1000; 
+
+% Predict tides at the location of interest: 
+sl_predict = tmd_predict('CATS2022_02-21.nc',lat,lon,t,'h');
+
+% Look how many tide predictions are NaNs: 
+sum(isnan(sl_predict))
+
+%%
+
+
+figure
+mapzoomps(lat,lon,'mapwidth',100,'inset','ne') % centers a map on the region of interest
+plotps(lat,lon,'ko','markerfacecolor','y') % plots the tide gauge location
+modismoaps('contrast','low') % background image
+
+%%
+plot(t,sl)
+
+
+
+sl_predict = tmd_predict('CATS2022_02-21.nc',lat,lon,t,'h','coast','unmask');
+hold on
+plot(t,sl_old)
+plot(t,sl_new)
+
+
+figure
+plot(t,sl)
+hold on
+plot(t,sl-sl_new)
+
+
+
 %%
 tic
 sl_old = tmd_tide_pred('Model_CATS2008',datenum(t),lat*ones(size(t)),lon*ones(size(t)),'z'); 

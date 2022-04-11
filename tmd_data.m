@@ -1,5 +1,5 @@
 function [Z,x_or_lon,y_or_lat] = tmd_data(filename,variable,varargin) 
-% 
+% tmd_data loads tide model data into the Matlab workspace. 
 % 
 %% Syntax 
 % 
@@ -11,7 +11,6 @@ function [Z,x_or_lon,y_or_lat] = tmd_data(filename,variable,varargin)
 %% Description 
 % 
 % [Z,x_or_lon,y_or_lat] = tmd_data(filename,variable)
-% 
 % 
 %  * 'h'   complex tidal height (m)  
 %  * 'hRe' real part of tidal height
@@ -42,20 +41,31 @@ function [Z,x_or_lon,y_or_lat] = tmd_data(filename,variable,varargin)
 %  * 'mask' binary land/ocean mask
 %  * 'flexure' ice shelf flexure coefficient from a linear elastic model applied to BedMachine ice thickness (can slightly exceed 1). 
 %
-% [...] = tmd_data(...,'constituents',conList)
+% [...] = tmd_data(...,'constituents',conList) specifies tidal constituents as a 
+% cell array (e.g, {'m2','s2'}. If constituents are not specified, all constituents 
+% from the model are returned. 
 %
-% [...] = tmd_data(...,'bounds',[xi yi])
+% [...] = tmd_data(...,'bounds',[xi yi]) enter an Mx2 matrix of coordinates 
+% to only load data in a rectangle around the specified [xi(:) yi(:)] where
+% xi and yi are projected coordinates for tide models that are in projected
+% coordinates. For tide models in geo coordinates (global tide models,
+% generally), xi refers to longitudes of interest and yi is latitudes of interest. 
+% The advantage of specifying bounds is to minimize the amount of data that
+% are loaded, when only a small area within a larger tide model is of
+% interest. 
 % 
 %% Example 
 % 
 % [hAm,x,y] = tmd_data('CATS2022_02-21.nc','hAm');  
-% hPh = tmd_data('CATS_2022_02-21.nc','hPh'); 
+% hPh = tmd_data('CATS2022_02-21.nc','hPh'); 
 % 
-% h = imagesc(x,y,hPh); 
-% cmocean phase 
+% h = imagesc(x,y,hPh(:,:,1)); 
+% cmocean phase % set colormap
 % 
+%% Author Info 
+% This function was written by Chad A. Greene in 2022. 
 % 
-
+% See also tmd_interp and tmd_predict. 
 
 %% Input parsing 
 
@@ -97,7 +107,6 @@ if nargin>2
       geo = true; 
    end
       
-   
 end
 
 %% Load data 

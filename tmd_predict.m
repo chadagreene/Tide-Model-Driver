@@ -23,8 +23,9 @@ assert(isequal(size(lat),size(lon)),'Dimensions of lat and lon must agree.')
 % Set defaults: 
 InferMinorConstituents = true; 
 MapSolution = false; 
-flexure = false; % ice shelf flexure zone 
+MaskingMethod = 'nan'; % default set land areas to nan by nearest-neighbor interpolation of the mask.  
 conList = strsplit(ncreadatt(filename,'cons','long_name')); 
+
 if nargin<5
    ptype = 'h'; 
 end
@@ -47,9 +48,21 @@ if nargin>5
       d_minor = 0; % minor constituent correction. 
    end
    
-   if any(strncmpi(varargin,'flexure',4)) 
-      flexure = true; 
+%    if any(strncmpi(varargin,'flexure',4)) 
+%       flexure = true; 
+%    end
+   
+   if nargin>4
+      tmp = strncmpi(varargin,'coasts',5); 
+      if any(tmp)
+         MaskingMethod = lower(varargin{find(tmp)+1}); 
+         if isnan(MaskingMethod)
+            MaskingMethod = 'nan'; % making it a string for later. 
+         end
+         assert(ismember(MaskingMethod,{'nan','flex','flexure','unmask'}),'Coastal masking method can only be NaN, ''flexure'', or ''unmask''. Try again.')
+      end
    end
+
 end
    
 % Parse solution type: 
@@ -73,12 +86,12 @@ t = reshape(t,[],1);
 
 %% Load data
 
-hc = tmd_interp(filename,ptype,lat,lon,'constituents',conList);
+hc = tmd_interp(filename,ptype,lat,lon,'constituents',conList,'coasts',MaskingMethod);
 hc = permute(hc,[3 1 2]); % puts constituents in first column. 
 
-if flexure 
-   flex = tmd_interp(filename,'flexure',lat,lon); 
-end
+% if flexure 
+%    flex = tmd_interp(filename,'flexure',lat,lon); 
+% end
 
 %%
 
@@ -117,9 +130,9 @@ else % Single-location time series or drift track
 end
 
 % Account for ice shelf flexure in the grounding zone: 
-if flexure 
-   z = z.*flex; 
-end
+% if flexure 
+%    z = z.*flex; 
+% end
 
 %% Clean up 
 
