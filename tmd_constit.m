@@ -1,20 +1,18 @@
 function [ispec,amp,ph,omega,alpha,constitNum] = tmd_constit(constituents)
-% constit returns amplitude, phase, frequency, alpha, species for
-% a tidal constituent identified by a 4 character string. 
+% constit returns amplitude, phase, frequency, alpha, species for tidal constituents. 
 % 
 % In TMD2.04 this note appeared: "This version returns zeros for all phases." I do 
 % not think this is true.  
 % 
 %% Syntax
 % 
-%  [ispec,amp,ph,omega,alpha,constitNum] = constit(c)
+%  [ispec,amp,ph,omega,alpha,constitNum] = constit(constituents)
 % 
 %% Description 
 % 
-% [ispec,amp,ph,omega,alpha,constitNum] = constit(c) returns constants for a tidal 
-% constituent c.  c must be an Nx4 letter character string.  If a constituent has fewer
-% than 4 letters in its name, pad the end with spaces, e.g., 'k2  '. Constants returned
-% by constit are: 
+% [ispec,amp,ph,omega,alpha,constitNum] = constit(constituents) returns constants for tidal 
+% constituents, specified by a string (e.g., 'm2') or a cell array of
+% strings (e.g., {'m2','s2'}). 
 % 
 %    ispec: species type (spherical harmonic dependence of quadropole potential).
 % 
@@ -31,7 +29,7 @@ function [ispec,amp,ph,omega,alpha,constitNum] = tmd_constit(constituents)
 %% Example
 % Get constants for the k1 constituent: 
 % 
-% [ispec,amp,ph,omega,alpha,constitNum] = constit('k1  ')
+% [ispec,amp,ph,omega,alpha,constitNum] = tmd_constit('k1')
 % ispec =
 %      1
 % amp =

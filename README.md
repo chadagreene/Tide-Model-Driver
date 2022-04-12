@@ -21,7 +21,7 @@ Tide Model Driver for MATLAB, version 3.0
 To access TMD documentation within MATLAB, simply type 
 
 ```matlab
-tmd
+tmd 
 ```
 into the Command Window. To access documentation for a specific function, type `tmd` followed by the function name into the Command Window. For example:
 
@@ -37,15 +37,18 @@ Most users will only need to interact with one function. It is:
 
 * `tmd_interp` provides water column thickness, land/ocean mask, ice shelf flexure, and tidal constiuent parameters at specified geographic locations, for a given tide model. 
 * `tmd_data` loads gridded tide model data without interpolation. 
+* `tmd_ellipse` 
 
 ### Under-the-hood functions 
 You probably won't need to call any of the following functions directly, but they called by the functions above. 
 
-* `tmd_astrol` 
-* `tmd_constit`
-* `tmd_harp`
-* `tmd_InferMinor`
+* `tmd_astrol` computes the basic astronomical mean longitudes s, h, p, N.
+* `tmd_constit` returns amplitude, phase, frequency, alpha, species for tidal constituents. 
+* `tmd_harp` predicts tidal time series using harmonic constants. 
+* `tmd_InferMinor` returns correction for 16 minor tidal constiuents. 
 * `tmd_nodal`
+* `tmd_ll2ps` converts geographic coordinates to polar stereographic kilometers for polar models. 
+* `tmd_ps2ll` converts polar stereographic kilometers geographic coordinates for polar models. 
 
 ### Conversion from OTIS to NetCDF format
 

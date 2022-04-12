@@ -1,19 +1,17 @@
 function hhat = tmd_harp(t,hc,constituents,astrol_p,astrol_N)
-% harp1 predicts tidal time series using harmonic constants. This is the time series version of harp. 
+% tmd_harp predicts tidal time series using harmonic constants. 
 % Nodal corrections are included. 
-% 
-% harp1 is called by tmd_tide_pred. 
 % 
 %% Syntax
 % 
-% hhat = harp1(time,hc,con)
+% hhat = tmd_harp(t,hc,constituents,astrol_p,astrol_N)
 % 
 %% Description 
 % 
 % hhat = harp1(time,hc,con) returns the time series hhat reconstructed using HC. Inputs are: 
 % 
 %     t datetime or datenum
-%     con(nc,4) - char*4 tidal constituent IDs 
+%     constituents 
 %     hc(nc) - harmonic constant vector  (complex)
 % 
 %% Author Info
@@ -24,8 +22,10 @@ function hhat = tmd_harp(t,hc,constituents,astrol_p,astrol_N)
 % * Replaced function end with function return. 
 % * Replaced constit loop with a single call to consit, which is newly re-written to allow multiple constituents. 
 % * Rewrote hhat loop to be a little less cryptic. 
+% In April 2022, Chad Greene rewrote the function to remove loops and
+% accept input times in datenum format. 
 % 
-% See also harp, nodal, and tmd_tide_pred. 
+% See also tmd_predict and tmd_astrol. 
 
 % if isdatetime(t)
 %    t = datenum(t); 

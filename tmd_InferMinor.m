@@ -1,5 +1,5 @@
 function dh = tmd_InferMinor(hc,constituents,t,aS,aH,aP,aN)
-% InferMinor returns correction for 16 minor tidal constiuents.  Zeros 
+% tmd_InferMinor returns correction for 16 minor tidal constiuents.  Zeros 
 % are returned if not enough input for inference. This is based on Richard
 % Ray's code perth2. 
 % 

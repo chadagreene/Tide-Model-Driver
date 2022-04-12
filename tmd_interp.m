@@ -64,6 +64,8 @@ function zi = tmd_interp(filename,variable,lati,loni,varargin)
 narginchk(4,Inf) 
 assert(islatlon(lati,loni),'Inputs lati,loni must be in the range of possible latitude and longitudes.') 
 assert(isequal(size(lati),size(loni)),'Dimensions of input lati,loni coordinates must agree.') 
+assert(contains(filename,'.nc'),'Input filename must end in .nc.')
+assert(exist(filename,'file'),['Cannot find ',filename,'. Check the path and try again.'])
 
 %% Parse inputs 
 
@@ -87,7 +89,7 @@ proj4 = ncreadatt(filename,'mapping','spatial_proj4');
 
 switch proj4 
    case '+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=-70 +x_0=0 +y_0=0 +datum=WGS84 +units=km +no_defs +type=crs'
-      [xi,yi] = mapll(lati,loni,-71,-70,'S'); 
+      [xi,yi] = tmd_ll2ps(lati,loni,-71,-70,'S'); 
    otherwise 
       xi = loni; 
       yi = lati; 

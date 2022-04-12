@@ -28,7 +28,7 @@ function [pu,pf] = tmd_nodal(constituents,astrol_p,astrol_N)
 % In April 2022, Chad Greene rewrote this as tmd_nodal, which accepts
 % different inputs from the original nodal.m function. 
 % 
-% See also harp and harp1. 
+% See also tmd_harp. 
 
 cid0 = {'m2';'s2';'k1';'o1'; ...
         'n2';'p1';'k2';'q1'; ...

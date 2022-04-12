@@ -60,7 +60,7 @@
 [Lat,Lon] = psgrid('scar inlet',1500,1); 
 
 % Get water column thickness at each grid point: 
-wct = tmd_interp('CATS2022_02-21.nc','wct',Lat,Lon); 
+wct = tmd_interp('CATS2008_update_2022-04-11.nc','wct',Lat,Lon); 
 
 % Plot: 
 figure
@@ -78,26 +78,26 @@ ylabel(cb,'water column thickness (m)')
 % 600 km wide grid at 0.2 km resolution, centered on (75S,100.5W).
 [Lat,Lon] = psgrid(-75,-100.5,100,.2); 
 
-h_default = tmd_interp('CATS2022_02-21.nc','hAm',Lat,Lon,'constituents','m2');
-h_flexure = tmd_interp('CATS2022_02-21.nc','hAm',Lat,Lon,'constituents','m2','coasts','flexure');
-h_unmask = tmd_interp('CATS2022_02-21.nc','hAm',Lat,Lon,'constituents','m2','coasts','unmask');
+h_default = tmd_interp('CATS2008_update_2022-04-11.nc','hAm',Lat,Lon,'constituents','m2');
+h_flexure = tmd_interp('CATS2008_update_2022-04-11.nc','hAm',Lat,Lon,'constituents','m2','coasts','flexure');
+h_unmask = tmd_interp('CATS2008_update_2022-04-11.nc','hAm',Lat,Lon,'constituents','m2','coasts','unmask');
 
 figure
-subplot(1,3,1) 
+subsubplot(1,3,1) 
 pcolorps(Lat,Lon,h_default)
 axis tight off
 bedmachine
 caxis([0 0.06])
 title 'NaN (default)'
 
-subplot(1,3,2) 
+subsubplot(1,3,2) 
 pcolorps(Lat,Lon,h_flexure)
 axis tight off
 bedmachine
 caxis([0 0.06])
 title 'flexure'
 
-subplot(1,3,3) 
+subsubplot(1,3,3) 
 pcolorps(Lat,Lon,h_unmask)
 axis tight off
 bedmachine
@@ -106,17 +106,28 @@ title 'unmask'
 
 %%
 
-%mask = tmd_interp('CATS2022_02-21.nc','mask',Lat,Lon); 
+[Lat,Lon] = psgrid(-75,-100.5,500,.5); 
 
+h_default = tmd_interp('CATS2008_update_2022-04-11.nc','hAm',Lat,Lon,'constituents','m2');
 
-h = tmd_interp('CATS2022_02-21.nc','hAm',Lat,Lon,'constituent','k2'); 
+figure
+pcolorps(Lat,Lon,h_default)
+axis tight off
+bedmachine
+title 'NaN (default)'
+
+%%
+
+%mask = tmd_interp('CATS2008_update_2022-04-11.nc','mask',Lat,Lon); 
+
+h = tmd_interp('CATS2008_update_2022-04-11.nc','hAm',Lat,Lon,'constituent','k2'); 
 
 hold on
 contourps(Lat,Lon,h,'k')
 
 %%
-U = tmd_interp('CATS2022_02-21.nc','uAm',Lat,Lon,'constituent','k2'); 
-V = tmd_interp('CATS2022_02-21.nc','vAm',Lat,Lon,'constituent','k2'); 
+U = tmd_interp('CATS2008_update_2022-04-11.nc','uAm',Lat,Lon,'constituent','k2'); 
+V = tmd_interp('CATS2008_update_2022-04-11.nc','vAm',Lat,Lon,'constituent','k2'); 
 
 
 [Vx,Vy] = uv2vxvy(Lat,Lon,U,V); 
