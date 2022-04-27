@@ -1,4 +1,6 @@
-% This file reads the CATS2008 tide model and converts it to NetCDF. 
+% This file reads the old binary CATS2008 tide model and converts it to NetCDF. 
+% This script also densifies the data to 2 km resolution and adjusts coastlines 
+% to match BedMachine v2. 
 % 
 % This script calls some legacy functions from TMD2.5 to load the old data.
 % 
@@ -107,6 +109,7 @@ end
 oldmask = interp2(x4,y4,mask,X,Y,'nearest'); 
 wct_cats = interp2(x4,y4,double(wct),X,Y); 
 
+
 %% Get the GL to agree with BedMachine
 
 [Lat,Lon] = mapxy(X,Y,-71,-70,'S'); 
@@ -177,6 +180,10 @@ axis([  -1609006.64    -415618.02      63826.14    1152447.96])
 
 %%
 
+% Scaling factor for saving to NCSHORT (int16):
+scale_h = floor(32767/max(abs([real(h(:));imag(h(:))])));
+scale_UV = floor(32767/max(abs([real(U(:));real(V(:));imag(U(:));imag(V(:));])));
+
 [ispec,amp,ph,omega,alpha,constitNum] = tmd_constit(strsplit(con_string));
 
 proj4 = '+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=-70 +x_0=0 +y_0=0 +datum=WGS84 +units=km +no_defs +type=crs';
@@ -193,6 +200,7 @@ netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Title','CATS2022');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Description','This is CATS2008, but slightly modified to match BedMachine v2 geometry.');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Author','Chad A. Greene');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'creation_date',datestr(now,'yyyy-mm-dd'));
+netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'tmd_version','TMD3.0');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'license','MIT License');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Data_citation',['Howard, S. L., Erofeeva, S., & Padman, L. (2019) "CATS2008: Circum-Antarctic Tidal Simulation version 2008" u.S. Antarctic Program (USAP) Data Center. doi: https://doi.org/10.15784/601235.'])
 
@@ -261,42 +269,48 @@ hRe_var_id = netcdf.defVar(ncid,'hRe','NC_SHORT',[x_id y_id cons_id]);
 netcdf.putAtt(ncid,hRe_var_id,'long_name',    'real component of height constituent');
 netcdf.putAtt(ncid,hRe_var_id,'standard_name','height_constituent');
 netcdf.putAtt(ncid,hRe_var_id,'grid_mapping', 'polar_stereographic');
-netcdf.putAtt(ncid,hRe_var_id,'units',        'millimeter');
+netcdf.putAtt(ncid,hRe_var_id,'units',        'm');
+netcdf.putAtt(ncid,hRe_var_id,'scale_factor',  1/scale_h);
 
 % Define hIm
 hIm_var_id = netcdf.defVar(ncid,'hIm','NC_SHORT',[x_id y_id cons_id]);
 netcdf.putAtt(ncid,hIm_var_id,'long_name',    'imaginary component of height constituent');
 netcdf.putAtt(ncid,hIm_var_id,'standard_name','height_constituent');
 netcdf.putAtt(ncid,hIm_var_id,'grid_mapping', 'polar_stereographic');
-netcdf.putAtt(ncid,hIm_var_id,'units',        'millimeter');
+netcdf.putAtt(ncid,hIm_var_id,'units',        'm');
+netcdf.putAtt(ncid,hIm_var_id,'scale_factor',  1/scale_h);
 
 % Define uRe
-uRe_var_id = netcdf.defVar(ncid,'URe','NC_INT',[x_id y_id cons_id]);
-netcdf.putAtt(ncid,uRe_var_id,'long_name',    'real component of U transport constituent. Multiply by 1e-6 to get m^2/s.');
+uRe_var_id = netcdf.defVar(ncid,'URe','NC_SHORT',[x_id y_id cons_id]);
+netcdf.putAtt(ncid,uRe_var_id,'long_name',    'real component of U transport constituent.');
 netcdf.putAtt(ncid,uRe_var_id,'standard_name','height_constituent');
 netcdf.putAtt(ncid,uRe_var_id,'grid_mapping', 'polar_stereographic');
-netcdf.putAtt(ncid,uRe_var_id,'units',        'mm^2/s');
+netcdf.putAtt(ncid,uRe_var_id,'units',        'm^2/s');
+netcdf.putAtt(ncid,uRe_var_id,'scale_factor',  1/scale_UV);
 
 % Define uIm
-uIm_var_id = netcdf.defVar(ncid,'UIm','NC_INT',[x_id y_id cons_id]);
-netcdf.putAtt(ncid,uIm_var_id,'long_name',    'imaginary component of U transport constituent. Multiply by 1e-6 to get m^2/s.');
+uIm_var_id = netcdf.defVar(ncid,'UIm','NC_SHORT',[x_id y_id cons_id]);
+netcdf.putAtt(ncid,uIm_var_id,'long_name',    'imaginary component of U transport constituent.');
 netcdf.putAtt(ncid,uIm_var_id,'standard_name','height_constituent');
 netcdf.putAtt(ncid,uIm_var_id,'grid_mapping', 'polar_stereographic');
-netcdf.putAtt(ncid,uIm_var_id,'units',        'mm^2/s');
+netcdf.putAtt(ncid,uIm_var_id,'units',        'm^2/s');
+netcdf.putAtt(ncid,uIm_var_id,'scale_factor',  1/scale_UV);
 
 % Define vRe
-vRe_var_id = netcdf.defVar(ncid,'VRe','NC_INT',[x_id y_id cons_id]);
-netcdf.putAtt(ncid,vRe_var_id,'long_name',    'real component of V transport constituent. Multiply by 1e-6 to get m^2/s.');
+vRe_var_id = netcdf.defVar(ncid,'VRe','NC_SHORT',[x_id y_id cons_id]);
+netcdf.putAtt(ncid,vRe_var_id,'long_name',    'real component of V transport constituent.');
 netcdf.putAtt(ncid,vRe_var_id,'standard_name','height_constituent');
 netcdf.putAtt(ncid,vRe_var_id,'grid_mapping', 'polar_stereographic');
-netcdf.putAtt(ncid,vRe_var_id,'units',        'mm^2/s');
+netcdf.putAtt(ncid,vRe_var_id,'units',        'm^2/s');
+netcdf.putAtt(ncid,vRe_var_id,'scale_factor',  1/scale_UV);
 
 % Define vIm
-vIm_var_id = netcdf.defVar(ncid,'VIm','NC_INT',[x_id y_id cons_id]);
-netcdf.putAtt(ncid,vIm_var_id,'long_name',    'imaginary component of V transport constituent. Multiply by 1e-6 to get m^2/s.');
+vIm_var_id = netcdf.defVar(ncid,'VIm','NC_SHORT',[x_id y_id cons_id]);
+netcdf.putAtt(ncid,vIm_var_id,'long_name',    'imaginary component of V transport constituent.');
 netcdf.putAtt(ncid,vIm_var_id,'standard_name','height_constituent');
 netcdf.putAtt(ncid,vIm_var_id,'grid_mapping', 'polar_stereographic');
-netcdf.putAtt(ncid,vIm_var_id,'units',        'mm^2/s');
+netcdf.putAtt(ncid,vIm_var_id,'units',        'm^2/s');
+netcdf.putAtt(ncid,vIm_var_id,'scale_factor',  1/scale_UV);
 
 % Define wct: 
 wct_var_id = netcdf.defVar(ncid,'wct','NC_SHORT',[x_id y_id]);
@@ -344,12 +358,12 @@ netcdf.putVar(ncid,amp_var_id,amp);
 netcdf.putVar(ncid,ph_var_id,ph);
 netcdf.putVar(ncid,om_var_id,omega);
 netcdf.putVar(ncid,alp_var_id,alpha);
-netcdf.putVar(ncid,hRe_var_id,ipermute(int16(1000*real(h)),[2 1 3]));
-netcdf.putVar(ncid,hIm_var_id,ipermute(int16(1000*imag(h)),[2 1 3]));
-netcdf.putVar(ncid,uRe_var_id,ipermute(int32(1e6*real(U)),[2 1 3]));
-netcdf.putVar(ncid,uIm_var_id,ipermute(int32(1e6*imag(U)),[2 1 3]));
-netcdf.putVar(ncid,vRe_var_id,ipermute(int32(1e6*real(V)),[2 1 3]));
-netcdf.putVar(ncid,vIm_var_id,ipermute(int32(1e6*imag(V)),[2 1 3]));
+netcdf.putVar(ncid,hRe_var_id,ipermute(int16(scale_h*real(h)),[2 1 3]));
+netcdf.putVar(ncid,hIm_var_id,ipermute(int16(scale_h*imag(h)),[2 1 3]));
+netcdf.putVar(ncid,uRe_var_id,ipermute(int16(scale_UV*real(U)),[2 1 3]));
+netcdf.putVar(ncid,uIm_var_id,ipermute(int16(scale_UV*imag(U)),[2 1 3]));
+netcdf.putVar(ncid,vRe_var_id,ipermute(int16(scale_UV*real(V)),[2 1 3]));
+netcdf.putVar(ncid,vIm_var_id,ipermute(int16(scale_UV*imag(V)),[2 1 3]));
 netcdf.putVar(ncid,wct_var_id,ipermute(wct,[2 1]));
 netcdf.putVar(ncid,mask_var_id,ipermute(mask,[2 1]));
 netcdf.putVar(ncid,flexure_var_id,ipermute(flexure,[2 1]));
@@ -358,56 +372,4 @@ netcdf.putVar(ncid,flexure_var_id,ipermute(flexure,[2 1]));
 netcdf.close(ncid)
 
 disp done
-
-%% Validate after saving 
-% 
-% ncdisp(newfilename)
-% 
-% x1 = double(ncread(newfilename,'x'))'; 
-% y1 = double(ncread(newfilename,'y'))'; 
-% assert(isequal(x,x1),'Something went wrong with x')
-% assert(isequal(y,y1),'Something went wrong with y')
-% 
-% Zi = permute(ncread(newfilename,'hIm'),[2 1 3]);
-% Zr = permute(ncread(newfilename,'hRe'),[2 1 3]);
-% assert(isequal(h,complex(Zr,Zi)),'Something went wrong with h.') % well okay this is expected to break bc of rounding to int16 
-% 
-% Ui = permute(ncread(newfilename,'uIm'),[2 1 3]);
-% Ur = permute(ncread(newfilename,'uRe'),[2 1 3]);
-% assert(isequal(U,complex(Ur,Ui)),'Something went wrong with u.')
-% 
-% Vi = permute(ncread(newfilename,'vIm'),[2 1 3]);
-% Vr = permute(ncread(newfilename,'vRe'),[2 1 3]);
-% assert(isequal(V,complex(Vr,Vi)),'Something went wrong with v.')
-% 
-% ocean = permute(ncread(newfilename,'mask'),[2 1]); 
-% assert(isequal(ocean,mask),'Something went wrong with the mask.')
-% 
-% wct2 = permute(ncread(newfilename,'wct'),[2 1]); 
-% assert(isequal(wct,wct2),'Something went wrong with wct.')
-% 
-% flex2 = permute(ncread(newfilename,'flexure'),[2 1]); 
-% assert(isequaln(flexure,flex2),'Something went wrong with flexure.')
-% 
-% lat = permute(ncread(newfilename,'lat'),[2 1]); 
-% assert(isequaln((lat),single(Lat)),'Something went wrong with lat.')
-% 
-% lon = permute(ncread(newfilename,'lon'),[2 1]); 
-% assert(isequaln((lon),single(Lon)),'Something went wrong with lon.')
-% 
-% % Visual check: 
-% figure
-% pcolor(x1,y1,Zr(:,:,1))
-% shading interp
-% 
-% % Plot wct in a standard projection: 
-% 
-% [X,Y] = meshgrid(x,y); 
-% 
-% [Lat,Lon] = ps2ll(X*1000,Y*1000,'meridian',-70); % requires Antarctic Mapping Tools 
-% 
-% figure
-% pcolorps(Lat,Lon,wct) 
-% bedmachine % adds a coastline for context 
-
 

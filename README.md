@@ -1,12 +1,10 @@
 # 🚧 Tide Model Driver 3.0 🚧 
 Tide Model Driver for MATLAB, version 3.0
 
-🚧 This repo is construction. 🚧
-
+🚧 This repo is under construction. 🚧
 
 
 # What's new in TMD 3.0?
-![Tidal phase of the m2 constituent for the Filchner-Ronne Ice Shelf](tide-model-conversions/CATS2008_update_2022_comparison.png)
 
 * Switched to consolidated NetCDF model data format. 
 * TMD functions rewritten for improved performance. 
@@ -16,7 +14,9 @@ Tide Model Driver for MATLAB, version 3.0
 	* CATS bathymetry and coastlines adjusted to match BedMachine v2 ([Morlighem et al., 2020](https://doi.org/10.1038/s41561-019-0510-8)). 
 	* Ice shelf flexure model included for tidal deflections in grounding zones. 
 
-# Contents 
+![Tidal phase of the m2 constituent for the Filchner-Ronne Ice Shelf](tide-model-conversions/CATS2008_update_2022_comparison.png)
+
+# TMD Contents 
 ### Help 
 To access TMD documentation within MATLAB, simply type 
 
@@ -33,14 +33,14 @@ Most users will only need to interact with one function. It is:
 
 * `tmd_predict` predicts tidal elevation, transport, or current velocities for given location(s) and time(s). 
 
-### Other helpful functions
+### Other useful functions
 
 * `tmd_interp` provides water column thickness, land/ocean mask, ice shelf flexure, and tidal constiuent parameters at specified geographic locations, for a given tide model. 
 * `tmd_data` loads gridded tide model data without interpolation. 
 * `tmd_ellipse` 
 
 ### Under-the-hood functions 
-You probably won't need to call any of the following functions directly, but they called by the functions above. 
+You probably won't need to call any of the following functions directly, but they are called by the functions above. 
 
 * `tmd_astrol` computes the basic astronomical mean longitudes s, h, p, N.
 * `tmd_constit` returns amplitude, phase, frequency, alpha, species for tidal constituents. 

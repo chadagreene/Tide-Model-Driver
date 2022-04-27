@@ -11,10 +11,10 @@ function [pu,pf] = tmd_nodal(constituents,astrol_p,astrol_N)
 %
 %% Description 
 % 
-% [pu,pf] = tmd_nodal(t,cid) takes input constituents as cell array (1xN constituents) 
-% and the outputs astrol_p and astrol_N from the tmd_astrol function. astrol_p and 
-% astrol_M are dimesnions Mx1, with one row per timestep. Outputs pu,pf are MxN 
-% corresponding to M timesteps and N constituents. 
+% [pu,pf] = tmd_nodal(constituents,astrol_p,astrol_N) takes input constituents 
+% as cell array (1xN constituents). astrol_p and astrol_N are the outputs from 
+% the tmd_astrol function, and are dimesnions Mx1, with one row per timestep. 
+% Outputs pu,pf are MxN corresponding to M timesteps and N constituents. 
 % 
 %% Author Info
 % This function is part of the Tide Model Driver (TMD), which was written by Lana Erofeeva
@@ -25,8 +25,9 @@ function [pu,pf] = tmd_nodal(constituents,astrol_p,astrol_N)
 % * Function return replaced by function end. 
 % * Removed several dozen lines of unused variables. 
 % * Removed several loops which were used for indexing; replaced with logicals and ismember.  
-% In April 2022, Chad Greene rewrote this as tmd_nodal, which accepts
-% different inputs from the original nodal.m function. 
+% In April 2022, Chad Greene rewrote this as tmd_nodal, which replaces both the
+% old nodal.m and nodal1.m, but note that the inputs to tmd_nodal are different 
+% from the original nodal.m function. 
 % 
 % See also tmd_harp. 
 

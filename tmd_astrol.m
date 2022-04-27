@@ -7,7 +7,7 @@ function [s,h,p,N] = tmd_astrol(t)
 % 
 %% Description 
 % 
-% [s,h,p,N] = astrol(t) returns astronomical  mean longitudes in degrees
+% [s,h,p,N] = astrol(t) returns astronomical mean longitudes in degrees
 % (wrapped 0 to 360). Input times t are datetime or datenum format. 
 %   s: moon
 %   h: sun

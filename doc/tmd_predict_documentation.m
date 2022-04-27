@@ -14,11 +14,11 @@ sl = ncread(fn,'sea_level')/1000;
 
 plot(t,sl)
 
-%sl_old = tmd_tide_pred('Model_CATS2008',datenum(t),lat,lon,'z'); 
+sl_old = tmd_tide_pred('Model_CATS2008',datenum(t),lat,lon,'z'); 
 
 %sl_new = tmd_predict('CATS2022_02-21.nc',lat,lon,t);
 
-sl_new = tmd_predict('CATS2022_02-21.nc',lat,lon,t,'h','coast','unmask');
+sl_new = tmd_predict('CATS2008_update_2022-04-22.nc',lat,lon,t,'h','coast','unmask');
 
 hold on
 plot(t,sl_old)
@@ -43,28 +43,24 @@ t = ncdateread(fn,'time');
 sl = ncread(fn,'sea_level')/1000; 
 
 % Predict tides at the location of interest: 
-sl_predict = tmd_predict('CATS2008_update_2022-04-11.nc',lat,lon,t,'h');
+sl_predict = tmd_predict('CATS2008_update_2022-04-22.nc',lat,lon,t,'h');
 
 % Look how many tide predictions are NaNs: 
 sum(isnan(sl_predict))
 
 %%
-
-
 figure
 mapzoomps(lat,lon,'mapwidth',100,'inset','ne') % centers a map on the region of interest
 plotps(lat,lon,'ko','markerfacecolor','y') % plots the tide gauge location
 modismoaps('contrast','low') % background image
 
 %%
-plot(t,sl)
 
-
-
-sl_predict = tmd_predict('CATS2022_02-21.nc',lat,lon,t,'h','coast','unmask');
+figure
+plot(t,sl-mean(sl,'omitnan'))
+sl_predict = tmd_predict('CATS2008_update_2022-04-22.nc',lat,lon,t,'h','coast','unmask');
 hold on
-plot(t,sl_old)
-plot(t,sl_new)
+plot(t,sl_predict)
 
 
 figure
@@ -113,6 +109,11 @@ toc % 21 sec
 tic
 z = tmd_predict('CATS2008_update_2022-04-11.nc',lat,lon,t,'h','flexure'); 
 toc
+
+
+%%
+
+m2 = tmd_interp('CATS2008_update_2022-04-11.nc','h',lat,lon);
 
 %%
 

@@ -121,7 +121,7 @@ end
 % Lowercase first letter indicates velocity: 
 if ismember(variable(1),{'u','v'})
    wct = tmd_data(filename,'wct','bounds',[xi(:) yi(:)],varargin{:}); 
-   z = z./wct; 
+   z = z./max(wct,10); % divide transports by at least 10 m wct to prevent insanely high velocities.
 end
 
 %% Interpolate 

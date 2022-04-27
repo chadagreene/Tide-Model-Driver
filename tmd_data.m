@@ -60,6 +60,7 @@ function [Z,x_or_lon,y_or_lat] = tmd_data(filename,variable,varargin)
 % hPh = tmd_data('CATS2022_02-21.nc','hPh'); 
 % 
 % h = imagesc(x,y,hPh(:,:,1)); 
+% axis xy image
 % cmocean phase % set colormap
 % 
 %% Author Info 
@@ -160,35 +161,35 @@ for k = 1:NCons
          Z = double(permute(ncread(filename,variable,[ci(1) ri(1)],[numel(ci) numel(ri)]),[2 1]));
          
       case {'hre','him'}
-         Z(:,:,placInd) = double(permute(ncread(filename,variable,[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]))*1e-3;
+         Z(:,:,placInd) = double(permute(ncread(filename,variable,[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]));
 
       case {'ure','uim','vre','vim'}
-         Z(:,:,placInd) = double(permute(ncread(filename,variable,[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]))*1e-6;
+         Z(:,:,placInd) = double(permute(ncread(filename,variable,[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]));
          
       case 'h'
          Z(:,:,placInd) = complex(double(permute(ncread(filename,'hRe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])),...
-                                  double(permute(ncread(filename,'hIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])))*1e-3;
+                                  double(permute(ncread(filename,'hIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])));
       case 'ham' 
          Z(:,:,placInd) = abs(complex(double(permute(ncread(filename,'hRe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])),...
-                                      double(permute(ncread(filename,'hIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]))))*1e-3;
+                                      double(permute(ncread(filename,'hIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]))));
       case 'hph'
           Z(:,:,placInd) = -angle(complex(double(permute(ncread(filename,'hRe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])),...
                                           double(permute(ncread(filename,'hIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]))));
       case 'u'
          Z(:,:,placInd) = complex(double(permute(ncread(filename,'URe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])),...
-                                  double(permute(ncread(filename,'UIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])))*1e-6;
+                                  double(permute(ncread(filename,'UIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])));
       case 'uam' 
          Z(:,:,placInd) = abs(complex(double(permute(ncread(filename,'URe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])),...
-                                      double(permute(ncread(filename,'UIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]))))*1e-6;
+                                      double(permute(ncread(filename,'UIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]))));
       case 'uph'
           Z(:,:,placInd) = -angle(complex(double(permute(ncread(filename,'URe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])),...
                                           double(permute(ncread(filename,'UIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]))));
       case 'v' 
          Z(:,:,placInd) = complex(double(permute(ncread(filename,'VRe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])),...
-                                  double(permute(ncread(filename,'VIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])))*1e-6;
+                                  double(permute(ncread(filename,'VIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])));
       case 'vam' 
          Z(:,:,placInd) = abs(complex(double(permute(ncread(filename,'VRe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])),...
-                                      double(permute(ncread(filename,'VIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]))))*1e-6;
+                                      double(permute(ncread(filename,'VIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]))));
       case 'vph'
           Z(:,:,placInd) = -angle(complex(double(permute(ncread(filename,'VRe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])),...
                                           double(permute(ncread(filename,'VIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]))));
@@ -199,9 +200,9 @@ for k = 1:NCons
 end
 
 % Convert transports to velocities if requested: 
-if ismember(variable,{'uRe','uIm','u','uAm','uPh','vRe','vIm','v','vAm','vPh'})
+if ismember(variable,{'uRe','uIm','u','uAm','vRe','vIm','v','vAm'})
 	wct = double(permute(ncread(filename,'wct',[ri(1) ci(1)],[numel(ci) numel(ri)]),[2 1])); 
-   Z = Z./wct; 
+   Z = Z./max(wct,10); % divide transports by at least 10 m wct to prevent insanely high velocities.
 end
 
 if geo 

@@ -78,9 +78,9 @@ ylabel(cb,'water column thickness (m)')
 % 600 km wide grid at 0.2 km resolution, centered on (75S,100.5W).
 [Lat,Lon] = psgrid(-75,-100.5,100,.2); 
 
-h_default = tmd_interp('CATS2008_update_2022-04-11.nc','hAm',Lat,Lon,'constituents','m2');
-h_flexure = tmd_interp('CATS2008_update_2022-04-11.nc','hAm',Lat,Lon,'constituents','m2','coasts','flexure');
-h_unmask = tmd_interp('CATS2008_update_2022-04-11.nc','hAm',Lat,Lon,'constituents','m2','coasts','unmask');
+h_default = tmd_interp('CATS2008_update_2022-04-22.nc','hAm',Lat,Lon,'constituents','m2');
+h_flexure = tmd_interp('CATS2008_update_2022-04-22.nc','hAm',Lat,Lon,'constituents','m2','coasts','flexure');
+h_unmask = tmd_interp('CATS2008_update_2022-04-22.nc','hAm',Lat,Lon,'constituents','m2','coasts','unmask');
 
 figure
 subsubplot(1,3,1) 
@@ -106,29 +106,31 @@ title 'unmask'
 
 %%
 
-[Lat,Lon] = psgrid(-75,-100.5,500,.5); 
+[Lat,Lon] = psgrid('ronne ice shelf',1500,.5); 
 
-h_default = tmd_interp('CATS2008_update_2022-04-11.nc','hAm',Lat,Lon,'constituents','m2');
+h_default = tmd_interp('CATS2008_update_2022-04-22.nc','hAm',Lat,Lon,'constituents','m2');
 
 figure
 pcolorps(Lat,Lon,h_default)
 axis tight off
 bedmachine
-title 'NaN (default)'
 
 %%
 
 %mask = tmd_interp('CATS2008_update_2022-04-11.nc','mask',Lat,Lon); 
 
-h = tmd_interp('CATS2008_update_2022-04-11.nc','hAm',Lat,Lon,'constituent','k2'); 
+h = tmd_interp('CATS2008_update_2022-04-22.nc','hAm',Lat,Lon,'constituent','k2'); 
 
 hold on
 contourps(Lat,Lon,h,'k')
 
 %%
-U = tmd_interp('CATS2008_update_2022-04-11.nc','uAm',Lat,Lon,'constituent','k2'); 
-V = tmd_interp('CATS2008_update_2022-04-11.nc','vAm',Lat,Lon,'constituent','k2'); 
 
+U2 = tmd_interp('CATS2008_update_2022-04-22.nc','uAm',Lat,Lon,'constituent','k2'); 
+V2 = tmd_interp('CATS2008_update_2022-04-22.nc','vAm',Lat,Lon,'constituent','k2'); 
+
+U(~isfinite(U)) = 0; 
+V(~isfinite(V)) = 0; 
 
 [Vx,Vy] = uv2vxvy(Lat,Lon,U,V); 
 
@@ -144,6 +146,7 @@ Vyr = imresize(Vy,sc);
 
 hold on
 q = quiver(Xr,Yr,Vxr,Vyr,'r'); 
+q.AutoScaleFactor = 3; 
 
 %%
 
