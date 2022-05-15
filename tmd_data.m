@@ -39,7 +39,7 @@ function [Z,x_or_lon,y_or_lat] = tmd_data(filename,variable,varargin)
 %  * 'VPh' phase of meridional transport
 %  * 'wct' water column thickness (m) 
 %  * 'mask' binary land/ocean mask
-%  * 'flexure' ice shelf flexure coefficient from a linear elastic model applied to BedMachine ice thickness (can slightly exceed 1). 
+%  * 'flexure' ice shelf flexure coefficient from a linear elastic model applied to BedMachine ice thickness (can slightly exceed 1). Only for CATS model. 
 %
 % [...] = tmd_data(...,'constituents',conList) specifies tidal constituents as a 
 % cell array (e.g, {'m2','s2'}. If constituents are not specified, all constituents 
@@ -83,6 +83,13 @@ bounds = [[-Inf;Inf] [-Inf;Inf]];
 assert(contains(filename,'.nc'),'Input filename must end in .nc.')
 assert(exist(filename,'file'),['Cannot find ',filename,'. Check the path and try again.'])
 
+proj4 = ncreadatt(filename,'mapping','spatial_proj4');
+if strcmpi(proj4,'+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
+   GlobalModel = true; 
+else 
+   GlobalModel = false; 
+end
+
 if nargin>2 
    
    tmp = strncmpi(varargin,'bounds',3); 
@@ -90,6 +97,13 @@ if nargin>2
       spatialSubset = true; 
       bounds = varargin{find(tmp)+1}; 
       assert(size(bounds,2)==2,'Spatial bounds must be Mx2 in the form [xi(:) yi(:)] or [loni(:) lati(:)].')
+      
+      % Wrap longitudes to 360 for global model: 
+      if GlobalModel 
+         tmp=bounds(:,1); 
+         tmp(tmp<0) = tmp(tmp<0)+360; 
+         bounds(:,1)  = tmp; 
+      end
    end 
    
    tmp = strncmpi(varargin,'constituents',3); 
@@ -110,10 +124,15 @@ if nargin>2
       
 end
 
-%% Load data 
+%% Load data
 
-x_or_lon = double(ncread(filename,'x')); 
-y_or_lat = double(ncread(filename,'y')); 
+if GlobalModel
+   x_or_lon = double(ncread(filename,'lon')); 
+   y_or_lat = double(ncread(filename,'lat')); 
+else
+   x_or_lon = double(ncread(filename,'x')); 
+   y_or_lat = double(ncread(filename,'y')); 
+end
 cons = strsplit(ncreadatt(filename,'cons','long_name')); 
 
 dx = abs(diff(x_or_lon(1:2))); 
@@ -147,9 +166,9 @@ for k = 1:NCons
       placInd = k;
    else 
       conind = 1; 
-      placInd = 1:length(cons); 
+      placInd = 1:length(cons);
    end
-
+   
    switch lower(variable)
       case 'mask'
          Z = logical(permute(ncread(filename,variable,[ci(1) ri(1)],[numel(ci) numel(ri)]),[2 1]));
@@ -206,8 +225,12 @@ if ismember(variable,{'uRe','uIm','u','uAm','vRe','vIm','v','vAm'})
 end
 
 if geo 
-   x_or_lon = double(permute(ncread(filename,'lon',[ci(1) ri(1)],[numel(ci) numel(ri)]),[2 1]));
-   y_or_lat = double(permute(ncread(filename,'lat',[ci(1) ri(1)],[numel(ci) numel(ri)]),[2 1]));
+   if GlobalModel 
+      % do nothing, x_or_lon is already lon and y_or_lat is already lat. 
+   else 
+      x_or_lon = double(permute(ncread(filename,'lon',[ci(1) ri(1)],[numel(ci) numel(ri)]),[2 1]));
+      y_or_lat = double(permute(ncread(filename,'lat',[ci(1) ri(1)],[numel(ci) numel(ri)]),[2 1]));
+   end
 end
 
 end

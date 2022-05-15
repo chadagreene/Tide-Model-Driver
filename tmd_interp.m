@@ -40,7 +40,7 @@ function zi = tmd_interp(filename,variable,lati,loni,varargin)
 %  * 'VPh' phase of meridional transport
 %  * 'wct' water column thickness (m) 
 %  * 'mask' binary land/ocean mask
-%  * 'flexure' ice shelf flexure coefficient from a linear elastic model applied to BedMachine ice thickness (can slightly exceed 1). 
+%  * 'flexure' ice shelf flexure coefficient from a linear elastic model applied to BedMachine ice thickness (can slightly exceed 1). Only for CATS model. 
 % 
 % zi = tmd_interp(...,'constituents',conList) specifies tidal constituents as a 
 % cell array (e.g, {'m2','s2'}. If constituents are not specified, all constituents 
@@ -88,11 +88,19 @@ end
 proj4 = ncreadatt(filename,'mapping','spatial_proj4');
 
 switch proj4 
+   
+   case '+proj=stere +lat_0=90 +lat_ts=70 +lon_0=-45 +x_0=0 +y_0=0 +datum=WGS84 +units=km +no_defs +type=crs'
+      [xi,yi] = tmd_ll2ps(lati,loni,70,-45,'N'); 
+      
    case '+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=-70 +x_0=0 +y_0=0 +datum=WGS84 +units=km +no_defs +type=crs'
       [xi,yi] = tmd_ll2ps(lati,loni,-71,-70,'S'); 
-   otherwise 
+      
+   otherwise % assume global
       xi = loni; 
       yi = lati; 
+      
+      % Wrap to 360: 
+      xi(xi<0) = xi(xi<0)+360; 
 end
 
 %% Load data

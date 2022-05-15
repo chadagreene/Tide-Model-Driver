@@ -1,4 +1,4 @@
-function hhat = tmd_harp(t,hc,constituents,astrol_p,astrol_N)
+function hhat = tmd_harp(t,hc,constituents,astrol_p,astrol_N,ispec,ph,omega)
 % tmd_harp predicts tidal time series using harmonic constants. 
 % Nodal corrections are included. 
 % 
@@ -32,8 +32,6 @@ function hhat = tmd_harp(t,hc,constituents,astrol_p,astrol_N)
 % end
 
 time_s = (t - datenum(1992,1,1))*86400; % time (days since Jan 1, 1992) is converted to seconds by multiplying by 86400 s/yr. 
-
-[ispec,~,ph,omega,~,~] = tmd_constit(constituents);
 
 igood=ispec~=-1;
 

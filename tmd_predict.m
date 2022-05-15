@@ -52,15 +52,13 @@ if nargin>5
 %       flexure = true; 
 %    end
    
-   if nargin>4
-      tmp = strncmpi(varargin,'coasts',5); 
-      if any(tmp)
-         MaskingMethod = lower(varargin{find(tmp)+1}); 
-         if isnan(MaskingMethod)
-            MaskingMethod = 'nan'; % making it a string for later. 
-         end
-         assert(ismember(MaskingMethod,{'nan','flex','flexure','unmask'}),'Coastal masking method can only be NaN, ''flexure'', or ''unmask''. Try again.')
+   tmp = strncmpi(varargin,'coasts',5); 
+   if any(tmp)
+      MaskingMethod = lower(varargin{find(tmp)+1}); 
+      if isnan(MaskingMethod)
+         MaskingMethod = 'nan'; % making it a string for later. 
       end
+      assert(ismember(MaskingMethod,{'nan','flex','flexure','unmask'}),'Coastal masking method can only be NaN, ''flexure'', or ''unmask''. Try again.')
    end
 
 end
@@ -86,6 +84,8 @@ t = reshape(t,[],1);
 
 %% Load data
 
+%length(conList)
+%conList = conList(:,[1 2 5 6 3 7 4 8])
 hc = tmd_interp(filename,ptype,lat,lon,'constituents',conList,'coasts',MaskingMethod);
 hc = permute(hc,[3 1 2]); % puts constituents in first column. 
 
@@ -93,9 +93,12 @@ hc = permute(hc,[3 1 2]); % puts constituents in first column.
 %    flex = tmd_interp(filename,'flexure',lat,lon); 
 % end
 
+
 %%
 
 [astrol_s,astrol_h,astrol_p,astrol_N] = tmd_astrol(t);
+
+[ispec,~,ph,omega,~,~] = tmd_constit(conList);
 
 if MapSolution
    
@@ -108,7 +111,7 @@ if MapSolution
    for k = 1:length(t)
       
       % Major constiuents: 
-      hhat = tmd_harp(t(k),hc(:,isf),conList,astrol_p(k),astrol_N(k));
+      hhat = tmd_harp(t(k),hc(:,isf),conList,astrol_p(k),astrol_N(k),ispec,ph,omega);
 
       % Minor constiuents:
       if InferMinorConstituents
@@ -121,7 +124,7 @@ if MapSolution
 else % Single-location time series or drift track  
 
    % Major constituents: 
-   hhat = tmd_harp(t,hc,conList,astrol_p,astrol_N);
+   hhat = tmd_harp(t,hc,conList,astrol_p,astrol_N,ispec,ph,omega);
    
    if InferMinorConstituents
       d_minor = tmd_InferMinor(hc,conList,t,astrol_s,astrol_h,astrol_p,astrol_N); 

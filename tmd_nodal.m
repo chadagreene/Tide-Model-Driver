@@ -30,25 +30,16 @@ function [pu,pf] = tmd_nodal(constituents,astrol_p,astrol_N)
 % from the original nodal.m function. 
 % 
 % See also tmd_harp. 
-
-cid0 = {'m2';'s2';'k1';'o1'; ...
-        'n2';'p1';'k2';'q1'; ...
-        '2n2';'mu2';'nu2';'l2'; ...
-        't2';'j1';'no1';'oo1'; ...
-        'rho1';'mf';'mm';'ssa'; ...
-        'm4';'ms4';'mn4'};
      
-index= [30,35,19,12,...
-        27,17,37,10,...
-        25,26,28,33,...
-        34,23,14,24,...
-        11, 5, 3, 2,...
-        45,46,44];
+cid0 = {'sa';'ssa';'mm';'msf';'mf';'mt';'alpha1';'2q1';'sigma1';'q1';
+        'rho1';'o1';'tau1';'m1';'chi1';'pi1';'p1';'s1';'k1';'psi1';'phi1';
+        'theta1';'j1';'oo1';'2n2';'mu2';'n2';'nu2';'m2a';'m2';'m2b';'lambda2';
+        'l2';'t2';'s2';'r2';'k2';'eta2';'mns2';'2sm2';'m3';'mk3';'s3';'mn4';
+        'm4';'ms4';'mk4';'s4';'s5';'m6';'s6';'s7';'s8'};
  
 % Determine equilibrium arguments
 rad=pi/180;
 
-%[~,~,astrol_p,astrol_N] = tmd_astrol(t_mjd);  
 nT = length(astrol_p);
 
 %     determine nodal corrections f and u 
@@ -133,31 +124,31 @@ u=zeros(nT,53);
 % u(:, 2) = 0;                                       % Ssa
 % u(:, 3) = 0;                                       % Mm
 % u(:, 4) = 0;                                       % MSf
-u(:, 5) = -23.7*sinn + 2.7*sin2n - 0.4*sin3n;      % Mf
+u(:, 5) = (-23.7*sinn + 2.7*sin2n - 0.4*sin3n)*rad;      % Mf
 u(:, 6) = atan(-(.203*sinn+.040*sin2n)./...
-             (1+.203*cosn+.040*cos2n))/rad;        % Mt
+             (1+.203*cosn+.040*cos2n));        % Mt
 % u(:, 7) = 0;                                       % alpha1
-u(:, 8) = atan(.189*sinn./(1.+.189*cosn))/rad;     % 2Q1
+u(:, 8) = atan(.189*sinn./(1.+.189*cosn));     % 2Q1
 u(:, 9) = u(:,8);                                  % sigma1
 u(:,10) = u(:,8);                                  % q1
 u(:,11) = u(:,8);                                  % rho1
-u(:,12) = 10.8*sinn - 1.3*sin2n + 0.2*sin3n;       % O1
+u(:,12) = (10.8*sinn - 1.3*sin2n + 0.2*sin3n)*rad;       % O1
 % u(:,13) = 0;                                       % tau1
-u(:,14) = atan2(tmp2,tmp1)/rad;                    % M1
-u(:,15) = atan(-.221*sinn./(1.+.221*cosn))/rad;    % chi1
+u(:,14) = atan2(tmp2,tmp1);                    % M1
+u(:,15) = atan(-.221*sinn./(1.+.221*cosn));    % chi1
 % u(:,16) = 0;                                       % pi1
 % u(:,17) = 0;                                       % P1
 % u(:,18) = 0;                                       % S1
 u(:,19) = atan((-.1554*sinn+.0029*sin2n)./...
-           (1.+.1158*cosn-.0029*cos2n))/rad;       % K1
+           (1.+.1158*cosn-.0029*cos2n));       % K1
 % u(:,20) = 0;                                       % psi1
 % u(:,21) = 0;                                       % phi1
 % u(:,22) = 0;                                       % theta1
-u(:,23) = atan(-.227*sinn./(1.+.169*cosn))/rad;    % J1
+u(:,23) = atan(-.227*sinn./(1.+.169*cosn));    % J1
 u(:,24) = atan(-(.640*sinn+.134*sin2n)./...
-           (1.+.640*cosn+.134*cos2n))/rad;         % OO1
+           (1.+.640*cosn+.134*cos2n));         % OO1
 u(:,25) = atan((-.03731*sinn+.00052*sin2n)./ ...
-           (1.-.03731*cosn+.00052*cos2n))/rad;     % 2N2
+           (1.-.03731*cosn+.00052*cos2n));     % 2N2
 u(:,26) = u(:,25);                                 % mu2
 u(:,27) = u(:,25);                                 % N2
 u(:,28) = u(:,25);                                 % nu2
@@ -165,13 +156,13 @@ u(:,28) = u(:,25);                                 % nu2
 u(:,30) = u(:,25);                                   % M2
 % u(:,31) = 0;                                       % M2b
 % u(:,32) = 0;                                       % lambda2
-u(:,33) = atan(-temp2./temp1)/rad ;                % L2
+u(:,33) = atan(-temp2./temp1) ;                % L2
 % u(:,34) = 0;                                       % T2
 % u(:,35) = 0;                                       % S2
 % u(:,36) = 0;                                       % R2
 u(:,37) = atan(-(.3108*sinn+.0324*sin2n)./ ...
-             (1.+.2852*cosn+.0324*cos2n))/rad;     % K2
-u(:,38) = atan(-.436*sinn./(1.+.436*cosn))/rad;    % eta2
+             (1.+.2852*cosn+.0324*cos2n));     % K2
+u(:,38) = atan(-.436*sinn./(1.+.436*cosn));    % eta2
 u(:,39) = u(:,30)*2;                               % MNS2
 u(:,40) = u(:,30);                                 % 2SM2
 u(:,41) = 1.5d0*u(:,30);                           % M3
@@ -189,16 +180,11 @@ u(:,50) = u(:,30)*3;                               % M6
 % u(:,53) = 0;                                       % S8
 
 %% 
-% set correspondence between given constituents and supported in OTIS
-ncmx=size(cid0,1); 
-
-PU = u(:,index(1:ncmx))*rad; 
-PF = f(:,index(1:ncmx)); 
 
 [~,Lib] = ismember(constituents,cid0); 
 
-pu = PU(:,Lib); 
-pf = PF(:,Lib); 
+pu = u(:,Lib); 
+pf = f(:,Lib); 
 
 end
 

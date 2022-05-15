@@ -60,7 +60,8 @@
 [Lat,Lon] = psgrid('scar inlet',1500,1); 
 
 % Get water column thickness at each grid point: 
-wct = tmd_interp('CATS2008_update_2022-04-11.nc','wct',Lat,Lon); 
+%wct = tmd_interp('CATS2008_update_2022-04-22.nc','wct',Lat,Lon); 
+wct = tmd_interp('/Users/cgreene/Downloads/TPXO9_atlas_v5/TPXO9_atlas30_update_2022-05-03.nc','wct',Lat,Lon); 
 
 % Plot: 
 figure
@@ -68,7 +69,7 @@ pcolorps(Lat,Lon,wct)
 axis tight off
 bedmachine   % plots coastline and gl
 cmocean deep % colormap
-shadem(11)   % hillshade with gain of 11
+shadem(10)   % hillshade with gain of 10
 cb = colorbar; 
 ylabel(cb,'water column thickness (m)')
 
