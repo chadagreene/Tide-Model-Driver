@@ -246,17 +246,22 @@ lon = ncread(fn,'lon');
 t = ncdateread(fn,'time');
 sl = ncread(fn,'sea_level')/1000; 
 
-plot(t,sl-mean(sl,'omitnan'))
+plot(t,sl-mean(sl,'omitnan'),'color',.6*[1 1 1])
 
 
-sl_old = tmd_tide_pred('Model_Gr1kmTM_v1',datenum(t),lat,lon,'z'); 
-sl_predict2 = tmd_predict('/Users/cgreene/Downloads/Gr1kmTM/Gr1kmTM_update_2022-05-15.nc',lat,lon,t,'h','coast','unmask');
+sl_Gr = tmd_predict('/Users/cgreene/Downloads/Gr1kmTM/Gr1kmTM_update_2022-05-15.nc',lat,lon,t,'h');
+sl_tpx = tmd_predict('/Users/cgreene/Downloads/TPXO9_atlas_v5/TPXO9_atlas30_update_2022-05-16.nc',lat,lon,t,'h');
 
 hold on
 
 %plot(t,sl)
-plot(t,sl_old,'k','linewidth',2)
-plot(t,sl_predict2,'y--','linewidth',2)
+plot(t,sl_Gr)
+plot(t,sl_tpx)
+legend('obs','Gr','tpx')
+
+std(sl,'omitnan')
+std(sl-sl_Gr,'omitnan')
+std(sl-sl_tpx,'omitnan')
 
 %%
 filename = '/Users/cgreene/Downloads/Gr1kmTM/Gr1kmTM_update_2022-05-06.nc'; 

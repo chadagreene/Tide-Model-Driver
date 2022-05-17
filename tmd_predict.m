@@ -84,8 +84,6 @@ t = reshape(t,[],1);
 
 %% Load data
 
-%length(conList)
-%conList = conList(:,[1 2 5 6 3 7 4 8])
 hc = tmd_interp(filename,ptype,lat,lon,'constituents',conList,'coasts',MaskingMethod);
 hc = permute(hc,[3 1 2]); % puts constituents in first column. 
 
