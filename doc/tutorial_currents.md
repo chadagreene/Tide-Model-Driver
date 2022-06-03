@@ -1,9 +1,9 @@
 ## Tutorial: Tidal Currents
 This tutorial covers how to detide and interpret ADCP (current) measurements near Getz Ice Shelf, Antarctica. Here we use the CATS tide model, but you can just as easily use any other TMD3.0 compatible if you wish.
 
-Back to Tide Model Driver Contents.
+[Back to Tide Model Driver Contents](../README.md).
  
-## View data file contents
+### View data file contents
 The first step when exploring any new dataset is to see what's in the data file. Use `ncdisp` to find out: 
 
 ```matlab 
@@ -73,7 +73,7 @@ Variables:
                        units         = 'm/s'
 ```
 
-## Load data
+### Load data
 Above you see that the units of time are days since Jan 1, 1950. So when we import time into Matlab's datenum format, just add the datenum of Jan 1, 1950. Load all the other data too. 
 
 ```matlab
@@ -85,7 +85,7 @@ u = ncread('ADCP_S112.nc','u');
 v = ncread('ADCP_S112.nc','v'); 
 ```
 
-## Plot current speed
+### Plot current speed
 Plot "speed" as the hypotenuse of u and v: 
 
 ```matlab
@@ -100,8 +100,7 @@ caxis([0 0.25]) % makes small signals more visible
 ```
 <img src="markdown_figures/tutorial_currents_01_hires.png" width="500"/>
 
-## 
- According to Anna Wåhlin: 
+Why is there missing data at the top of the water column? According to Anna Wåhlin: 
  
 >  The missing data at the top is likely due to loss of backscatter signal, 
 >  caused by too much energy being lost in the water column and/or lack of 
@@ -121,7 +120,7 @@ datetick('x','keeplimits')
 ## 
 Above, you can see the tidal signals pulsating the entire water column.
 
-## Plot mean currents
+### Plot mean currents
 Here are the mean zonal and meridional components. (Adding an 0.2 offset for display purposes): 
 
 ```matlab
@@ -141,7 +140,7 @@ datetick('x','mmm-yyyy')
 <img src="markdown_figures/tutorial_currents_03_hires.png" width="500"/>
 
 
-## Predict tides
+### Predict tides
 Get the predicted zonal and meridional components of the tidal current at the mooring location: 
 
 ```matlab
@@ -171,14 +170,14 @@ datetick('x','keeplimits')
 ## 
 Above, the tidal currents have been removed from the zonal and meridional components of the current. All that remains is the residual water flow that isn't driven by tides (and any tidal energy that wasn't perfectly accounted for in the CATS model). 
 
-## Flow into/out of a trough
+### Flow into/out of a trough
 Optional: Use [Antarctic Mapping Tools](https://github.com/chadagreene/Antarctic-Mapping-Tools) with [BedMachine](https://github.com/chadagreene/BedMachine/) and [Climate Data Tools](https://github.com/chadagreene/CDT) to plot a map of the area surrounding the mooring, for context: 
 
 ```matlab
 figure
 mapzoomps(lat,lon,'mapwidth',700) % zooms a map on the mooring
-bedmachine('bed')  plots bed depth 
-bedmachine  plots grounding line 
+bedmachine('bed') % plots bed depth 
+bedmachine % plots grounding line 
 hold on
 plotps(lat,lon,'yo','linewidth',4) % mooring location
 plotps(lat,lon,'ro','linewidth',2) 
@@ -214,7 +213,7 @@ datetick('x','keeplimits')
 ```
 <img src="markdown_figures/tutorial_currents_08_hires.png" width="500"/>
 
-## Detide the Observations
+### Detide the Observations
 Here's the same thing as above, but detided by subtracting the predicted tide: 
 
 ```matlab
@@ -234,7 +233,7 @@ title 'detided flow toward/away from Getz'
 ```
 <img src="markdown_figures/tutorial_currents_09_hires.png" width="500"/>
 
-## Baroclinic flow
+### Baroclinic flow
 So far, we've applied the mean predicted tidal currents to the entire water column. In reality, the strength of any water flow in the ocean is a function of depth. Here's the mean meridional velocity at this mooring:
 
 ```matlab
@@ -268,7 +267,7 @@ xline(v_tidal_mean)
 ```
 <img src="markdown_figures/tutorial_currents_11_hires.png" width="500"/>
 
-## Water transports versus velocities 
+### Water transports versus velocities 
 By default, TMD calculates _transport_ variables (m^2/s), then divides them by water column thickness to get barotropic tidal velocity (m/s). If bathymetry in the model is inaccurate, then errors in predicted currents will scale with the bathymetry error. 
  
  In this particular case, we know the depth of the mooring, which is 

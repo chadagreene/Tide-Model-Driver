@@ -3,19 +3,6 @@ Tide Model Driver for MATLAB, version 3.0
 
 🚧 This repo is under construction. 🚧
 
-
-# What's new in TMD 3.0?
-
-* Switched to consolidated NetCDF model data format. 
-* TMD functions rewritten for improved performance. 
-* Improved documentation.  
-* CATS2008 updates: 
-	* CATS resolution increased from 4 km to 2 km. 
-	* CATS bathymetry and coastlines adjusted to match BedMachine v2 ([Morlighem et al., 2020](https://doi.org/10.1038/s41561-019-0510-8)). 
-	* Ice shelf flexure model included for tidal deflections in grounding zones. 
-
-![Tidal phase of the m2 constituent for the Filchner-Ronne Ice Shelf](tide-model-conversions/CATS2008_update_2022_comparison.png)
-
 # TMD Contents 
 ### Help 
 To access TMD documentation within MATLAB, simply type 
@@ -57,5 +44,20 @@ This version of TMD works with NetCDF data, which have been converted from the o
 # Installation 
 1. Get tide model data. 
 2. Install TMD 
+
+# Tutorials
+* [ADCP current data analysis](doc/tutorial_currents.md).
+
+# What's new in TMD 3.0?
+
+* Switched to consolidated NetCDF model data format. 
+* TMD functions rewritten for improved performance. 
+* Improved documentation.  
+* CATS2008 updates: 
+	* CATS resolution increased from 4 km to 2 km. 
+	* CATS bathymetry and coastlines adjusted to match BedMachine v2 ([Morlighem et al., 2020](https://doi.org/10.1038/s41561-019-0510-8)). 
+	* Ice shelf flexure model included for tidal deflections in grounding zones. 
+
+![Tidal phase of the m2 constituent for the Filchner-Ronne Ice Shelf](tide-model-conversions/CATS2008_update_2022_comparison.png)
 
 # Author Info & Citation Information
