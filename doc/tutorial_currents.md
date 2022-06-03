@@ -98,7 +98,7 @@ cb = colorbar;
 ylabel(cb,'Current speed (m/s)')
 caxis([0 0.25]) % makes small signals more visible 
 ```
-![](markdown_figures/tutorial_currents_01_hires.png)
+<img src="markdown_figures/tutorial_currents_01_hires.png" width="500"/>
 
 ## 
  According to Anna Wåhlin: 
@@ -116,7 +116,7 @@ Let's zoom in on a few weeks to make the time series more sensible:
 xlim([datenum(2013,1,12) datenum(2013,2,15)])
 datetick('x','keeplimits')
 ```
-![](markdown_figures/tutorial_currents_02_hires.png)
+<img src="markdown_figures/tutorial_currents_02_hires.png" width="500"/>
 
 ## 
 Above, you can see the tidal signals pulsating the entire water column.
@@ -138,7 +138,7 @@ legend('u_{mean}+0.2','v_{mean}')
 axis tight
 datetick('x','mmm-yyyy')
 ```
-![](markdown_figures/tutorial_currents_03_hires.png)
+<img src="markdown_figures/tutorial_currents_03_hires.png" width="500"/>
 
 
 ## Predict tides
@@ -158,7 +158,7 @@ hold on
 plot(t,v_mean-v_pred);
 legend('u_{mean}+0.2','v_{mean}','u_{detide}+0.2','v_{detide}')
 ```
-![](markdown_figures/tutorial_currents_04_hires.png)
+<img src="markdown_figures/tutorial_currents_04_hires.png" width="500"/>
 
 Zoom in for clarity: 
 
@@ -166,7 +166,7 @@ Zoom in for clarity:
 xlim([datenum(2013,1,12) datenum(2013,2,15)])
 datetick('x','keeplimits')
 ```
-![](markdown_figures/tutorial_currents_05_hires.png)
+<img src="markdown_figures/tutorial_currents_05_hires.png" width="500"/>
 
 ## 
 Above, the tidal currents have been removed from the zonal and meridional components of the current. All that remains is the residual water flow that isn't driven by tides (and any tidal energy that wasn't perfectly accounted for in the CATS model). 
@@ -188,7 +188,7 @@ axis off
 shadem(4,[225 80]) % hillshade
 graticuleps % lat/lon grid
 ```
-![](markdown_figures/tutorial_currents_06_hires.png)
+<img src="markdown_figures/tutorial_currents_06_hires.png" width="500"/>
 
 In the map above, we see the north/south motion of the water roughly corresponds to flow out/into trough that leads to Getz Ice Shelf.  Here's just the meridional component of ADCP velocity, to show flow into and out of the trough: 
 
@@ -204,7 +204,7 @@ axis tight
 datetick('x','mmm-yyyy')
 title 'flow toward/away from Getz'
 ```
-![](markdown_figures/tutorial_currents_07_hires.png)
+<img src="markdown_figures/tutorial_currents_07_hires.png" width="500"/>
 
 In the time series above, red flows south (toward Getz) while blue flows north. Here's a zoom-in:
 
@@ -212,9 +212,10 @@ In the time series above, red flows south (toward Getz) while blue flows north. 
 xlim([datenum(2013,1,12) datenum(2013,2,15)])
 datetick('x','keeplimits')
 ```
-![](markdown_figures/tutorial_currents_08_hires.png)
+<img src="markdown_figures/tutorial_currents_08_hires.png" width="500"/>
 
-And here's the same thing, detided: 
+## Detide the Observations
+Here's the same thing as above, but detided by subtracting the predicted tide: 
 
 ```matlab
 v_detide = v - v_pred'; 
@@ -231,7 +232,7 @@ xlim([datenum(2013,1,12) datenum(2013,2,15)])
 datetick('x','keeplimits')
 title 'detided flow toward/away from Getz'
 ```
-![](markdown_figures/tutorial_currents_09_hires.png)
+<img src="markdown_figures/tutorial_currents_09_hires.png" width="500"/>
 
 ## Baroclinic flow
 So far, we've applied the mean predicted tidal currents to the entire water column. In reality, the strength of any water flow in the ocean is a function of depth. Here's the mean meridional velocity at this mooring:
@@ -247,7 +248,7 @@ xlabel 'meridional velocity (m/s)'
 ylabel 'depth (m)' 
 title 'mean meridional flow' 
 ```
-![](markdown_figures/tutorial_currents_10_hires.png)
+<img src="markdown_figures/tutorial_currents_10_hires.png" width="500"/>
 
 The plot above shows that mean flow is negative (southward, or toward Getz) throughout the entire water column, but is particularly strong near the bottom of the water column. 
  
@@ -265,7 +266,7 @@ That tiny value of mean tidal velocity tells us that effectively none of the mea
 hold on
 xline(v_tidal_mean)
 ```
-![](markdown_figures/tutorial_currents_11_hires.png)
+<img src="markdown_figures/tutorial_currents_11_hires.png" width="500"/>
 
 ## Water transports versus velocities 
 By default, TMD calculates _transport_ variables (m^2/s), then divides them by water column thickness to get barotropic tidal velocity (m/s). If bathymetry in the model is inaccurate, then errors in predicted currents will scale with the bathymetry error. 
