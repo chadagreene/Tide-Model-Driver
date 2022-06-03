@@ -1,4 +1,4 @@
-function [Z,x_or_lon,y_or_lat] = tmd_data(filename,variable,varargin) 
+function [Z,x_or_lon,y_or_lat,conList] = tmd_data(filename,variable,varargin) 
 % tmd_data loads tide model data into the Matlab workspace. 
 % 
 %% Syntax 
@@ -54,14 +54,10 @@ function [Z,x_or_lon,y_or_lat] = tmd_data(filename,variable,varargin)
 % are loaded, when only a small area within a larger tide model is of
 % interest. 
 % 
-%% Example 
+%% Examples 
+% For examples type 
 % 
-% [hAm,x,y] = tmd_data('CATS2022_02-21.nc','hAm');  
-% hPh = tmd_data('CATS2022_02-21.nc','hPh'); 
-% 
-% h = imagesc(x,y,hPh(:,:,1)); 
-% axis xy image
-% cmocean phase % set colormap
+%   tmd tmd_data
 % 
 %% Author Info 
 % This function was written by Chad A. Greene in 2022. 
@@ -82,6 +78,8 @@ bounds = [[-Inf;Inf] [-Inf;Inf]];
 
 assert(contains(filename,'.nc'),'Input filename must end in .nc.')
 assert(exist(filename,'file'),['Cannot find ',filename,'. Check the path and try again.'])
+
+conList = strsplit(ncreadatt(filename,'cons','long_name')); 
 
 proj4 = ncreadatt(filename,'mapping','spatial_proj4');
 if strcmpi(proj4,'+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
@@ -192,7 +190,7 @@ for k = 1:NCons
          Z(:,:,placInd) = abs(complex(double(permute(ncread(filename,'hRe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])),...
                                       double(permute(ncread(filename,'hIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]))));
       case 'hph'
-          Z(:,:,placInd) = -angle(complex(double(permute(ncread(filename,'hRe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])),...
+          Z(:,:,placInd) = angle(complex(double(permute(ncread(filename,'hRe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])),...
                                           double(permute(ncread(filename,'hIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]))));
       case 'u'
          Z(:,:,placInd) = complex(double(permute(ncread(filename,'URe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])),...
@@ -201,7 +199,7 @@ for k = 1:NCons
          Z(:,:,placInd) = abs(complex(double(permute(ncread(filename,'URe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])),...
                                       double(permute(ncread(filename,'UIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]))));
       case 'uph'
-          Z(:,:,placInd) = -angle(complex(double(permute(ncread(filename,'URe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])),...
+          Z(:,:,placInd) = angle(complex(double(permute(ncread(filename,'URe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])),...
                                           double(permute(ncread(filename,'UIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]))));
       case 'v' 
          Z(:,:,placInd) = complex(double(permute(ncread(filename,'VRe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])),...
@@ -210,7 +208,7 @@ for k = 1:NCons
          Z(:,:,placInd) = abs(complex(double(permute(ncread(filename,'VRe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])),...
                                       double(permute(ncread(filename,'VIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]))));
       case 'vph'
-          Z(:,:,placInd) = -angle(complex(double(permute(ncread(filename,'VRe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])),...
+          Z(:,:,placInd) = angle(complex(double(permute(ncread(filename,'VRe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])),...
                                           double(permute(ncread(filename,'VIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]))));
       otherwise
          error(['The requested variable ',variable,' is not a variable in file ',filename,'.'])

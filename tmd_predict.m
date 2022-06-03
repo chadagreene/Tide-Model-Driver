@@ -90,14 +90,14 @@ hc = permute(hc,[3 1 2]); % puts constituents in first column.
 % if flexure 
 %    flex = tmd_interp(filename,'flexure',lat,lon); 
 % end
-
-
 %%
 
 [astrol_s,astrol_h,astrol_p,astrol_N] = tmd_astrol(t);
 
 [ispec,~,ph,omega,~,~] = tmd_constit(conList);
 
+%atan2(-imag(hc),real(hc))
+   
 if MapSolution
    
    % Preallocate z: 

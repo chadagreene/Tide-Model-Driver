@@ -4,14 +4,10 @@ hc = tmd_interp('CATS2008_update_2022-04-22.nc','h',lat,lon,'constituents',{'m2'
 hc = permute(hc,[3 1 2]);
 
 
-hg = tmd_interp('/Users/cgreene/Downloads/TPXO9_atlas_v5/TPXO9_atlas30_update_2022-05-06.nc','h',lat,lon,'constituents',{'m2','mf'});
+hg = tmd_interp('/Users/cgreene/Downloads/TPXO9_atlas_v5/TPXO9_atlas30_update_2022-05-16.nc','h',lat,lon,'constituents',{'m2','mf'});
 hg = permute(hg,[3 1 2]);
 
 
-filename = '/Users/cgreene/Downloads/TPXO9_atlas_v5/TPXO9_atlas30_update_2022-05-06.nc';
-ph = ncread(filename,'phase');
-[angle(hc) angle(conj(hg)) -ph([4 6])]
-%[abs(hg) angle(hg)]
 
 %%
 
@@ -40,12 +36,25 @@ sl_cats2 = tmd_predict('CATS2008_update_2022-04-22.nc',lat,lon,t,'h','coast','un
 plot(t,sl_cats2-mean(sl_cats2,'omitnan'),'--')
 
 %%
-clf
-plot(t,sl_cats2-mean(sl_cats2,'omitnan'))
-hold on
-sl_tpxo = tmd_predict('/Users/cgreene/Downloads/TPXO9_atlas_v5/TPXO9_atlas30_update_2022-05-06.nc',lat,lon,t,'h','coast','unmask'); 
 
-plot(t,sl_tpxo-mean(sl_tpxo,'omitnan'))
+
+fn = '/Users/cgreene/Documents/GitHub/Tide-Model-Driver/doc/h189.nc'; % good
+lat = ncread(fn,'lat');
+lon = ncread(fn,'lon');
+t = ncdateread(fn,'time');
+sl = ncread(fn,'sea_level')/1000; 
+
+
+sl_cats2 = tmd_predict('CATS2008_update_2022-04-22.nc',lat,lon,t,'h','coast','unmask');
+
+figure
+plot(t,sl-mean(sl,'omitnan'),'color',.5*[1 1 1])
+hold on
+plot(t,sl_cats2-mean(sl_cats2,'omitnan'),'linewidth',2)
+hold on
+sl_tpxo = tmd_predict('/Users/cgreene/Downloads/TPXO9_atlas_v5/TPXO9_atlas30_update_2022-05-16.nc',lat,lon,t,'h','constituents',{'m2','s2','n2','k2','k1','o1','p1','q1','mf','mm'}); 
+
+plot(t,sl_tpxo-mean(sl_tpxo,'omitnan'),'linewidth',2)
 
 xlim(datetime([datenum('Jun 20, 2009, 12:00:56') datenum('Jul 02, 2009, 09:44:26')],'convertfrom','datenum'))
 
@@ -53,7 +62,7 @@ xlim(datetime([datenum('Jun 20, 2009, 12:00:56') datenum('Jul 02, 2009, 09:44:26
 %%
 
 sl_cats2 = tmd_predict('CATS2008_update_2022-04-22.nc',lat,lon,t,'h','coast','unmask','constituents',{'m2'});
-sl_tpx = tmd_predict('/Users/cgreene/Downloads/TPXO9_atlas_v5/TPXO9_atlas30_update_2022-05-03.nc',lat,lon,t,'h','coast','unmask','constituents',{'m2'});
+sl_tpx = tmd_predict('/Users/cgreene/Downloads/TPXO9_atlas_v5/TPXO9_atlas30_update_2022-05-16.nc',lat,lon,t,'h','coast','unmask','constituents',{'m2'});
 plot(t,sl_cats2)
 hold on
 plot(t,sl_tpx)

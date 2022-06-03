@@ -132,7 +132,7 @@ c_data =  { 'm2'; 's2';'k1' ;'o1'; ...
      
 %% Return only constants associated with constituent c: 
 
-[~,kk] = ismember(constituents,c_data); 
+[~,kk] = ismember(constituents,c_data);
 
 % Define outputs: 
 if any(kk)

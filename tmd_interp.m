@@ -150,7 +150,7 @@ switch lower(variable)
    case {'ham','uam','vam'} 
       zi = abs(zi); 
    case {'hph','uph','vph'} 
-      zi = -angle(zi); 
+      zi = angle(zi); 
    otherwise 
       % I think all the other cases are already taken care of. 
 
