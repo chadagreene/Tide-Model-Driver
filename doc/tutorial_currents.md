@@ -1,8 +1,9 @@
-## Tutorial: Tidal Currents
+# Tutorial: Tidal Currents
 This tutorial covers how to detide and interpret ADCP (current) measurements near Getz Ice Shelf, Antarctica. Here we use the CATS tide model, but you can just as easily use any other TMD3.0 compatible if you wish.
 
 [Back to Tide Model Driver Contents](../README.md).
  
+## Explore the measurements 
 ### View data file contents
 The first step when exploring any new dataset is to see what's in the data file. Use `ncdisp` to find out: 
 
@@ -13,11 +14,12 @@ Source:
 Format:
            netcdf4_classic
 Global Attributes:
-           Conventions   = 'CF-1.7'
-           Description   = 'ADCP current meter time series from a mooring near Getz Ice Shelf'
-           Author        = 'Anna Wåhlin'
-           creation_date = '2022-06-02'
-           Data_citation = 'Anna Wåhlin'
+           Conventions       = 'CF-1.7'
+           Description       = 'ADCP current meter time series from a mooring near Getz Ice Shelf'
+           Data_source       = 'Anna Wåhlin. 2017. WATER TEMPERATURE, SALINITY, and CURRENT VELOCITIES collected using RVIB Oden and RVIB Araon in the Amundsen Sea from 2010-02-15 to 2014-01-24 (NCEI Accession 0163357). NOAA NCEI Environmental Data Archive. {26A6DBC0-C484-40CE-A65C-49D52708D350}.'
+           Data_citation     = 'La, H.S., Park, K., Wåhlin, A. et al. Zooplankton and micronekton respond to climate fluctuations in the Amundsen Sea polynya, Antarctica. Sci Rep 9, 10087 (2019). https://doi.org/10.1038/s41598-019-46423-1'
+           creation_date     = '2022-06-03'
+           NetCDF_conversion = 'Chad A. Greene'
 Dimensions:
            time = 16127
            z    = 44
@@ -116,8 +118,7 @@ xlim([datenum(2013,1,12) datenum(2013,2,15)])
 datetick('x','keeplimits')
 ```
 <img src="markdown_figures/tutorial_currents_02_hires.png" width="500"/>
-
-## 
+ 
 Above, you can see the tidal signals pulsating the entire water column.
 
 ### Plot mean currents
@@ -140,7 +141,8 @@ datetick('x','mmm-yyyy')
 <img src="markdown_figures/tutorial_currents_03_hires.png" width="500"/>
 
 
-### Predict tides
+## Tidal currents
+### Predict tides at the mooring location 
 Get the predicted zonal and meridional components of the tidal current at the mooring location: 
 
 ```matlab
@@ -167,10 +169,9 @@ datetick('x','keeplimits')
 ```
 <img src="markdown_figures/tutorial_currents_05_hires.png" width="500"/>
 
-## 
 Above, the tidal currents have been removed from the zonal and meridional components of the current. All that remains is the residual water flow that isn't driven by tides (and any tidal energy that wasn't perfectly accounted for in the CATS model). 
 
-### Flow into/out of a trough
+## Flow into/out of a trough
 Optional: Use [Antarctic Mapping Tools](https://github.com/chadagreene/Antarctic-Mapping-Tools) with [BedMachine](https://github.com/chadagreene/BedMachine/) and [Climate Data Tools](https://github.com/chadagreene/CDT) to plot a map of the area surrounding the mooring, for context: 
 
 ```matlab
@@ -213,7 +214,7 @@ datetick('x','keeplimits')
 ```
 <img src="markdown_figures/tutorial_currents_08_hires.png" width="500"/>
 
-### Detide the Observations
+### Detide the observations
 Here's the same thing as above, but detided by subtracting the predicted tide: 
 
 ```matlab
@@ -233,7 +234,7 @@ title 'detided flow toward/away from Getz'
 ```
 <img src="markdown_figures/tutorial_currents_09_hires.png" width="500"/>
 
-### Baroclinic flow
+## Baroclinic flow
 So far, we've applied the mean predicted tidal currents to the entire water column. In reality, the strength of any water flow in the ocean is a function of depth. Here's the mean meridional velocity at this mooring:
 
 ```matlab
@@ -267,7 +268,7 @@ xline(v_tidal_mean)
 ```
 <img src="markdown_figures/tutorial_currents_11_hires.png" width="500"/>
 
-### Water transports versus velocities 
+## Water transports versus velocities 
 By default, TMD calculates _transport_ variables (m^2/s), then divides them by water column thickness to get barotropic tidal velocity (m/s). If bathymetry in the model is inaccurate, then errors in predicted currents will scale with the bathymetry error. 
  
  In this particular case, we know the depth of the mooring, which is 
