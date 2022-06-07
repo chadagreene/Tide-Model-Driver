@@ -3,7 +3,7 @@ function [pu,pf] = tmd_nodal(constituents,astrol_p,astrol_N)
 % ARGUMENTS and ASTROL FORTRAN subroutines SUPPLIED by RICHARD RAY, March 1999.
 % NOTE - "no1" in constit.h corresponds to "M1" in arguments.
 % 
-% This function is called by harp and harp1. 
+% This function is called by tmd_harp. 
 % 
 %% Syntax 
 % 

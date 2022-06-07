@@ -4,6 +4,8 @@
 % interpolation). 
 % 
 
+addpath(genpath('/Users/cgreene/Downloads/TMD3.00_alpha'))
+
 %% Model_Gr1kmTM_v1
 
 % Load reference data: 
@@ -18,7 +20,7 @@ tic
 sl_old = tmd_tide_pred('Model_Gr1kmTM_v1',datenum(t),lat,lon,'z'); 
 old_time = toc 
 tic
-sl_new = tmd_predict('/Users/cgreene/Downloads/Gr1kmTM/Gr1kmTM_update_2022-05-15.nc',lat,lon,t,'h','coast','unmask');
+sl_new = tmd_predict('Gr1kmTM_update_2022-05-15.nc',lat,lon,t,'h','coast','unmask');
 new_time = toc
 
 % Plot
@@ -41,7 +43,7 @@ tic
 sl_old = tmd_tide_pred('Model_Gr1kmTM_v1',datenum(t),lat,lon,'z'); 
 old_time = toc 
 tic
-sl_new = tmd_predict('/Users/cgreene/Downloads/Gr1kmTM/Gr1kmTM_update_2022-05-15.nc',lat,lon,t,'h','coast','unmask');
+sl_new = tmd_predict('Gr1kmTM_update_2022-05-15.nc',lat,lon,t,'h','coast','unmask');
 new_time = toc
 
 

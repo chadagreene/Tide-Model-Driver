@@ -18,6 +18,12 @@ function z = tmd_predict(filename,lat,lon,t,ptype,varargin)
 
 narginchk(4,Inf) 
 assert(exist(filename,'file'),['Cannot find model file ',filename,'. Check the file name and make sure it is in the Matlab path or specify the full path to the .nc file.'] ) 
+try 
+   tmd_version = ncreadatt(filename,'/','tmd_version'); 
+   assert(tmd_version>=3.0,[filename,' is not compatible with TMD3.0+.'])
+catch 
+   error([filename,' is not compatible with TMD3.0+.'])
+end
 assert(isequal(size(lat),size(lon)),'Dimensions of lat and lon must agree.') 
 
 % Set defaults: 
@@ -94,9 +100,8 @@ hc = permute(hc,[3 1 2]); % puts constituents in first column.
 
 [astrol_s,astrol_h,astrol_p,astrol_N] = tmd_astrol(t);
 
-[ispec,~,ph,omega,~,~] = tmd_constit(conList);
+[ispec,~,ph,omega,~] = tmd_constit(conList);
 
-%atan2(-imag(hc),real(hc))
    
 if MapSolution
    

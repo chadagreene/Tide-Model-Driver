@@ -8,11 +8,12 @@ function hhat = tmd_harp(t,hc,constituents,astrol_p,astrol_N,ispec,ph,omega)
 % 
 %% Description 
 % 
-% hhat = harp1(time,hc,con) returns the time series hhat reconstructed using HC. Inputs are: 
+% hhat = harp(time,hc,con) returns the time series hhat reconstructed using HC.
+% Inputs are: 
 % 
-%     t datetime or datenum
-%     constituents 
-%     hc(nc) - harmonic constant vector  (complex)
+%     t  time in Matlab's datenum format
+%     hc complex harmonic constants  
+%     constituents cell array, e.g., {'m2','k1'} 
 % 
 %% Author Info
 % TMD was written by Lana Erofeeva (serofeev@coas.oregonstate.edu) and is maintained by

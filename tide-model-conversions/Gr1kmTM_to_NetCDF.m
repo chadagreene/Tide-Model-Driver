@@ -125,7 +125,7 @@ scale_UV= 32767/max([mxur mxui mxvr mxvi])
 
 %%
 
-[ispec,amp,ph,omega,alpha,constitNum] = tmd_constit(strsplit(con_string));
+[ispec,amp,ph,omega,alpha] = tmd_constit(strsplit(con_string));
 
 proj4 = '+proj=stere +lat_0=90 +lat_ts=70 +lon_0=-45 +x_0=0 +y_0=0 +datum=WGS84 +units=km +no_defs +type=crs';
 
@@ -140,7 +140,7 @@ netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Title','Gr1kmTM');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Description','.');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Author','Chad A. Greene');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'creation_date',datestr(now,'yyyy-mm-dd'));
-netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'tmd_version','TMD3.0');
+netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'tmd_version',3.0);
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'license','MIT License');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Data_citation',['Susan L. Howard and Laurie Padman. 2021. Gr1kmTM: Greenland 1 kilometer Tide Model, 2021. urn:node:ARCTIC. doi:10.18739/A2251FM3S.'])
 

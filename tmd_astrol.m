@@ -1,5 +1,6 @@
 function [s,h,p,N] = tmd_astrol(t)
-% astrol computes the basic astronomical mean longitudes s, h, p, N.
+% tmd_astrol computes the basic astronomical mean longitudes s, h, p, N, 
+% following Foreman & Henry (1989). 
 % 
 %% Syntax
 % 
@@ -14,9 +15,19 @@ function [s,h,p,N] = tmd_astrol(t)
 %   p: lunar perigee
 %   N: ascending lunar node. Note N is not N', i.e. N is decreasing with time.
 % 
-%% Example
-%
-%        
+% Some guidance from Laurie Padman (because I asked for an explanation, June 2022):
+% "The variable names are exactly as used in the Foreman & Henry (1989, FH89)
+% paper. The statement about N not being N' can be explained looking at the 
+% first page (col 2) of FH89; there, they use n’ as the negative of the longitude 
+% of the moon’s ascending node. This statement in the code is telling us that
+% ‘n’ in TMD is *not* the negative’d value."    
+% 
+%% References 
+% 
+% Foreman, M. G. G., & Henry, R. F. (1989). The harmonic analysis of tidal 
+% model time series. Advances in water resources, 12(3), 109-120.
+% https://doi.org/10.1016/0309-1708(89)90017-1
+% 
 %% Version History: 
 % These formulae are for the period 1990 - 2010, and were derived
 % by David Cartwright (personal comm., Nov. 1990).

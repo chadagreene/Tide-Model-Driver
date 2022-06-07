@@ -41,6 +41,7 @@
 %  * |'wct'| water column thickness (m) 
 %  * |'mask'| binary land/ocean mask
 %  * |'flexure'| ice shelf flexure coefficient from a linear elastic model applied to BedMachine ice thickness (can slightly exceed 1). 
+%  * |'h_range'| full peak-to-peak tidal range 
 % 
 % |zi = tmd_interp(...,'constituents',conList)| specifies tidal constituents as a 
 % cell array (e.g, |{'m2','s2'}|. If constituents are not specified, all constituents 

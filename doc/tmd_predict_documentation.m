@@ -258,8 +258,8 @@ sl = ncread(fn,'sea_level')/1000;
 plot(t,sl-mean(sl,'omitnan'),'color',.6*[1 1 1])
 
 
-sl_Gr = tmd_predict('/Users/cgreene/Downloads/Gr1kmTM/Gr1kmTM_update_2022-05-15.nc',lat,lon,t,'h');
-sl_tpx = tmd_predict('/Users/cgreene/Downloads/TPXO9_atlas_v5/TPXO9_atlas30_update_2022-05-16.nc',lat,lon,t,'h');
+sl_Gr = tmd_predict('Gr1kmTM_update_2022-05-15.nc',lat,lon,t,'h');
+sl_tpx = tmd_predict('TPXO9_atlas30_update_2022-05-16.nc',lat,lon,t,'h');
 
 hold on
 

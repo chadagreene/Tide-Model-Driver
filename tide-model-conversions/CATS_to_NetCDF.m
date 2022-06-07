@@ -9,12 +9,14 @@
 %% Enter initial file info 
 
 % Output file: 
-newfilename = ['/Users/cgreene/Downloads/CATS2008/CATS2008_update_',datestr(now,'yyyy-mm-dd'),'.nc']; 
+newfilename = ['/Users/cgreene/Documents/data/tides/CATS2008_update_',datestr(now,'yyyy-mm-dd'),'.nc']; 
 
 % Input files: 
 filename_grd = '/Users/cgreene/Downloads/CATS2008/grid_CATS2008'; 
 filename_h = '/Users/cgreene/Downloads/CATS2008/hf.CATS2008.out'; 
 filename_u = '/Users/cgreene/Downloads/CATS2008/uv.CATS2008.out'; 
+addpath(genpath('/Users/cgreene/Downloads/TMD3.00_alpha'))
+addpath(genpath('/Users/cgreene/Downloads/CATS2008'))
 
 old_res = 4; % (km) input grid resolution 
 new_res = 2; % (km) output grid resolution 
@@ -35,7 +37,8 @@ x = (ll_lims(1)+old_res/2):old_res:(ll_lims(2)-old_res/2);
 y = (ll_lims(4)-old_res/2):-old_res:(ll_lims(3)+old_res/2); 
 
 % Number of constituents: 
-Ncons = length(strsplit(con_string,' ')); 
+conList = strsplit(con_string,' ');
+Ncons = length(conList); 
 
 for k=1:Ncons
    
@@ -178,17 +181,24 @@ axis([  -1609006.64    -415618.02      63826.14    1152447.96])
 
 % export_fig CATS2008_update_2022_comparison.png -r600 -p0.01
 
+%% Tidal range
+% After writing the whole file, calculate the peak-to-peak tidal range and 
+% add it to the NetCDF. 
+
+% Takes ~3 hours! 
+%h_range = tidal_range(newfilename);
+h_range = tidal_range(h,conList,mask==1);
 %%
 
 % Scaling factor for saving to NCSHORT (int16):
 scale_h = floor(32767/max(abs([real(h(:));imag(h(:))])));
 scale_UV = floor(32767/max(abs([real(U(:));real(V(:));imag(U(:));imag(V(:));])));
 
-[ispec,amp,ph,omega,alpha,constitNum] = tmd_constit(strsplit(con_string));
+[ispec,amp,ph,omega,alpha] = tmd_constit(strsplit(con_string));
 
 proj4 = '+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=-70 +x_0=0 +y_0=0 +datum=WGS84 +units=km +no_defs +type=crs';
 
-return
+
 %% Write the netcdf 
 
 % 1. Create netCDF file handle and Attributes
@@ -200,7 +210,7 @@ netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Title','CATS2022');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Description','This is CATS2008, but slightly modified to match BedMachine v2 geometry.');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Author','Chad A. Greene');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'creation_date',datestr(now,'yyyy-mm-dd'));
-netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'tmd_version','TMD3.0');
+netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'tmd_version',3.0);
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'license','MIT License');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Data_citation',['Howard, S. L., Erofeeva, S., & Padman, L. (2019) "CATS2008: Circum-Antarctic Tidal Simulation version 2008" u.S. Antarctic Program (USAP) Data Center. doi: https://doi.org/10.15784/601235.'])
 
@@ -334,6 +344,14 @@ netcdf.putAtt(ncid,flexure_var_id,'long_name',    'Forward-modeled coefficient o
 netcdf.putAtt(ncid,flexure_var_id,'standard_name','ice_flexure_percent');
 netcdf.putAtt(ncid,flexure_var_id,'grid_mapping', 'polar_stereographic');
 
+% define h_range
+R_var_id = netcdf.defVar(ncid,'h_range','NC_SHORT',[x_id y_id]);
+netcdf.putAtt(ncid,R_var_id,'long_name',    'Peak-to-peak tidal range.');
+netcdf.putAtt(ncid,R_var_id,'standard_name','tidal range');
+netcdf.putAtt(ncid,R_var_id,'grid_mapping', 'polar_stereographic');
+netcdf.putAtt(ncid,R_var_id,'units', 'm');
+netcdf.putAtt(ncid,R_var_id,'scale_factor',1/1000);
+
 % Compress and stop variable definition
 netcdf.defVarDeflate(ncid,lat_var_id,true,true,9);
 netcdf.defVarDeflate(ncid,lon_var_id,true,true,9);
@@ -346,6 +364,7 @@ netcdf.defVarDeflate(ncid,vRe_var_id,true,true,9);
 netcdf.defVarDeflate(ncid,wct_var_id,true,true,9);
 netcdf.defVarDeflate(ncid,mask_var_id,true,true,9);
 netcdf.defVarDeflate(ncid,flexure_var_id,true,true,9);
+netcdf.defVarDeflate(ncid,R_var_id,true,true,9);
 netcdf.endDef(ncid);
 
 %3. Place data
@@ -367,9 +386,11 @@ netcdf.putVar(ncid,vIm_var_id,ipermute(int16(scale_UV*imag(V)),[2 1 3]));
 netcdf.putVar(ncid,wct_var_id,ipermute(wct,[2 1]));
 netcdf.putVar(ncid,mask_var_id,ipermute(mask,[2 1]));
 netcdf.putVar(ncid,flexure_var_id,ipermute(flexure,[2 1]));
+netcdf.putVar(ncid,R_var_id,ipermute(h_range*1000,[2 1]));
 
 %4. Close file 
 netcdf.close(ncid)
 
-disp done
+disp 'done'
+
 

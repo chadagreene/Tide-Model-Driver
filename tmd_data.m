@@ -40,6 +40,7 @@ function [Z,x_or_lon,y_or_lat,conList] = tmd_data(filename,variable,varargin)
 %  * 'wct' water column thickness (m) 
 %  * 'mask' binary land/ocean mask
 %  * 'flexure' ice shelf flexure coefficient from a linear elastic model applied to BedMachine ice thickness (can slightly exceed 1). Only for CATS model. 
+%  * 'h_range' full peak-to-peak tidal range 
 %
 % [...] = tmd_data(...,'constituents',conList) specifies tidal constituents as a 
 % cell array (e.g, {'m2','s2'}. If constituents are not specified, all constituents 
@@ -64,6 +65,19 @@ function [Z,x_or_lon,y_or_lat,conList] = tmd_data(filename,variable,varargin)
 % 
 % See also tmd_interp and tmd_predict. 
 
+%% Error checks 
+
+assert(contains(filename,'.nc'),'Input filename must end in .nc.')
+assert(exist(filename,'file'),['Cannot find ',filename,'. Check the path and try again.'])
+
+% Ensure the model file is TMD3.0 compatible: 
+try 
+   tmd_version = ncreadatt(filename,'/','tmd_version'); 
+   assert(tmd_version>=3.0,[filename,' is not compatible with TMD3.0+.'])
+catch 
+   error([filename,' is not compatible with TMD3.0+.'])
+end
+
 %% Input parsing 
 
 narginchk(2,Inf)
@@ -75,9 +89,6 @@ geo = false; % output geographic coordinates
 stride = Inf; 
 NCons = 1; 
 bounds = [[-Inf;Inf] [-Inf;Inf]];
-
-assert(contains(filename,'.nc'),'Input filename must end in .nc.')
-assert(exist(filename,'file'),['Cannot find ',filename,'. Check the path and try again.'])
 
 conList = strsplit(ncreadatt(filename,'cons','long_name')); 
 

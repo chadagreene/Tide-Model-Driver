@@ -238,10 +238,10 @@ title 'detided flow toward/away from Getz'
 So far, we've applied the mean predicted tidal currents to the entire water column. In reality, the strength of any water flow in the ocean is a function of depth. Here's the mean meridional velocity at this mooring:
 
 ```matlab
-v_baroclinic = mean(v,2,'omitnan'); 
+v_barotropic = mean(v,2,'omitnan'); 
 
 figure
-plot(v_baroclinic,z)
+plot(v_barotropic,z)
 box off 
 axis tight
 xlabel 'meridional velocity (m/s)'
@@ -260,13 +260,8 @@ v_tidal_mean =
    1.5288e-05
 ```
 
-That tiny value of mean tidal velocity tells us that effectively none of the mean flow here is driven by tidal forcing. Here's the mean meridional tidal velocity plotted as a vertical line, for context: 
+That tiny value of mean tidal velocity tells us that effectively none of the mean flow here is driven by tidal forcing. 
 
-```matlab
-hold on
-xline(v_tidal_mean)
-```
-<img src="markdown_figures/tutorial_currents_11_hires.png" width="500"/>
 
 ## Water transports versus velocities 
 By default, TMD calculates _transport_ variables (m^2/s), then divides them by water column thickness to get barotropic tidal velocity (m/s). If bathymetry in the model is inaccurate, then errors in predicted currents will scale with the bathymetry error. 

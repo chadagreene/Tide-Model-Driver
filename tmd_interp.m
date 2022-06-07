@@ -41,7 +41,8 @@ function zi = tmd_interp(filename,variable,lati,loni,varargin)
 %  * 'wct' water column thickness (m) 
 %  * 'mask' binary land/ocean mask
 %  * 'flexure' ice shelf flexure coefficient from a linear elastic model applied to BedMachine ice thickness (can slightly exceed 1). Only for CATS model. 
-% 
+%  * 'h_range' full peak-to-peak tidal range 
+%
 % zi = tmd_interp(...,'constituents',conList) specifies tidal constituents as a 
 % cell array (e.g, {'m2','s2'}. If constituents are not specified, all constituents 
 % from the model are returned. 
@@ -66,6 +67,14 @@ assert(islatlon(lati,loni),'Inputs lati,loni must be in the range of possible la
 assert(isequal(size(lati),size(loni)),'Dimensions of input lati,loni coordinates must agree.') 
 assert(contains(filename,'.nc'),'Input filename must end in .nc.')
 assert(exist(filename,'file'),['Cannot find ',filename,'. Check the path and try again.'])
+
+% Ensure the model file is TMD3.0 compatible: 
+try 
+   tmd_version = ncreadatt(filename,'/','tmd_version'); 
+   assert(tmd_version>=3.0,[filename,' is not compatible with TMD3.0+.'])
+catch 
+   error([filename,' is not compatible with TMD3.0+.'])
+end
 
 %% Parse inputs 
 

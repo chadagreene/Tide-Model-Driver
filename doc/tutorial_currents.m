@@ -74,7 +74,7 @@ datetick('x','mmm-yyyy')
 % at the mooring location: 
 
 % (My) file path to the model file: 
-fn = '/Users/cgreene/Downloads/CATS2008/CATS2008_update_2022-04-22.nc'; 
+fn = 'CATS2008_update_2022-06-05.nc'; 
 
 % Predict tidal velocities: 
 u_pred = tmd_predict(fn,lat,lon,t,'u');  
@@ -160,10 +160,10 @@ title 'detided flow toward/away from Getz'
 % water column. In reality, the strength of any water flow in the ocean is
 % a function of depth. Here's the mean meridional velocity at this mooring:
 
-v_baroclinic = mean(v,2,'omitnan'); 
+v_barotropic = mean(v,2,'omitnan'); 
 
 figure
-plot(v_baroclinic,z)
+plot(v_barotropic,z)
 box off 
 axis tight
 xlabel 'meridional velocity (m/s)'
@@ -181,11 +181,7 @@ v_tidal_mean = mean(v_pred)
 
 %%
 % That tiny value of mean tidal velocity tells us that effectively none of the mean
-% flow here is driven by tidal forcing. Here's the mean meridional tidal
-% velocity plotted as a vertical line, for context: 
-
-hold on
-xline(v_tidal_mean)
+% flow here is driven by tidal forcing. 
 
 %% Water transports versus velocities 
 % By default, TMD calculates _transport_ variables (m^2/s), then divides them by
