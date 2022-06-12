@@ -1,11 +1,11 @@
 function R = tidal_range(filename_or_hc,conList,mask)
 % tidal_range calculates the peak-to-peak tidal height range. (May take
-% hours.) 
+% several hours.) 
 % 
 %% Syntax
 % 
 %  R = tidal_range(filename)
-%  R = tidal_range(hRe,hIm,conList,mask)
+%  R = tidal_range(hc,conList,mask)
 % 
 %% Description
 % 
@@ -14,19 +14,23 @@ function R = tidal_range(filename_or_hc,conList,mask)
 % minus minimum predicted values over a 14 day period, calculated at 30
 % minute temporal resolution, including major and minor constituents. 
 % 
-% R = tidal_range(hRe,hIm,conList,mask)
+% R = tidal_range(hc,conList,mask) computes the tidal range for the
+% complex coefficients hc corresponding to the constituents conList, and a
+% binary mask that is true for any pixels to be solved. hc should be MxNxP,
+% where M and N are spatial dimensions and P is the number of constituents.
+% conList is a Px1 cell array of consitutents, and mask is MxN. 
 %
 %% Example 
 % 
-% R = tidal_range('/Users/cgreene/Downloads/CATS2008/CATS2008_update_2022-04-22.nc');
+% R = tidal_range('/Users/cgreene/data/CATS2008_update_2022-04-22.nc');
 % 
 %% Author Info 
 % Written by Chad A. Greene, June 2022. 
 
 %% 
 
-% Two weeks of 30 minute timesteps: 
-t = (datenum(2000,1,1):1/48:datenum(2000,1,29))';
+% A month of 30 minute timesteps: 
+t = (datenum(2000,1,1):1/48:datenum(2000,1,31))';
 
 %% Load data
 
@@ -42,7 +46,7 @@ end
 hc = cube2rect(hc,mask); % cube2rect is in Climate Data Toolbox for Matlab
 
 [astrol_s,astrol_h,astrol_p,astrol_N] = tmd_astrol(t);
-[ispec,~,ph,omega,~,~] = tmd_constit(conList);
+[ispec,~,ph,omega,~] = tmd_constit(conList);
 
 %% Solve
 

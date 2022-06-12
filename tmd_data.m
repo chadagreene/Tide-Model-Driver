@@ -90,7 +90,7 @@ stride = Inf;
 NCons = 1; 
 bounds = [[-Inf;Inf] [-Inf;Inf]];
 
-conList = strsplit(ncreadatt(filename,'cons','long_name')); 
+conList = strsplit(ncreadatt(filename,'constituents','constituent_order')); 
 
 proj4 = ncreadatt(filename,'mapping','spatial_proj4');
 if strcmpi(proj4,'+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
@@ -142,7 +142,7 @@ else
    x_or_lon = double(ncread(filename,'x')); 
    y_or_lat = double(ncread(filename,'y')); 
 end
-cons = strsplit(ncreadatt(filename,'cons','long_name')); 
+cons = strsplit(ncreadatt(filename,'constituents','constituent_order')); 
 
 dx = abs(diff(x_or_lon(1:2))); 
 dy = abs(diff(y_or_lat(1:2))); 

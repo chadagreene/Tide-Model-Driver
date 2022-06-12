@@ -12,11 +12,11 @@
 newfilename = ['/Users/cgreene/Documents/data/tides/CATS2008_update_',datestr(now,'yyyy-mm-dd'),'.nc']; 
 
 % Input files: 
-filename_grd = '/Users/cgreene/Downloads/CATS2008/grid_CATS2008'; 
-filename_h = '/Users/cgreene/Downloads/CATS2008/hf.CATS2008.out'; 
-filename_u = '/Users/cgreene/Downloads/CATS2008/uv.CATS2008.out'; 
+filename_grd = '/Users/cgreene/Documents/data/tides/CATS2008/grid_CATS2008'; 
+filename_h = '/Users/cgreene/Documents/data/tides/CATS2008/hf.CATS2008.out'; 
+filename_u = '/Users/cgreene/Documents/data/tides/CATS2008/uv.CATS2008.out'; 
 addpath(genpath('/Users/cgreene/Downloads/TMD3.00_alpha'))
-addpath(genpath('/Users/cgreene/Downloads/CATS2008'))
+addpath(genpath('/Users/cgreene/Documents/data/tides/CATS2008'))
 
 old_res = 4; % (km) input grid resolution 
 new_res = 2; % (km) output grid resolution 
@@ -51,6 +51,10 @@ for k=1:Ncons
    U(:,:,k) = flipud(tmp'); 
    V(:,:,k) = flipud(tmp2'); 
 end
+
+% Mask out erroneous "lakes" in CATS2008 (identified by Tyler Sutterley)  
+bad = rms(abs(h),3)<0.003 & mask;
+mask(bad) = 0; 
 
 %% Start a phase comparison 
 % (Finishes after grid densification) 
@@ -185,9 +189,10 @@ axis([  -1609006.64    -415618.02      63826.14    1152447.96])
 % After writing the whole file, calculate the peak-to-peak tidal range and 
 % add it to the NetCDF. 
 
-% Takes ~3 hours! 
-%h_range = tidal_range(newfilename);
-h_range = tidal_range(h,conList,mask==1);
+% Takes ~5 hours! 
+%h_range = tidal_range(h,conList,mask==1);
+h_range = permute(ncread('CATS2008_update_2022-06-06.nc','h_range'),[2 1]); 
+
 %%
 
 % Scaling factor for saving to NCSHORT (int16):
@@ -207,8 +212,8 @@ mode = bitor(mode,netcdf.getConstant('CLASSIC_MODEL'));
 ncid=netcdf.create(newfilename,mode);
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Conventions','CF-1.7');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Title','CATS2022');
-netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Description','This is CATS2008, but slightly modified to match BedMachine v2 geometry.');
-netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Author','Chad A. Greene');
+netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Description','This is CATS2008, but resampled at 2 km resolution, and adjusted to match BedMachine v2 ice masks and water column thickness.');
+netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Author','Susan Howard, Svetlana Erofeeva, Laurie Padman, Chad A. Greene, and Tyler Sutterley.');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'creation_date',datestr(now,'yyyy-mm-dd'));
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'tmd_version',3.0);
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'license','MIT License');
@@ -228,14 +233,14 @@ netcdf.putAtt(ncid,mapping_var_id,'spatial_proj4',proj4);
 % Define x: 
 x_id     = netcdf.defDim(ncid,'x',length(x));
 x_var_id = netcdf.defVar(ncid,'x','NC_FLOAT',x_id);
-netcdf.putAtt(ncid,x_var_id,'long_name',    'Cartesian x-coordinate');
+netcdf.putAtt(ncid,x_var_id,'long_name',    'Cartesian x-coordinate, grid cell center');
 netcdf.putAtt(ncid,x_var_id,'standard_name','projection_x_coordinate');
 netcdf.putAtt(ncid,x_var_id,'units',        'kilometer');
 
 % Define y: 
 y_id     = netcdf.defDim(ncid,'y',length(y));
 y_var_id = netcdf.defVar(ncid,'y','NC_FLOAT',y_id);
-netcdf.putAtt(ncid,y_var_id,'long_name',    'Cartesian y-coordinate');
+netcdf.putAtt(ncid,y_var_id,'long_name',    'Cartesian y-coordinate, grid cell center');
 netcdf.putAtt(ncid,y_var_id,'standard_name','projection_y_coordinate');
 netcdf.putAtt(ncid,y_var_id,'units',        'kilometer');
 
@@ -252,23 +257,27 @@ netcdf.putAtt(ncid,lon_var_id,'standard_name','longitude');
 netcdf.putAtt(ncid,lon_var_id,'units',        'degree');
 
 % Define constituents
-cons_id = netcdf.defDim(ncid,'cons',Ncons); 
-cons_var_id = netcdf.defVar(ncid,'cons','NC_BYTE',cons_id); 
-netcdf.putAtt(ncid,cons_var_id,'standard_name',    'tidal_constituents');
-netcdf.putAtt(ncid,cons_var_id,'long_name',con_string); 
+cons_id = netcdf.defDim(ncid,'constituents',Ncons); 
+cons_var_id = netcdf.defVar(ncid,'constituents','NC_BYTE',cons_id); 
+netcdf.putAtt(ncid,cons_var_id,'standard_name', 'tidal_constituents');
+netcdf.putAtt(ncid,cons_var_id,'long_name','Tidal constituents listed in order in the constituent_order attribute.'); 
+netcdf.putAtt(ncid,cons_var_id,'constituent_order',con_string); 
 
 % Define constituent attributes 
 amp_var_id = netcdf.defVar(ncid,'amplitude','NC_DOUBLE',cons_id); 
 netcdf.putAtt(ncid,amp_var_id,'standard_name',    'amplitude');
-netcdf.putAtt(ncid,amp_var_id,'long_name','constituent amplitude'); 
+netcdf.putAtt(ncid,amp_var_id,'long_name','amplitude of equilibrium tide in for each tidal constituent.'); 
+netcdf.putAtt(ncid,amp_var_id,'units',    'meters');
 
 ph_var_id = netcdf.defVar(ncid,'phase','NC_DOUBLE',cons_id); 
 netcdf.putAtt(ncid,ph_var_id,'standard_name',    'phase');
 netcdf.putAtt(ncid,ph_var_id,'long_name','Astronomical arguments (relative to t0 = 1 Jan 0:00 1992)'); 
+netcdf.putAtt(ncid,ph_var_id,'units',    'radians');
 
 om_var_id = netcdf.defVar(ncid,'omega','NC_FLOAT',cons_id); 
 netcdf.putAtt(ncid,om_var_id,'standard_name',    'omega');
 netcdf.putAtt(ncid,om_var_id,'long_name','frequency'); 
+netcdf.putAtt(ncid,om_var_id,'units','1/s'); 
 
 alp_var_id = netcdf.defVar(ncid,'alpha','NC_FLOAT',cons_id); 
 netcdf.putAtt(ncid,alp_var_id,'standard_name',    'alpha');
@@ -292,7 +301,7 @@ netcdf.putAtt(ncid,hIm_var_id,'scale_factor',  1/scale_h);
 
 % Define uRe
 uRe_var_id = netcdf.defVar(ncid,'URe','NC_SHORT',[x_id y_id cons_id]);
-netcdf.putAtt(ncid,uRe_var_id,'long_name',    'real component of U transport constituent.');
+netcdf.putAtt(ncid,uRe_var_id,'long_name',    'real component of U transport constituent. This is the zonal flow component in geographic coordinates.');
 netcdf.putAtt(ncid,uRe_var_id,'standard_name','height_constituent');
 netcdf.putAtt(ncid,uRe_var_id,'grid_mapping', 'polar_stereographic');
 netcdf.putAtt(ncid,uRe_var_id,'units',        'm^2/s');
@@ -300,7 +309,7 @@ netcdf.putAtt(ncid,uRe_var_id,'scale_factor',  1/scale_UV);
 
 % Define uIm
 uIm_var_id = netcdf.defVar(ncid,'UIm','NC_SHORT',[x_id y_id cons_id]);
-netcdf.putAtt(ncid,uIm_var_id,'long_name',    'imaginary component of U transport constituent.');
+netcdf.putAtt(ncid,uIm_var_id,'long_name',    'imaginary component of U transport constituent. This is the zonal flow component in geographic coordinates.');
 netcdf.putAtt(ncid,uIm_var_id,'standard_name','height_constituent');
 netcdf.putAtt(ncid,uIm_var_id,'grid_mapping', 'polar_stereographic');
 netcdf.putAtt(ncid,uIm_var_id,'units',        'm^2/s');
@@ -308,7 +317,7 @@ netcdf.putAtt(ncid,uIm_var_id,'scale_factor',  1/scale_UV);
 
 % Define vRe
 vRe_var_id = netcdf.defVar(ncid,'VRe','NC_SHORT',[x_id y_id cons_id]);
-netcdf.putAtt(ncid,vRe_var_id,'long_name',    'real component of V transport constituent.');
+netcdf.putAtt(ncid,vRe_var_id,'long_name',    'real component of V transport constituent. This is the meridional flow component in geographic coordinates.');
 netcdf.putAtt(ncid,vRe_var_id,'standard_name','height_constituent');
 netcdf.putAtt(ncid,vRe_var_id,'grid_mapping', 'polar_stereographic');
 netcdf.putAtt(ncid,vRe_var_id,'units',        'm^2/s');
@@ -316,7 +325,7 @@ netcdf.putAtt(ncid,vRe_var_id,'scale_factor',  1/scale_UV);
 
 % Define vIm
 vIm_var_id = netcdf.defVar(ncid,'VIm','NC_SHORT',[x_id y_id cons_id]);
-netcdf.putAtt(ncid,vIm_var_id,'long_name',    'imaginary component of V transport constituent.');
+netcdf.putAtt(ncid,vIm_var_id,'long_name',    'imaginary component of V transport constituent.  This is the meridional flow component in geographic coordinates.');
 netcdf.putAtt(ncid,vIm_var_id,'standard_name','height_constituent');
 netcdf.putAtt(ncid,vIm_var_id,'grid_mapping', 'polar_stereographic');
 netcdf.putAtt(ncid,vIm_var_id,'units',        'm^2/s');

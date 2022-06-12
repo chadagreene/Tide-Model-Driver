@@ -1,18 +1,18 @@
-function dh = tmd_InferMinor(hc,constituents,t,aS,aH,aP,aN)
+function dh = tmd_InferMinor(hc,constituents,t,s,h,p,N)
 % tmd_InferMinor returns correction for 16 minor tidal constiuents. Zeros 
 % are returned if not enough input for inference. This is based on Richard
 % Ray's code perth2. 
 % 
 %% Syntax
 % 
-%  dh = tmd_InferMinor(hc,constituents,t,aS,aH,aP,aN)
+%  dh = tmd_InferMinor(hc,constituents,t,s,h,p,N)
 % 
 %% Description 
 % 
-% dh = tmd_InferMinor(hc,constituents,t,aS,aH,aP,aN) returns the correction dh given 
-% complex hc for GIVEN constituents/points, constituents are in cell format, 
-% t is serial date in Matlab's datenum or datetime format. The variables aS,aH,aP,aN 
-% are the outputs of tmd_astrol, and must have the same dimensions as t. 
+% dh = tmd_InferMinor(hc,constituents,t,s,h,p,N) returns the correction dh given 
+% complex hc for given constituents are in cell format, 
+% t is serial date in Matlab's datenum or datetime format. The variables
+% s,h,p,N are the outputs of tmd_astrol, and must have the same dimensions as t. 
 % 
 %% Function history
 % This function was written in Matlab by Lana Erofeeva, Oct 2004, based on 
@@ -34,15 +34,15 @@ function dh = tmd_InferMinor(hc,constituents,t,aS,aH,aP,aN)
 narginchk(7,7) 
 assert(isnumeric(hc)==1,'InferMinor input error: hc must be numeric.') 
 assert(iscell(constituents),'InferMinor input error: cid must be a cell array of constituents.') 
-assert(isequal(size(t),size(aS),size(aH),size(aP),size(aN)),'Time and astrol inputs must all have the same dimensions.')
+assert(isequal(size(t),size(s),size(h),size(p),size(N)),'Time and astrol inputs must all have the same dimensions.')
 
 %% Check sizes: 
 
 M = size(hc,2); 
-N = numel(t); 
-if N>1
-   assert(M==1 | M==N,'Error: If neither input times nor location are scalar, they must be vectors of the same length.')
-   M=N; 
+T = numel(t); 
+if T>1
+   assert(M==1 | M==T,'Error: If neither input times nor location are scalar, they must be vectors of the same length.')
+   M=T; 
 end
 
 %% Create data based on input dimensions: 
@@ -63,6 +63,15 @@ cid8 = {'q1';'o1';'p1';'k1';'n2';'m2';'s2';'k2'};
 z8 = hc(Lib,:); 
 
 assert(sum(Lia)>5,'Not enough constituents for inference.')
+
+% Names of all 18 minor cons (some are repeated)  
+minor_cons = {'2q1';'sigma1';'rho1';'m1';'m1';'chi1';'pi1';'phi1';'theta1';...
+              'j1';'oo1';'2n2';'mu2';'nu2';'lambda2';'l2';'l2';'t2'};
+
+% Get the indices of all the minor constituents that are in minor_cons and 
+% also in the tide model. The ~tilde below ensures we only solve the minor 
+% cons that aren't in the model, because we don't want to double count them.
+ind = ~ismember(minor_cons,constituents); 
 
 %% Solve constants: 
 
@@ -90,30 +99,30 @@ zmin(17,:) = 0.0033*z8(6,:) + 0.0082*z8(7,:);   %L2 +
 zmin(18,:) = 0.0585*z8(7,:);                      %t2 + 
 
 arg=zeros(18,M);
-arg(1,:) = t1 - 4.*aS + aH + 2.*aP - 90;     % 2Q1
-arg(2,:) = t1 - 4.*aS + 3.*aH - 90;         % sigma1
-arg(3,:) = t1 - 3.*aS + 3.*aH - aP - 90;     % rho1
-arg(4,:) = t1 - aS + aH - aP + 90;           % M1
-arg(5,:) = t1 - aS + aH + aP + 90;           % M1
-arg(6,:) = t1 - aS + 3.*aH - aP + 90;        % chi1
-arg(7,:) = t1 - 2.*aH + PP - 90;           % pi1
-arg(8,:) = t1 + 3.*aH + 90;                % phi1
-arg(9,:) = t1 + aS - aH + aP + 90;           % theta1
-arg(10,:) = t1 + aS + aH - aP + 90;          % J1
-arg(11,:) = t1 + 2.*aS + aH + 90;           % OO1
-arg(12,:) = t2 - 4.*aS + 2.*aH + 2.*aP;       % 2N2
-arg(13,:) = t2 - 4.*aS + 4.*aH;              % mu2
-arg(14,:) = t2 - 3.*aS + 4.*aH - aP;          % nu2
-arg(15,:) = t2 - aS + aP + 180;           % lambda2
-arg(16,:) = t2 - aS + 2.*aH - aP + 180;    % L2
-arg(17,:) = t2 - aS + 2.*aH + aP;             % L2
-arg(18,:) = t2 - aH + PP;                   % t2
+arg(1,:) = t1 - 4.*s + h + 2.*p - 90;     % 2Q1
+arg(2,:) = t1 - 4.*s + 3.*h - 90;         % sigma1
+arg(3,:) = t1 - 3.*s + 3.*h - p - 90;     % rho1
+arg(4,:) = t1 - s + h - p + 90;           % M1
+arg(5,:) = t1 - s + h + p + 90;           % M1
+arg(6,:) = t1 - s + 3.*h - p + 90;        % chi1
+arg(7,:) = t1 - 2.*h + PP - 90;           % pi1
+arg(8,:) = t1 + 3.*h + 90;                % phi1
+arg(9,:) = t1 + s - h + p + 90;           % theta1
+arg(10,:) = t1 + s + h - p + 90;          % J1
+arg(11,:) = t1 + 2.*s + h + 90;           % OO1
+arg(12,:) = t2 - 4.*s + 2.*h + 2.*p;       % 2N2
+arg(13,:) = t2 - 4.*s + 4.*h;              % mu2
+arg(14,:) = t2 - 3.*s + 4.*h - p;          % nu2
+arg(15,:) = t2 - s + p + 180;           % lambda2
+arg(16,:) = t2 - s + 2.*h - p + 180;    % L2
+arg(17,:) = t2 - s + 2.*h + p;             % L2
+arg(18,:) = t2 - h + PP;                   % t2
 
 % determine nodal corrections f and u:
-sinn = sin(aN*rad);
-cosn = cos(aN*rad);
-sin2n = sin(2.*aN*rad);
-cos2n = cos(2.*aN*rad);
+sinn = sin(N*rad);
+cosn = cos(N*rad);
+sin2n = sin(2.*N*rad);
+cos2n = cos(2.*N*rad);
 
 f = ones(18,M);
 f(1,:) = hypot(1.0 + 0.189*cosn - 0.0058*cos2n, 0.189*sinn - 0.0058*sin2n);
@@ -149,8 +158,8 @@ u(17,:) = atan2(-0.441*sinn, 1.0 + 0.441*cosn)/rad;
 
 %% Sum over all tides: 
 
-tmp = (arg+u)*rad; % This tmp variable prevents performing the same operation twice on the next line.
-dh = permute(sum(real(zmin).*f.*cos(tmp) + imag(zmin).*f.*sin(tmp)),[2 3 1]); 
+tmp = (arg(ind,:)+u(ind,:))*rad; % This tmp variable prevents performing the same operation twice on the next line.
+dh = permute(sum(real(zmin(ind,:)).*f(ind,:).*cos(tmp) + imag(zmin(ind,:)).*f(ind,:).*sin(tmp)),[2 3 1]); 
 
 end
 

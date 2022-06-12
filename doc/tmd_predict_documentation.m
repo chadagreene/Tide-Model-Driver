@@ -86,7 +86,7 @@ t = ncdateread(fn,'time');
 sl = ncread(fn,'sea_level')/1000; 
 
 % Predict tides at the location of interest: 
-sl_predict = tmd_predict('CATS2008_update_2022-04-22.nc',lat,lon,t,'h');
+sl_predict = tmd_predict('CATS2008_update_2022-06-06.nc',lat,lon,t,'h');
 
 % Look how many tide predictions are NaNs: 
 sum(isnan(sl_predict))
@@ -102,7 +102,7 @@ modismoaps('contrast','low') % background image
 figure
 plot(t,sl-mean(sl,'omitnan'))
 
-sl_predict = tmd_predict('CATS2008_update_2022-04-22.nc',lat,lon,t,'h','coast','unmask');
+sl_predict = tmd_predict('CATS2008_update_2022-06-06.nc',lat,lon,t,'h','coast','unmask');
 hold on
 plot(t,sl_predict)
 plot(t,sl - mean(sl,'omitnan') - sl_predict)
@@ -194,7 +194,7 @@ ptype = 'h';
 
 %%
 
-filename = 'CATS2022_02-21.nc';
+filename = 'CATS2008_update_2022-06-06.nc';
 
 [lat,lon] = psgrid('amundsen sea',800,1); 
 
@@ -203,22 +203,46 @@ filename = 'CATS2022_02-21.nc';
 t = datenum(1984,5,27,2,17,0);
 
 
-t = [t t+.2]; 
+%t = [t t+.2]; 
 
 
 wct = tmd_interp(filename,'wct',lat,lon); 
 
-profile clear 
-profile on 
 z = tmd_predict(filename,lat,lon,t);
-profile viewer 
 
 
 figure
-surfps(lat,lon,-wct,z)
+surfps(lat,lon,-wct,z(:,:,1))
 view(2)
 axis off
 shadem(-3)
+
+%%
+
+[u,v] = tmd_predict(filename,lat,lon,t,'uv');
+
+%%
+
+[X,Y] = ll2ps(lat,lon); 
+
+[vx,vy] = uv2vxvy(lat,lon,u,v); 
+
+hold on
+q = quiversc(X,Y,vx,vy); 
+q.AutoScaleFactor = 10; 
+
+%%
+
+
+u_true = u .* cosd(lon) - v.* sind(lon);
+v_true = v .* cosd(lon) + u.* sind(lon);
+
+
+vx = u.*cosd(lon) + v.*sind(lon); 
+vy = - u.*sind(lon) + v.*cosd(lon); 
+
+q2 = quiversc(X,Y,vx,vy); 
+q2.AutoScaleFactor=10;
 
 %%
 

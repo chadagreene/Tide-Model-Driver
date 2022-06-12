@@ -1,25 +1,44 @@
 function [umajor,uminor,uphase,uincl] = tmd_ellipse(filename,constituent,lati,loni)
-% tmd_get_ellipse extracts tidal ellipse grids from a model.  
+% tmd_ellipse extracts tidal ellipse grids from a model.  
 % 
-% usage:
-% [x,y,umaj,umin,uphase,uincl]=tmd_get_ellipse(Model,cons);
+%% Syntax
 % 
-% Model - control file name for a tidal model, consisting of lines
-%         <elevation file name>
-%         <transport file name>
-%         <grid file name>
-%         <function to convert lat,lon to x,y>
-% 4th line is given only for models on cartesian grid (in km)
-% All model files should be provided in OTIS format
-% cons - tidal constituent given as char* 
+%  [umajor,uminor,uphase,uincl] = tmd_ellipse(filename,constituent,lati,loni)
+% 
+%% Description
+% 
+% [umajor,uminor,uphase,uincl] = tmd_ellipse(filename,constituent,lati,loni)
+% gives the major and minor axes of tidal current velocities. 
 %
-% output:
-% umaj,umin - major and minor ellipse axis (m/s)
-% uphase, uincl - ellipse phase and inclination degrees GMT
-% x,y - grid coordinates
+% Inputs: 
+%    filename: TMD3.0 compatible tide model ending in .nc. 
+%    constituent: string constituent (e.g., 'm2') 
+%    lati,loni: geographic coordinates (can be any size)
+% 
+% Outputs: 
+%    umajor: Major axis, the largest current for the constituent (m/s). Always positive. 
+%    uminior: Minor axis, the smallest current (m/s). Negative uminor indicates clockwise flow.  
+%    uphase: Reference point on the ellipse (degrees)
+%    uincl: Inclination
 %
-% sample call:
-% [x,y,umaj,umin,uphase,uincl]=tmd_get_ellipse('DATA/Model_Ross_prior','k1');
+%% Example 
+% % 
+% fn = 'CATS2008_update_2022-06-09.nc'; 
+% lat = -71.9102; 
+% lon =  172.6590;
+% 
+% [umaji,umini,uphasei,uincli] = tmd_ellipse(fn,'o1',lat,lon)
+% umaji =
+%     0.2060
+% umini =
+%    -0.0886
+% uphasei =
+%    36.9514
+% uincli =
+%    56.3513
+% 
+% % The above indicates clockwise flow with a max velocity of about 20
+% cm/s.
 %
 %% References 
 % 
@@ -27,22 +46,14 @@ function [umajor,uminor,uphase,uincl] = tmd_ellipse(filename,constituent,lati,lo
 % model time series. Advances in water resources, 12(3), 109-120.
 % https://doi.org/10.1016/0309-1708(89)90017-1
 % 
+%% Version History 
 % TMD release 2.02: 21 July 2010
-% TMD release 3.00: August 2018, changes by Chad Greene include: 
-%   - Turned TideEl.m into a subfunction of tmd_get_ellipse.
-%
-% TideEl calculates tidal ellipse parameters for the arrays of
-% u and v - COMPLEX amplitudes of EW and NS currents of
-% a given tidal constituent
-% land should be set to 0 or NaN in u,v prior to calling tideEl
-% usage: [umajor,uminor,uincl,uphase]=TideEl(u,v);
-% Version History 
-% TMD2.04: ??
-% TMD3.00: Chad Greene, August 2018.
-%   - Renamed (case change) function from tideEl to TideEl. 
-%   - Changed function return to function end. 
-%   - Turned this into a subfunction of tmd_get_ellipse. 
-%   
+% 
+% June 2022: Chad Greene 
+%   * Changed name from tmd_get_ellipse to tmd_ellipse.
+%   * Changed behavior to calculate ellipses at user-specified location(s).
+% 
+% See also: tmd_predict, tmd_interp, and tmd_data. 
 
 %% Input checks
 
@@ -51,17 +62,17 @@ assert(isequal(size(lati),size(loni)),'Dimensions of lati,loni must agree.')
 
 %% Load data 
 
-u = tmd_interp(filename,'u',lati,loni,'constituents',constituent); 
+u = tmd_interp(filename,'u',lati,loni,'constituents',constituent);
 v = tmd_interp(filename,'v',lati,loni,'constituents',constituent); 
 
 %% Calculate ellipses 
 
 % change to polar coordinates 
-% in Robin's was - + + -, this is as in Foreman's
-t1p = (real(u) - imag(v));
-t2p = (real(v) + imag(u));
-t1m = (real(u) + imag(v));
-t2m = (real(v) - imag(u));
+% Chad Greene swapped +/- to adapt to TMD3.0's complex number convention.  
+t1p = (real(u) + imag(v));
+t2p = (real(v) - imag(u));
+t1m = (real(u) - imag(v));
+t2m = (real(v) + imag(u));
 
 % ap, am - amplitudes of positevely and negatively
 % rotated vectors
@@ -79,9 +90,9 @@ em = 180. * em / pi;
 % determine the major and minor axes, phase and inclination using Foreman's formula 
 umajor = (ap + am); 
 uminor = (ap - am);
-uincl = 0.5 * (em + ep);
+uincl = 0.5*(em + ep);
 uincl = uincl - 180. *  (uincl > 180);
-uphase = - 0.5*(ep-em) ;
+uphase = 0.5*(em - ep) ;
 uphase = uphase + 360. * (uphase < 0);
 uphase = uphase - 360. * (uphase >= 360);
 

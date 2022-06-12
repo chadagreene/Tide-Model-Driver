@@ -2,20 +2,20 @@
 % This script calls some legacy functions from TMD2.5 to load the old data.
 % 
 % Written by Chad A. Greene, NASA/JPL, February 2022. 
-tic
+
 %% Enter initial file info 
 
 % Output file: 
-newfilename = ['/Users/cgreene/Downloads/TPXO9_atlas_v5/TPXO9_atlas30_update_',datestr(now,'yyyy-mm-dd'),'.nc']; 
+newfilename = ['/Users/cgreene/Documents/data/tides/TPXO9_atlas30_update_',datestr(now,'yyyy-mm-dd'),'.nc']; 
 
-%con_string = '2n2 k1 k2 m2 m4 mf mm mn4 ms4 n2 o1 p1 q1 s1 s2'; % constituents in proper order
-con_string = 'm2 s2 k1 o1 n2 p1 k2 q1 2n2 mf mm m4 ms4 mn4 s1'; % constituents in proper order
-uv = false; 
+con_string = '2n2 k1 k2 m2 m4 mf mm mn4 ms4 n2 o1 p1 q1 s1 s2'; % constituents in proper order
+%con_string = 'm2 s2 k1 o1 n2 p1 k2 q1 2n2 mf mm m4 ms4 mn4 s1'; % constituents in proper order
+uv = true; 
 
 %% Load data
 
 % Read the grid file: 
-[ll_lims,wct,mask,~,~] = grd_in('/Users/cgreene/Downloads/TPXO9_atlas_v5/grid_tpxo9_atlas_30_v5'); 
+[ll_lims,wct,mask,~,~] = grd_in('/Users/cgreene/Documents/data/tides/TPXO9_atlas_v5/grid_tpxo9_atlas_30_v5'); 
 
 [lon,lat] = XY(ll_lims,size(wct,1),size(wct,2));
 lat = fliplr(lat); 
@@ -30,20 +30,22 @@ Ncons = length(cons_cell);
 
 for k=1:Ncons
    
-   
-   ftmp = ['/Users/cgreene/Downloads/TPXO9_atlas_v5/h_',cons_cell{k},'_tpxo9_atlas_30_v5'];
+   ftmp = ['/Users/cgreene/Documents/data/tides/TPXO9_atlas_v5/h_',cons_cell{k},'_tpxo9_atlas_30_v5'];
    
    % Read each tidal height constituent and reorient: 
    tmp = h_in(ftmp,k); 
    h(:,:,k) = flipud(tmp'); 
    
    if uv
+      futmp = ['/Users/cgreene/Documents/data/tides/TPXO9_atlas_v5/u_',cons_cell{k},'_tpxo9_atlas_30_v5'];
       % Read each transport constituent and reorient: 
       [tmp,tmp2] = u_in(futmp,k); 
       U(:,:,k) = flipud(tmp'); 
       V(:,:,k) = flipud(tmp2'); 
    end
 end
+
+clear tmp tmp2
 
 %% Extend grid across the prime meridian  
 % This is just to allow seamless interpolation. 
@@ -66,15 +68,20 @@ for k=1:Ncons
    mxhr(k) = max(tmp(mask==1)); 
    tmp = abs(imag(h(:,:,k))); 
    mxhi(k) = max(tmp(mask==1)); 
+   tmp = abs(real(U(:,:,k))); 
+   mxur(k) = max(tmp(mask==1)); 
+   tmp = abs(imag(U(:,:,k))); 
+   mxui(k) = max(tmp(mask==1)); 
+   tmp = abs(real(V(:,:,k))); 
+   mxvr(k) = max(tmp(mask==1)); 
+   tmp = abs(imag(V(:,:,k))); 
+   mxvi(k) = max(tmp(mask==1)); 
    k
 end
 
 % Scaling factor for saving to NCSHORT (int16):
 scale_h = 32767/max([mxhr mxhi]);
-if uv
-   error 'rewrite scale_UV like scale_h above'; 
-   %scale_UV = 32767/max(abs([real(U(:));real(V(:));imag(U(:));imag(V(:));]));
-end
+scale_uv = 32767/max([mxur mxvr mxui mxvi]);
 
 [ispec,amp,ph,omega,alpha] = tmd_constit(cons_cell);
 
@@ -108,10 +115,6 @@ for k = 1:Ncons
    k
 end
 
-for k = 1:15
-   
-end
-
 %% Write the netcdf 
 
 % 1. Create netCDF file handle and Attributes
@@ -121,7 +124,7 @@ ncid=netcdf.create(newfilename,mode);
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Conventions','CF-1.7');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Title','TPXO9_atlas_v5');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Description','Global tide model at 1/30 degree resolution.');
-netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Author','Chad A. Greene');
+netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Author','Egbert, Gary D., and Svetlana Y. Erofeeva.');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'creation_date',datestr(now,'yyyy-mm-dd'));
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'tmd_version',3.0);
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'license','ask');
@@ -149,23 +152,27 @@ netcdf.putAtt(ncid,lat_var_id,'standard_name','latitude');
 netcdf.putAtt(ncid,lat_var_id,'units',        'degrees');
 
 % Define constituents
-cons_id = netcdf.defDim(ncid,'cons',Ncons); 
-cons_var_id = netcdf.defVar(ncid,'cons','NC_BYTE',cons_id); 
-netcdf.putAtt(ncid,cons_var_id,'standard_name',    'tidal_constituents');
-netcdf.putAtt(ncid,cons_var_id,'long_name',con_string); 
+cons_id = netcdf.defDim(ncid,'constituents',Ncons); 
+cons_var_id = netcdf.defVar(ncid,'constituents','NC_BYTE',cons_id); 
+netcdf.putAtt(ncid,cons_var_id,'standard_name', 'tidal_constituents');
+netcdf.putAtt(ncid,cons_var_id,'long_name','Tidal constituents listed in order in the constituent_order attribute.'); 
+netcdf.putAtt(ncid,cons_var_id,'constituent_order',con_string); 
 
 % Define constituent attributes 
 amp_var_id = netcdf.defVar(ncid,'amplitude','NC_DOUBLE',cons_id); 
 netcdf.putAtt(ncid,amp_var_id,'standard_name',    'amplitude');
-netcdf.putAtt(ncid,amp_var_id,'long_name','constituent amplitude'); 
+netcdf.putAtt(ncid,amp_var_id,'long_name','amplitude of equilibrium tide in m for each tidal constituent.'); 
+netcdf.putAtt(ncid,amp_var_id,'units',    'meters');
 
 ph_var_id = netcdf.defVar(ncid,'phase','NC_DOUBLE',cons_id); 
 netcdf.putAtt(ncid,ph_var_id,'standard_name',    'phase');
 netcdf.putAtt(ncid,ph_var_id,'long_name','Astronomical arguments (relative to t0 = 1 Jan 0:00 1992)'); 
+netcdf.putAtt(ncid,ph_var_id,'units',    'radians');
 
 om_var_id = netcdf.defVar(ncid,'omega','NC_FLOAT',cons_id); 
 netcdf.putAtt(ncid,om_var_id,'standard_name',    'omega');
 netcdf.putAtt(ncid,om_var_id,'long_name','frequency'); 
+netcdf.putAtt(ncid,om_var_id,'units','1/s'); 
 
 alp_var_id = netcdf.defVar(ncid,'alpha','NC_FLOAT',cons_id); 
 netcdf.putAtt(ncid,alp_var_id,'standard_name',    'alpha');

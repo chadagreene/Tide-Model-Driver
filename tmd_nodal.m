@@ -1,4 +1,4 @@
-function [pu,pf] = tmd_nodal(constituents,astrol_p,astrol_N)
+function [pu,pf] = tmd_nodal(constituents,p,N)
 % This is a Matlab remake of ARGUMENTS by Lana Erofeeva, Jan 2003.
 % ARGUMENTS and ASTROL FORTRAN subroutines SUPPLIED by RICHARD RAY, March 1999.
 % NOTE - "no1" in constit.h corresponds to "M1" in arguments.
@@ -7,27 +7,30 @@ function [pu,pf] = tmd_nodal(constituents,astrol_p,astrol_N)
 % 
 %% Syntax 
 % 
-%  [pu,pf] = tmd_nodal(constituents,astrol_p,astrol_N) 
+%  [pu,pf] = tmd_nodal(constituents,p,N) 
 %
 %% Description 
 % 
-% [pu,pf] = tmd_nodal(constituents,astrol_p,astrol_N) takes input constituents 
-% as cell array (1xN constituents). astrol_p and astrol_N are the outputs from 
-% the tmd_astrol function, and are dimesnions Mx1, with one row per timestep. 
-% Outputs pu,pf are MxN corresponding to M timesteps and N constituents. 
+% [pu,pf] = tmd_nodal(constituents,p,N) takes input constituents 
+% as cell array (1xN constituents). Inputs p and N are the lunar perigee p 
+% and ascending lunar node N given by the tmd_astrol function, and are 
+% dimesnions Mx1, with one row per timestep. Outputs pu,pf are MxN,
+% corresponding to M timesteps and N constituents. 
 % 
 %% Author Info
 % This function is part of the Tide Model Driver (TMD), which was written by Lana Erofeeva
 % and is maintained by Laurie Padman. This function is a Matlab remake of ARGUMENTS by Lana 
 % Erofeeva, Jan 2003. ARGUMENTS and ASTROL FORTRAN subroutines SUPPLIED by RICHARD RAY, March 1999.
+% 
 % In February 2016, Chad A. Greene modified nodal for computational efficiency and readability. 
-% Changes made by Chad include: 
-% * Function return replaced by function end. 
-% * Removed several dozen lines of unused variables. 
-% * Removed several loops which were used for indexing; replaced with logicals and ismember.  
+%    * Function return replaced by function end. 
+%    * Removed several dozen lines of unused variables. 
+%    * Removed several loops which were used for indexing; replaced with logicals and ismember.  
+% 
 % In April 2022, Chad Greene rewrote this as tmd_nodal, which replaces both the
 % old nodal.m and nodal1.m, but note that the inputs to tmd_nodal are different 
-% from the original nodal.m function. 
+% from the original nodal.m function. Now requires p and N as inputs, to
+% prevent calling tmd_astrol every time tmd_nodal is called. 
 % 
 % See also tmd_harp. 
      
@@ -40,14 +43,14 @@ cid0 = {'sa';'ssa';'mm';'msf';'mf';'mt';'alpha1';'2q1';'sigma1';'q1';
 % Determine equilibrium arguments
 rad=pi/180;
 
-nT = length(astrol_p);
+nT = length(p);
 
-%     determine nodal corrections f and u 
-sinn = sin(astrol_N*rad);
-cosn = cos(astrol_N*rad);
-sin2n = sin(2*astrol_N*rad);
-cos2n = cos(2*astrol_N*rad);
-sin3n = sin(3*astrol_N*rad);
+% Determine nodal corrections f and u 
+sinn = sin(N*rad);
+cosn = cos(N*rad);
+sin2n = sin(2*N*rad);
+cos2n = cos(2*N*rad);
+sin3n = sin(3*N*rad);
 
 %% Define constants
 
@@ -70,8 +73,8 @@ f(:,12) = sqrt((1.0+0.189*cosn-0.0058*cos2n).^2 + ...
 f(:, 13) = 1;                                   % tau1
 % tmp1  = 2.*cos(astrol_p*rad)+.4*cos((astrol_p-astrol_N)*rad);
 % tmp2  = sin(astrol_p*rad)+.2*sin((astrol_p-astrol_N)*rad);% Doodson's
-tmp1  = 1.36*cos(astrol_p*rad)+.267*cos((astrol_p-astrol_N)*rad);% Ray's
-tmp2  = 0.64*sin(astrol_p*rad)+.135*sin((astrol_p-astrol_N)*rad);
+tmp1  = 1.36*cos(p*rad)+.267*cos((p-N)*rad);% Ray's
+tmp2  = 0.64*sin(p*rad)+.135*sin((p-N)*rad);
 f(:,14) = hypot(tmp1,tmp2);                % M1
 f(:,15) = sqrt((1.+.221*cosn).^2+(.221*sinn).^2);% chi1
 % f(:,16) = 1;                                    % pi1
@@ -94,8 +97,8 @@ f(:,28) = f(:,25);                                % nu2
 f(:,30) = f(:,25);                                % M2
 % f(:,31) = 1;                                    % M2b
 % f(:,32) = 1;                                    % lambda2
-temp1 = 1.-0.25*cos(2*astrol_p*rad)-0.11*cos((2*astrol_p-astrol_N)*rad)-0.04*cosn;
-temp2 = 0.25*sin(2*astrol_p*rad)+0.11*sin((2*astrol_p-astrol_N)*rad)+ 0.04*sinn;
+temp1 = 1.-0.25*cos(2*p*rad)-0.11*cos((2*p-N)*rad)-0.04*cosn;
+temp2 = 0.25*sin(2*p*rad)+0.11*sin((2*p-N)*rad)+ 0.04*sinn;
 f(:,33) = sqrt(temp1.^2 + temp2.^2);              % L2
 % f(:,34) = 1;                                    % T2
 % f(:,35) = 1;                                    % S2
@@ -179,7 +182,7 @@ u(:,50) = u(:,30)*3;                               % M6
 % u(:,52) = 0;                                       % S7
 % u(:,53) = 0;                                       % S8
 
-%% 
+%% Trim to only the user-requested constituents
 
 [~,Lib] = ismember(constituents,cid0); 
 

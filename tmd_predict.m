@@ -30,7 +30,7 @@ assert(isequal(size(lat),size(lon)),'Dimensions of lat and lon must agree.')
 InferMinorConstituents = true; 
 MapSolution = false; 
 MaskingMethod = 'nan'; % default set land areas to nan by nearest-neighbor interpolation of the mask.  
-conList = strsplit(ncreadatt(filename,'cons','long_name')); 
+conList = strsplit(ncreadatt(filename,'constituents','constituent_order')); 
 
 if nargin<5
    ptype = 'h'; 
@@ -93,16 +93,15 @@ t = reshape(t,[],1);
 hc = tmd_interp(filename,ptype,lat,lon,'constituents',conList,'coasts',MaskingMethod);
 hc = permute(hc,[3 1 2]); % puts constituents in first column. 
 
+[s,h,p,N] = tmd_astrol(t);
+[~,~,ph,omega,~] = tmd_constit(conList);
+
 % if flexure 
 %    flex = tmd_interp(filename,'flexure',lat,lon); 
 % end
-%%
 
-[astrol_s,astrol_h,astrol_p,astrol_N] = tmd_astrol(t);
+%% Predict tides
 
-[ispec,~,ph,omega,~] = tmd_constit(conList);
-
-   
 if MapSolution
    
    % Preallocate z: 
@@ -114,11 +113,11 @@ if MapSolution
    for k = 1:length(t)
       
       % Major constiuents: 
-      hhat = tmd_harp(t(k),hc(:,isf),conList,astrol_p(k),astrol_N(k),ispec,ph,omega);
+      hhat = tmd_harp(t(k),hc(:,isf),conList,p(k),N(k),ph,omega);
 
       % Minor constiuents:
       if InferMinorConstituents
-         d_minor = tmd_InferMinor(hc(:,isf),conList,t(k),astrol_s(k),astrol_h(k),astrol_p(k),astrol_N(k)); 
+         d_minor = tmd_InferMinor(hc(:,isf),conList,t(k),s(k),h(k),p(k),N(k)); 
       end
    
       z(isf,k) = d_minor + hhat; 
@@ -127,10 +126,10 @@ if MapSolution
 else % Single-location time series or drift track  
 
    % Major constituents: 
-   hhat = tmd_harp(t,hc,conList,astrol_p,astrol_N,ispec,ph,omega);
+   hhat = tmd_harp(t,hc,conList,p,N,ph,omega);
    
    if InferMinorConstituents
-      d_minor = tmd_InferMinor(hc,conList,t,astrol_s,astrol_h,astrol_p,astrol_N); 
+      d_minor = tmd_InferMinor(hc,conList,t,s,h,p,N); 
    end
    z = d_minor + hhat; 
 end

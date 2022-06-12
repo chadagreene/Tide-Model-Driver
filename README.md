@@ -25,6 +25,7 @@ Most users will only need to interact with one function. It is:
 * `tmd_interp` provides water column thickness, land/ocean mask, ice shelf flexure, and tidal constiuent parameters at specified geographic locations, for a given tide model. 
 * `tmd_data` loads gridded tide model data without interpolation. 
 * `tmd_ellipse` 
+* `tidal_range` 
 
 ### Under-the-hood functions 
 You probably won't need to call any of the following functions directly, but they are called by the functions above. 
@@ -42,8 +43,8 @@ You probably won't need to call any of the following functions directly, but the
 This version of TMD works with NetCDF data, which have been converted from the original OTIS format using the `tide-model-conversions` folder. 
 
 # Installation 
-1. Get tide model data. 
-2. Install TMD 
+1. Install TMD 
+2. Get tide model data. 
 
 # Tutorials
 * [ADCP current data analysis](doc/tutorial_currents.md).
@@ -61,3 +62,6 @@ This version of TMD works with NetCDF data, which have been converted from the o
 ![Tidal phase of the m2 constituent for the Filchner-Ronne Ice Shelf](tide-model-conversions/CATS2008_update_2022_comparison.png)
 
 # Author Info & Citation Information
+If you use TMD3.0, please cite the following: 
+
+[Chad A. Greene](https://github.com/chadagreene), [Svetlana Erofeeva](https://ceoas.oregonstate.edu/svetlana-erofeeva), [Laurie Padman](https://github.com/LPadman), [Susan Howard](https://github.com/slhowardESR), [Tyler Sutterley](https://github.com/tsutterley), and [Gary Egbert](https://ceoas.oregonstate.edu/people/gary-egbert). The Tide Model Driver for MATLAB, version 3.0. 
