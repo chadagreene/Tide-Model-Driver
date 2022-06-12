@@ -16,16 +16,18 @@ function dh = tmd_InferMinor(hc,constituents,t,s,h,p,N)
 % 
 %% Function history
 % This function was written in Matlab by Lana Erofeeva, Oct 2004, based on 
-% Richard Ray's perth2 code.  In January 2016, Chad A. Greene made the following 
-% changes: 
-% * Added documentation in function header. 
-% * Removed variables which go unused. 
-% * Replaced summation loop with a simple call to sum. 
-% * Replaced function return with function end. 
-% * Replaced if-statement error checks with assertions. 
-% * Added input checks. 
-% * Replaced nested loops previously used to create z8 with ismember. 
-% In April 2022, Chad Greene changed the inputs for speed and readability.
+% Richard Ray's perth2 code.  
+%
+% In June 2022 for TMD3.0, Chad Greene made the following changes: 
+%    * Added documentation in function header. 
+%    * Removed unused variables. 
+%    * Replaced summation loop with a simple call to sum. 
+%    * Replaced function return with function end. 
+%    * Replaced if-statement error checks with assertions. 
+%    * Added input checks. 
+%    * Replaced nested loops previously used to create z8 with ismember. 
+%    * Changed the inputs for speed and readability.
+%    * Now ignores any minor constituents that are in the list of major constituents.  
 % 
 % See also tmd_predict and tmd_astrol.
 

@@ -86,7 +86,7 @@ t = ncdateread(fn,'time');
 sl = ncread(fn,'sea_level')/1000; 
 
 % Predict tides at the location of interest: 
-sl_predict = tmd_predict('CATS2008_update_2022-06-06.nc',lat,lon,t,'h');
+sl_predict = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'h');
 
 % Look how many tide predictions are NaNs: 
 sum(isnan(sl_predict))
@@ -306,5 +306,102 @@ figure
 plot(t,sl)
 hold on
 plot(t,sl-sl_predict)
+
+%%
+
+fn = '/Users/cgreene/Documents/GitHub/Tide-Model-Driver/doc/h189.nc'; % good
+lat = ncread(fn,'lat');
+lon = ncread(fn,'lon');
+t = ncdateread(fn,'time');
+sl = ncread(fn,'sea_level')/1000; 
+
+plot(t,sl-mean(sl,'omitnan'))
+
+hold on
+
+sl_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'h');
+sl_tpxo = tmd_predict('TPXO9_atlas_v5_update_2022-06-12.nc',lat,lon,t,'h');
+
+plot(t,sl_cats)
+plot(t,sl_tpxo)
+
+%%
+
+[phc,lon,lat,cons] = tmd_data('CATS2008_update_2022-06-11.nc','h','geo');
+phci = tmd_interp('CATS2008_update_2022-06-11.nc','h',lat,lon,'constituents',cons); 
+pht = tmd_interp('TPXO9_atlas_v5_update_2022-06-11.nc','h',lat,lon,'constituents',cons); 
+%pht = tmd_interp('TPXO9_atlas_v5_update_2022-06-11.nc','hPh',lat,lon); 
+
+%%
+
+k=k+1;
+k=1;
+clf
+subsubplot(1,3,1)
+imagescn(angle(phc(:,:,k)));
+axis image off
+subsubplot(1,3,2)
+imagescn(angle(phci(:,:,k)));
+axis image off
+
+subsubplot(1,3,3)
+imagescn(angle(conj(hi(:,:,k))))
+axis image off
+%%
+k=k+1;
+subsubplot(1,3,3)
+imagescn(pht(:,:,k))
+axis image off
+
+
+%%
+
+tmpc=angle(conj(phci(:,:,k)));
+tmpt=angle(conj(hi(:,:,k)));
+
+figure
+plot(tmpc(:),tmpt(:),'.')
+
+%%
+
+fn='/Users/cgreene/Downloads/h_m2_tpxo9_atlas_30_v3.nc'; 
+
+lon_z = ncread(fn,'lon_z'); 
+lat_z = ncread(fn,'lat_z'); 
+hRe = double(ncread(fn,'hRe')); 
+hIm = double(ncread(fn,'hIm')); 
+
+hn = flipud(complex(hRe,hIm)); 
+
+% Read each tidal height constituent and reorient: 
+tmp = h_in('/Users/cgreene/Documents/data/tides/TPXO9_atlas_v5/h_m2_tpxo9_atlas_30_v5',4); 
+
+hb = rot90(tmp); 
+
+
+figure
+subplot(2,2,1)
+imagesc(abs(hn))
+axis image off
+
+subplot(2,2,2)
+imagesc(abs(hb))
+axis image off
+
+subplot(2,2,3)
+imagesc(angle(hn))
+axis image off
+cmocean phase
+
+subplot(2,2,4)
+imagesc(angle(hb))
+axis image off
+cmocean phase
+
+
+%%
+lon(lon<0) = lon(lon<0)+360;
+
+hi = complex(interp2(lonz,latz,double(hRe),lon,lat),interp2(lonz,latz,double(hIm),lon,lat)); 
 
 

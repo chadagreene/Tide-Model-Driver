@@ -40,7 +40,6 @@ function [Z,x_or_lon,y_or_lat,conList] = tmd_data(filename,variable,varargin)
 %  * 'wct' water column thickness (m) 
 %  * 'mask' binary land/ocean mask
 %  * 'flexure' ice shelf flexure coefficient from a linear elastic model applied to BedMachine ice thickness (can slightly exceed 1). Only for CATS model. 
-%  * 'h_range' full peak-to-peak tidal range 
 %
 % [...] = tmd_data(...,'constituents',conList) specifies tidal constituents as a 
 % cell array (e.g, {'m2','s2'}. If constituents are not specified, all constituents 
@@ -163,7 +162,7 @@ else
     ri = 1:length(y_or_lat); 
     ci = 1:length(x_or_lon); 
 end
-
+ 
 if conSubset
    Z = NaN(numel(ri),numel(ci),NCons);
 end
@@ -178,47 +177,48 @@ for k = 1:NCons
       placInd = 1:length(cons);
    end
    
-   switch lower(variable)
+   switch variable
       case 'mask'
          Z = logical(permute(ncread(filename,variable,[ci(1) ri(1)],[numel(ci) numel(ri)]),[2 1]));
-         
       case 'flexure'
          Z = double(permute(ncread(filename,variable,[ci(1) ri(1)],[numel(ci) numel(ri)]),[2 1]))/100;
-
       case 'wct'
          Z = double(permute(ncread(filename,variable,[ci(1) ri(1)],[numel(ci) numel(ri)]),[2 1]));
-         
-      case {'hre','him'}
+      case {'hRe','hIm','URe','UIm','VRe','VIm'}
          Z(:,:,placInd) = double(permute(ncread(filename,variable,[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]));
-
-      case {'ure','uim','vre','vim'}
-         Z(:,:,placInd) = double(permute(ncread(filename,variable,[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]));
-         
+      case 'uRe'
+         Z(:,:,placInd) = double(permute(ncread(filename,'URe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]));
+      case 'uIm'
+         Z(:,:,placInd) = double(permute(ncread(filename,'UIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]));
+      case 'vRe'
+         Z(:,:,placInd) = double(permute(ncread(filename,'VRe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]));
+      case 'vIm'
+         Z(:,:,placInd) = double(permute(ncread(filename,'VIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]));
       case 'h'
          Z(:,:,placInd) = complex(double(permute(ncread(filename,'hRe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])),...
                                   double(permute(ncread(filename,'hIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])));
-      case 'ham' 
+      case 'hAm' 
          Z(:,:,placInd) = abs(complex(double(permute(ncread(filename,'hRe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])),...
                                       double(permute(ncread(filename,'hIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]))));
-      case 'hph'
+      case 'hPh'
           Z(:,:,placInd) = angle(complex(double(permute(ncread(filename,'hRe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])),...
                                           double(permute(ncread(filename,'hIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]))));
-      case 'u'
+      case {'u','U'}
          Z(:,:,placInd) = complex(double(permute(ncread(filename,'URe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])),...
                                   double(permute(ncread(filename,'UIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])));
-      case 'uam' 
+      case {'uAm','UAm'} 
          Z(:,:,placInd) = abs(complex(double(permute(ncread(filename,'URe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])),...
                                       double(permute(ncread(filename,'UIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]))));
-      case 'uph'
+      case {'uPh','UPh'}
           Z(:,:,placInd) = angle(complex(double(permute(ncread(filename,'URe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])),...
                                           double(permute(ncread(filename,'UIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]))));
-      case 'v' 
+      case {'v','V'} 
          Z(:,:,placInd) = complex(double(permute(ncread(filename,'VRe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])),...
                                   double(permute(ncread(filename,'VIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])));
-      case 'vam' 
+      case {'vAm','VAm'} 
          Z(:,:,placInd) = abs(complex(double(permute(ncread(filename,'VRe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])),...
                                       double(permute(ncread(filename,'VIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]))));
-      case 'vph'
+      case {'vPh','VPh'}
           Z(:,:,placInd) = angle(complex(double(permute(ncread(filename,'VRe',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3])),...
                                           double(permute(ncread(filename,'VIm',[ci(1) ri(1) conind],[numel(ci) numel(ri) stride]),[2 1 3]))));
       otherwise
@@ -227,9 +227,10 @@ for k = 1:NCons
    
 end
 
+
 % Convert transports to velocities if requested: 
 if ismember(variable,{'uRe','uIm','u','uAm','vRe','vIm','v','vAm'})
-	wct = double(permute(ncread(filename,'wct',[ri(1) ci(1)],[numel(ci) numel(ri)]),[2 1])); 
+   wct = double(permute(ncread(filename,'wct',[ci(1) ri(1)],[numel(ci) numel(ri)]),[2 1]));
    Z = Z./max(wct,10); % divide transports by at least 10 m wct to prevent insanely high velocities.
 end
 

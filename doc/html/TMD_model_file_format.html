@@ -1,0 +1,438 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>TMD3.0 Model File Format</title><meta name="generator" content="MATLAB 9.10"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2022-06-12"><meta name="DC.source" content="TMD_model_file_format.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>TMD3.0 Model File Format</h1><!--introduction--><p>This page describes the NetCDF data format for TMD3.0 compatible tide model files.</p><p><a href="TMD_Contents.html">Back to Tide Model Driver Contents</a>.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Explore file contents</a></li><li><a href="#2">Global models vs regional models</a></li><li><a href="#3">Constituents</a></li><li><a href="#6">Real and Imaginary Components</a></li><li><a href="#7">U and V variables</a></li><li><a href="#8">Units</a></li><li><a href="#9">Masks</a></li><li><a href="#11">Amplitude, phase, alpha, and omega</a></li><li><a href="#12"><tt>scale_factor</tt></a></li><li><a href="#13">Extra columns in global models</a></li><li><a href="#14">Flexure</a></li><li><a href="#15">Author Info</a></li></ul></div><h2 id="1">Explore file contents</h2><p>Take a look inside any TMD3.0 compatible NetCDF, and the contents should be fairly straightforward. Here's an example:</p><pre class="codeinput">ncdisp(<span class="string">'TPXO9_atlas_v5.nc'</span>)
+</pre><pre class="codeoutput">Source:
+           /Users/cgreene/Documents/data/tides/TPXO9_atlas_v5.nc
+Format:
+           netcdf4_classic
+Global Attributes:
+           Conventions   = 'CF-1.7'
+           Title         = 'TPXO9_atlas_v5'
+           Description   = 'Global tide model at 1/30 degree resolution.'
+           Author        = 'Egbert, Gary D., and Svetlana Y. Erofeeva.'
+           creation_date = '2022-06-12'
+           tmd_version   = 3
+           license       = 'ask'
+           Data_citation = 'Egbert, Gary D., and Svetlana Y. Erofeeva. "Efficient inverse modeling of barotropic ocean tides." Journal of Atmospheric and Oceanic Technology 19.2 (2002): 183-204.'
+Dimensions:
+           lon          = 10802
+           lat          = 5401
+           constituents = 15
+Variables:
+    mapping     
+           Size:       1x1
+           Dimensions: 
+           Datatype:   char
+           Attributes:
+                       grid_mapping_name = 'latitude_longitude'
+                       epsg_code         = 4326
+                       spatial_proj4     = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'
+    lon         
+           Size:       10802x1
+           Dimensions: lon
+           Datatype:   single
+           Attributes:
+                       long_name     = 'grid cell center longitude (first and last columns are repeats, to enable seamless interpolation)'
+                       standard_name = 'longitude'
+                       units         = 'degrees'
+    lat         
+           Size:       5401x1
+           Dimensions: lat
+           Datatype:   single
+           Attributes:
+                       long_name     = 'grid cell center latitude'
+                       standard_name = 'latitude'
+                       units         = 'degrees'
+    constituents
+           Size:       15x1
+           Dimensions: constituents
+           Datatype:   int8
+           Attributes:
+                       standard_name     = 'tidal_constituents'
+                       long_name         = 'Tidal constituents listed in order in the constituent_order attribute.'
+                       constituent_order = '2n2 k1 k2 m2 m4 mf mm mn4 ms4 n2 o1 p1 q1 s1 s2'
+    amplitude   
+           Size:       15x1
+           Dimensions: constituents
+           Datatype:   double
+           Attributes:
+                       standard_name = 'amplitude'
+                       long_name     = 'amplitude of equilibrium tide in m for each tidal constituent.'
+                       units         = 'meters'
+    phase       
+           Size:       15x1
+           Dimensions: constituents
+           Datatype:   double
+           Attributes:
+                       standard_name = 'phase'
+                       long_name     = 'Astronomical arguments (relative to t0 = 1 Jan 0:00 1992)'
+                       units         = 'radians'
+    omega       
+           Size:       15x1
+           Dimensions: constituents
+           Datatype:   single
+           Attributes:
+                       standard_name = 'omega'
+                       long_name     = 'frequency'
+                       units         = '1/s'
+    alpha       
+           Size:       15x1
+           Dimensions: constituents
+           Datatype:   single
+           Attributes:
+                       standard_name = 'alpha'
+                       long_name     = 'loading love number'
+    hRe         
+           Size:       10802x5401x15
+           Dimensions: lon,lat,constituents
+           Datatype:   int16
+           Attributes:
+                       long_name     = 'real component of height constituent'
+                       standard_name = 'height_constituent'
+                       grid_mapping  = 'polar_stereographic'
+                       units         = 'm'
+                       scale_factor  = 0.00030746
+    hIm         
+           Size:       10802x5401x15
+           Dimensions: lon,lat,constituents
+           Datatype:   int16
+           Attributes:
+                       long_name     = 'imaginary component of height constituent'
+                       standard_name = 'height_constituent'
+                       grid_mapping  = 'polar_stereographic'
+                       units         = 'm'
+                       scale_factor  = 0.00030746
+    URe         
+           Size:       10802x5401x15
+           Dimensions: lon,lat,constituents
+           Datatype:   int16
+           Attributes:
+                       long_name     = 'real component of U transport constituent.'
+                       standard_name = 'height_constituent'
+                       grid_mapping  = 'polar_stereographic'
+                       units         = 'm^2/s'
+                       scale_factor  = 0.015712
+    UIm         
+           Size:       10802x5401x15
+           Dimensions: lon,lat,constituents
+           Datatype:   int16
+           Attributes:
+                       long_name     = 'imaginary component of U transport constituent.'
+                       standard_name = 'height_constituent'
+                       grid_mapping  = 'polar_stereographic'
+                       units         = 'm^2/s'
+                       scale_factor  = 0.015712
+    VRe         
+           Size:       10802x5401x15
+           Dimensions: lon,lat,constituents
+           Datatype:   int16
+           Attributes:
+                       long_name     = 'real component of V transport constituent.'
+                       standard_name = 'height_constituent'
+                       grid_mapping  = 'polar_stereographic'
+                       units         = 'm^2/s'
+                       scale_factor  = 0.015712
+    VIm         
+           Size:       10802x5401x15
+           Dimensions: lon,lat,constituents
+           Datatype:   int16
+           Attributes:
+                       long_name     = 'imaginary component of V transport constituent.'
+                       standard_name = 'height_constituent'
+                       grid_mapping  = 'polar_stereographic'
+                       units         = 'm^2/s'
+                       scale_factor  = 0.015712
+    wct         
+           Size:       10802x5401
+           Dimensions: lon,lat
+           Datatype:   int16
+           Attributes:
+                       long_name     = 'water column thickness'
+                       standard_name = 'wct'
+                       units         = 'meters'
+                       grid_mapping  = 'polar_stereographic'
+    mask        
+           Size:       10802x5401
+           Dimensions: lon,lat
+           Datatype:   int8
+           Attributes:
+                       long_name     = 'ocean mask'
+                       standard_name = 'ocean_mask'
+                       grid_mapping  = 'polar_stereographic'
+                       valid_range   = [0  1]
+                       flag_values   = [0  1]
+                       flag_meanings = 'land ocean'
+</pre><h2 id="2">Global models vs regional models</h2><p>All model files are either <i>global</i> or <i>regional</i>. Global models, like the one above, are presented on a regular grid in geographic coordinates (degrees) and have 1D <tt>lon</tt> and <tt>lat</tt> variables. For global models, longitude is treated like the x dimension, and latitude is treated like the y dimension.</p><p>Regional models (CATS, Arctic models, etc) are presented ongrids that are regular in <i>projected</i> coordinates, meaning they are spaced equally in meters or kilometers. The proj4 string in the NetCDF file describes the projection parameters for any regional model. Regional models also include MxN arrays of latitude and longitude values.</p><p>In both global and regional models, all coordinates correspond to grid cell centers.</p><p>Most TMD functions accept latitude and longitude as inputs, and automatically project them to regional model coordinates where necessary.</p><h2 id="3">Constituents</h2><p>The tidal constituents are easy to miss in the NetCDF. They appear as a simple string, in the <tt>constituent_order</tt> attribute of the <tt>constituents</tt> variable. Here's how to access them:</p><pre class="codeinput">ncreadatt(<span class="string">'TPXO9_atlas_v5.nc'</span>,<span class="string">'constituents'</span>,<span class="string">'constituent_order'</span>)
+</pre><pre class="codeoutput">ans =
+    '2n2 k1 k2 m2 m4 mf mm mn4 ms4 n2 o1 p1 q1 s1 s2'
+</pre><p>Constituents can also be accessed as cell arrays using the <tt>tmd_data</tt> function:</p><pre class="codeinput">[wct,lon,lat,cons] = tmd_data(<span class="string">'TPXO9_atlas_v5.nc'</span>,<span class="string">'wct'</span>);
+
+cons
+</pre><pre class="codeoutput">cons =
+  1&times;15 cell array
+  Columns 1 through 7
+    {'2n2'}    {'k1'}    {'k2'}    {'m2'}    {'m4'}    {'mf'}    {'mm'}
+  Columns 8 through 14
+    {'mn4'}    {'ms4'}    {'n2'}    {'o1'}    {'p1'}    {'q1'}    {'s1'}
+  Column 15
+    {'s2'}
+</pre><p>I realize this is a somewhat strange way to package the constituent names, but it's the simplest way I could figure out how to do it, given the limitations of the NetCDF format.</p><h2 id="6">Real and Imaginary Components</h2><p>For tidal height h, zonal transport U, and meridional transport V, you'll find real and imaginary components hRe, hIm, URe, UIm, VRe, and VIm in the model file. The complex constituent can then be constucted following the format</p><pre>hc = complex(hRe,hIm);</pre><p>or</p><pre>hc = hRe + 1i*hIm;</pre><p>and the amplitude is then</p><pre>hAm = abs(hc);</pre><p>and the phase is given by</p><pre>hPh = angle(hc);</pre><p>Note: Some conventions use the complex conjugate of <tt>hc</tt>, and calculate phase angle as <tt>atan2(-imag(h), real(h))</tt>, but TMD3.0 uses the convention that's compatible with MATLAB's built-in <tt>complex</tt> and <tt>angle</tt> functions.</p><h2 id="7">U and V variables</h2><p>Each tide model file contains real and imaginary components of U and V transport variables, whose units are m^2/s.</p><p>Regardless of whether the model is global or regional, U and V always correspond to zonal (positive pointing geographic east) and meridional (positive pointing geographic north) components of transport.</p><p>Transport estimates are usually pretty good, and represent column-averaged (barotropic) flow. Column-averaged velocities are obtained by dividing transport by water column thickness, so the accuracy of velocity estimates is subject to the accuracy of the bathymetry estimate.</p><p>TMD3.0 model file format does not account for vertical variations in tidal transport or current velocity. In other words, this is a strictly barotropic model, and does not attempt to represent baroclinic flow.</p><h2 id="8">Units</h2><p>TMD3.0 uses meters, seconds, and combinations of meters and seconds. Previous versions of TMD produced tidal currents in cm/s, but we now package transports in units of m^2/s, so they may easily be divided by water column thickness (m), to get velocities of m/s.</p><h2 id="9">Masks</h2><p>TMD does something new with masking: The scripts that create each model file use <tt>regionfill</tt> to interpolate values of tidal constituents across all land areas.</p><p>Here's what the m2 constituent amplitude looks like in the TPXO9 file:</p><pre class="codeinput">[ph,lon,lat] = tmd_data(<span class="string">'TPXO9_atlas_v5.nc'</span>,<span class="string">'hAm'</span>,<span class="string">'constituents'</span>,<span class="string">'m2'</span>);
+
+figure
+h=imagesc(lon,lat,ph);
+axis <span class="string">xy</span> <span class="string">image</span>
+caxis([0 2])
+cb = colorbar;
+ylabel(cb,<span class="string">'m2 constituent amplitude (m)'</span>)
+</pre><img vspace="5" hspace="5" src="TMD_model_file_format_01.png" alt=""> <p><i>Why on Earth would we say there's a finite, nonzero tidal amplitude in the middle of China, or any other landmass?</i> Well, the reason's quite simple: Sometimes you may be interested in tides that are close to shore, for example, if you have a tide gauge at the end of a dock that may lie between modeled ocean and land pixels. In such a case, you know that tides exist there, but the tide model would only produce NaNs. You could extrapolate from the nearest grid cell that produces a finite tide solution, but that'd be inelegant and almost certainly wrong. The <tt>regionfill</tt> approach produces smoother, more physical interpolation close to the coast and is a reasonable approximation where the underlying tide model cannot offer a solution.</p><p>The <a href="tmd_interp_documentation.html"><tt>tmd_interp</tt></a> function sets land areas to NaN by default (but offers an option to "unmask"). For your tidal needs, you may wish to mask out land areas using the <tt>mask</tt> variable, which is 1 for all ocean grid cells, and 0 everywhe else. Below I'm using the mask to set the transparency of the previous image:</p><pre class="codeinput">[mask,lon,lat] = tmd_data(<span class="string">'TPXO9_atlas_v5.nc'</span>,<span class="string">'mask'</span>);
+h.AlphaData = mask;
+</pre><img vspace="5" hspace="5" src="TMD_model_file_format_02.png" alt=""> <h2 id="11">Amplitude, phase, alpha, and omega</h2><p>In each TMD3.0 compatible model file, you will find variables called amplitude, phase, omega, and alpha. You probably won't need to interact with these variables directly, but they are from the <tt>tmd_constit</tt> function.</p><h2 id="12"><tt>scale_factor</tt></h2><p>The real and imaginary components of h, U, and V are all scaled by a strange number listed as the <tt>scale_factor</tt> of each variable. MATLAB automatically parses the <tt>scale_factor</tt> when reading in the variables, so you don't have to worry about multiplying anything by anything.</p><p><i>Why isn't the scale factor a simple round number?</i> Because it doesn't have to be. Again, you don't have to worry about the <tt>scale_factor</tt>. The value of the scale factor is chosen to take advantage of the full range of the int16 Datatype that it's saved as. Any other scale factor would either clip the large values, or digitize the data at lower precision than necessary.</p><h2 id="13">Extra columns in global models</h2><p>You may notice that global model files have an extra grid cell on each end, corresponding to an extra longitude step before 0 and after 360. This rationale is that interpolation near 0 degrees longitude would produce NaNs, and you'd end up with a seam of missing data at that lontitude.</p><p>The trick of repeating a few rows or columns around the 0 degree longitude is an old one, and it could be performed after loading the data, rather than saving the data. However, <tt>tmd_interp</tt> only loads pixels around query points, so the simplest solution is to repeat the data in the data file, rather than writing <tt>tmd_interp</tt> to call <tt>tmd_data</tt> multiple times and stitch the pieces together before interpolation.</p><h2 id="14">Flexure</h2><p>For the CATS model, we have added a <tt>flexure</tt> variable. This is a first-order estimate of tidal flexure of ice shelves in the grounding zone, generated by appling a simple 1D linear elastic model to BedMachine v2 ice thickness, assuming an elastic modulus of E=4.8 GPa and Poisson's ratio nu = 0.4. Values range from zero to about 100, corresponding to the percent of tidal range that the ice shelf should exhibit. Values can exceed 100 by a few percent near the hydrostatic line.</p><h2 id="15">Author Info</h2><p>This document was written by Chad A. Greene, June 2022.</p><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2021a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% TMD3.0 Model File Format
+% This page describes the NetCDF data format for TMD3.0 compatible tide
+% model files. 
+%
+% <TMD_Contents.html Back to Tide Model Driver Contents>.
+
+%% Explore file contents 
+% Take a look inside any TMD3.0 compatible NetCDF, and the contents should
+% be fairly straightforward. Here's an example: 
+
+ncdisp('TPXO9_atlas_v5.nc')
+
+%% Global models vs regional models 
+% All model files are either _global_ or _regional_. Global models, like the
+% one above, are presented on a regular grid in geographic coordinates (degrees) 
+% and have 1D |lon| and |lat| variables. For global models, longitude is
+% treated like the x dimension, and latitude is treated like the y
+% dimension.
+%
+% Regional models (CATS, Arctic models, etc) are presented ongrids that are 
+% regular in _projected_ coordinates, meaning they are spaced equally in
+% meters or kilometers. The proj4 string in the NetCDF file describes the
+% projection parameters for any regional model. Regional models also
+% include MxN arrays of latitude and longitude values. 
+%
+% In both global and regional models, all coordinates correspond to grid
+% cell centers. 
+% 
+% Most TMD functions accept latitude and longitude as inputs, and
+% automatically project them to regional model coordinates where necessary.
+
+%% Constituents 
+% The tidal constituents are easy to miss in the NetCDF. They appear as a
+% simple string, in the |constituent_order| attribute of the |constituents|
+% variable. Here's how to access them: 
+
+ncreadatt('TPXO9_atlas_v5.nc','constituents','constituent_order')
+
+%%
+% Constituents can also be accessed as cell arrays using the |tmd_data|
+% function: 
+
+[wct,lon,lat,cons] = tmd_data('TPXO9_atlas_v5.nc','wct'); 
+
+cons
+
+%% 
+% I realize this is a somewhat strange way to package the constituent
+% names, but it's the simplest way I could figure out how to do it, given
+% the limitations of the NetCDF format. 
+
+%% Real and Imaginary Components 
+% For tidal height h, zonal transport U, and meridional transport V, you'll
+% find real and imaginary components hRe, hIm, URe, UIm, VRe, and VIm in
+% the model file. The complex constituent can then be constucted following
+% the format 
+% 
+%  hc = complex(hRe,hIm); 
+% 
+% or 
+% 
+%  hc = hRe + 1i*hIm; 
+% 
+% and the amplitude is then 
+% 
+%  hAm = abs(hc); 
+% 
+% and the phase is given by 
+% 
+%  hPh = angle(hc); 
+% 
+% Note: Some conventions use the complex conjugate of |hc|, and calculate
+% phase angle as |atan2(-imag(h), real(h))|, but TMD3.0 uses the convention
+% that's compatible with MATLAB's built-in |complex| and |angle| functions.
+
+%% U and V variables
+% Each tide model file contains real and imaginary components of U and V
+% transport variables, whose units are m^2/s. 
+%
+% Regardless of whether the model is global or regional, U and V always
+% correspond to zonal (positive pointing geographic east) and meridional
+% (positive pointing geographic north) components of transport. 
+% 
+% Transport estimates are usually pretty good, and represent column-averaged 
+% (barotropic) flow. Column-averaged velocities are obtained by dividing
+% transport by water column thickness, so the accuracy of velocity
+% estimates is subject to the accuracy of the bathymetry estimate. 
+% 
+% TMD3.0 model file format does not account for vertical variations in
+% tidal transport or current velocity. In other words, this is a strictly
+% barotropic model, and does not attempt to represent baroclinic flow. 
+
+%% Units 
+% TMD3.0 uses meters, seconds, and combinations of meters and seconds. Previous 
+% versions of TMD produced tidal currents in cm/s, but we now package
+% transports in units of m^2/s, so they may easily be divided by water
+% column thickness (m), to get velocities of m/s. 
+
+%% Masks 
+% TMD does something new with masking: The scripts that create each model
+% file use |regionfill| to interpolate values of tidal constituents
+% across all land areas. 
+% 
+% Here's what the m2 constituent amplitude looks like in the TPXO9 file:
+
+[ph,lon,lat] = tmd_data('TPXO9_atlas_v5.nc','hAm','constituents','m2'); 
+
+figure
+h=imagesc(lon,lat,ph);
+axis xy image 
+caxis([0 2])
+cb = colorbar; 
+ylabel(cb,'m2 constituent amplitude (m)') 
+
+%% 
+% _Why on Earth would we say there's a finite, nonzero tidal amplitude in
+% the middle of China, or any other landmass?_ Well, the reason's quite simple: 
+% Sometimes you may be interested in tides that are close to shore, for example, 
+% if you have a tide gauge at the end of a dock that may lie between
+% modeled ocean and land pixels. In such a case, you know that tides exist
+% there, but the tide model would only produce NaNs. You could extrapolate
+% from the nearest grid cell that produces a finite tide solution, but that'd 
+% be inelegant and almost certainly wrong. The |regionfill| approach
+% produces smoother, more physical interpolation close to the coast and is
+% a reasonable approximation where the underlying tide model cannot offer a
+% solution. 
+% 
+% The <tmd_interp_documentation.html |tmd_interp|> function sets land areas 
+% to NaN by default (but offers an option to "unmask"). For your tidal needs, 
+% you may wish to mask out land areas using the |mask| variable, which is
+% 1 for all ocean grid cells, and 0 everywhe else. Below I'm using the mask
+% to set the transparency of the previous image: 
+
+[mask,lon,lat] = tmd_data('TPXO9_atlas_v5.nc','mask'); 
+h.AlphaData = mask; 
+
+%% Amplitude, phase, alpha, and omega 
+% In each TMD3.0 compatible model file, you will find variables called
+% amplitude, phase, omega, and alpha. You probably won't need to interact
+% with these variables directly, but they are from the |tmd_constit|
+% function. 
+
+%% |scale_factor| 
+% The real and imaginary components of h, U, and V are all scaled by a
+% strange number listed as the |scale_factor| of each variable. MATLAB
+% automatically parses the |scale_factor| when reading in the variables, so
+% you don't have to worry about multiplying anything by anything. 
+% 
+% _Why isn't the scale factor a simple round number?_ Because it doesn't
+% have to be. Again, you don't have to worry about the |scale_factor|. The
+% value of the scale factor is chosen to take advantage of the full range
+% of the int16 Datatype that it's saved as. Any other scale factor would
+% either clip the large values, or digitize the data at lower precision
+% than necessary. 
+
+%% Extra columns in global models 
+% You may notice that global model files have an extra grid cell on each end,
+% corresponding to an extra longitude step before 0 and after 360. This
+% rationale is that interpolation near 0 degrees longitude would produce
+% NaNs, and you'd end up with a seam of missing data at that lontitude. 
+% 
+% The trick of repeating a few rows or columns around the 0 degree longitude
+% is an old one, and it could be performed after loading the data, rather than 
+% saving the data. However, |tmd_interp| only loads pixels around query
+% points, so the simplest solution is to repeat the data in the data file,
+% rather than writing |tmd_interp| to call |tmd_data| multiple times and
+% stitch the pieces together before interpolation. 
+
+%% Flexure 
+% For the CATS model, we have added a |flexure| variable. This is a
+% first-order estimate of tidal flexure of ice shelves in the grounding
+% zone, generated by appling a simple 1D linear elastic model to BedMachine
+% v2 ice thickness, assuming an elastic modulus of E=4.8 GPa and Poisson's ratio
+% nu = 0.4. Values range from zero to about 100, corresponding to the
+% percent of tidal range that the ice shelf should exhibit. Values can
+% exceed 100 by a few percent near the hydrostatic line. 
+
+%% Author Info
+% This document was written by Chad A. Greene, June 2022. 
+##### SOURCE END #####
+--></body></html>

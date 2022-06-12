@@ -41,7 +41,6 @@ function zi = tmd_interp(filename,variable,lati,loni,varargin)
 %  * 'wct' water column thickness (m) 
 %  * 'mask' binary land/ocean mask
 %  * 'flexure' ice shelf flexure coefficient from a linear elastic model applied to BedMachine ice thickness (can slightly exceed 1). Only for CATS model. 
-%  * 'h_range' full peak-to-peak tidal range 
 %
 % zi = tmd_interp(...,'constituents',conList) specifies tidal constituents as a 
 % cell array (e.g, {'m2','s2'}. If constituents are not specified, all constituents 
@@ -114,32 +113,45 @@ end
 
 %% Load data
 
+% switch lower(variable)
+%    case {'h','hre','him'}
+%       [zRe,x,y] = tmd_data(filename,'hRe','bounds',[xi(:) yi(:)],varargin{:}); 
+%       zIm = tmd_data(filename,'hIm','bounds',[xi(:) yi(:)],varargin{:}); 
+%       z = complex(zRe,zIm); 
+%    case {'u','ure','uim'}
+%       [zRe,x,y] = tmd_data(filename,'URe','bounds',[xi(:) yi(:)],varargin{:}); 
+%       zIm = tmd_data(filename,'UIm','bounds',[xi(:) yi(:)],varargin{:}); 
+%       z = complex(zRe,zIm); 
+%    case {'v','vre','vim'} 
+%       [zRe,x,y] = tmd_data(filename,'VRe','bounds',[xi(:) yi(:)],varargin{:}); 
+%       zIm = tmd_data(filename,'VIm','bounds',[xi(:) yi(:)],varargin{:}); 
+%       z = complex(zRe,zIm); 
+%    case {'wct','flexure','mask','ham','hph','uam','uph','vam','vph'} 
+%       [z,x,y] = tmd_data(filename,variable,'bounds',[xi(:) yi(:)],varargin{:}); 
+%    otherwise 
+%       error(['Unrecognized variable ',variable])
+% end
+
 switch lower(variable)
-   case {'h','hre','him'}
-      [zRe,x,y] = tmd_data(filename,'hRe','bounds',[xi(:) yi(:)],varargin{:}); 
-      zIm = tmd_data(filename,'hIm','bounds',[xi(:) yi(:)],varargin{:}); 
-      z = complex(zRe,zIm); 
-   case {'u','ure','uim'}
-      [zRe,x,y] = tmd_data(filename,'URe','bounds',[xi(:) yi(:)],varargin{:}); 
-      zIm = tmd_data(filename,'UIm','bounds',[xi(:) yi(:)],varargin{:}); 
-      z = complex(zRe,zIm); 
-   case {'v','vre','vim'} 
-      [zRe,x,y] = tmd_data(filename,'VRe','bounds',[xi(:) yi(:)],varargin{:}); 
-      zIm = tmd_data(filename,'VIm','bounds',[xi(:) yi(:)],varargin{:}); 
-      z = complex(zRe,zIm); 
-   case {'wct','flexure','mask','ham','hph','uam','uph','vam','vph'} 
-      [z,x,y] = tmd_data(filename,variable,'bounds',[xi(:) yi(:)],varargin{:}); 
+   case {'hph'}
+      [z,x,y] = tmd_data(filename,'h','bounds',[xi(:) yi(:)],varargin{:}); 
+   case {'uph'}
+      [z,x,y] = tmd_data(filename,'U','bounds',[xi(:) yi(:)],varargin{:}); 
+   case {'vph'} 
+      [z,x,y] = tmd_data(filename,'V','bounds',[xi(:) yi(:)],varargin{:}); 
+   case {'wct','flexure','mask'} 
+      [z,x,y] = tmd_data(filename,variable,'bounds',[xi(:) yi(:)]); 
    otherwise 
-      error(['Unrecognized variable ',variable])
+      [z,x,y] = tmd_data(filename,variable,'bounds',[xi(:) yi(:)],varargin{:}); 
 end
 
 %% Convert transports to velocities if requested
 
 % Lowercase first letter indicates velocity: 
-if ismember(variable(1),{'u','v'})
-   wct = tmd_data(filename,'wct','bounds',[xi(:) yi(:)],varargin{:}); 
-   z = z./max(wct,10); % divide transports by at least 10 m wct to prevent insanely high velocities.
-end
+% if ismember(variable(1),{'u','v'})
+%    wct = tmd_data(filename,'wct','bounds',[xi(:) yi(:)],varargin{:}); 
+%    z = z./max(wct,10); % divide transports by at least 10 m wct to prevent insanely high velocities.
+% end
 
 %% Interpolate 
 
@@ -156,8 +168,8 @@ end
 %% Convert complex numbers if requested 
 
 switch lower(variable) 
-   case {'ham','uam','vam'} 
-      zi = abs(zi); 
+%    case {'ham','uam','vam'} 
+%       zi = abs(zi); 
    case {'hph','uph','vph'} 
       zi = angle(zi); 
    otherwise 

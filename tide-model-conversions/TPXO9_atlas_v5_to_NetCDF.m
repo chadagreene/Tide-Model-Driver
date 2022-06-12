@@ -6,10 +6,9 @@
 %% Enter initial file info 
 
 % Output file: 
-newfilename = ['/Users/cgreene/Documents/data/tides/TPXO9_atlas30_update_',datestr(now,'yyyy-mm-dd'),'.nc']; 
+newfilename = ['/Users/cgreene/Documents/data/tides/TPXO9_atlas_v5_update_',datestr(now,'yyyy-mm-dd'),'.nc']; 
 
-con_string = '2n2 k1 k2 m2 m4 mf mm mn4 ms4 n2 o1 p1 q1 s1 s2'; % constituents in proper order
-%con_string = 'm2 s2 k1 o1 n2 p1 k2 q1 2n2 mf mm m4 ms4 mn4 s1'; % constituents in proper order
+con_string = '2n2 k1 k2 m2 m4 mf mm mn4 ms4 n2 o1 p1 q1 s1 s2'; % constituents in alphabetical order
 uv = true; 
 
 %% Load data
@@ -33,13 +32,13 @@ for k=1:Ncons
    ftmp = ['/Users/cgreene/Documents/data/tides/TPXO9_atlas_v5/h_',cons_cell{k},'_tpxo9_atlas_30_v5'];
    
    % Read each tidal height constituent and reorient: 
-   tmp = h_in(ftmp,k); 
+   tmp = h_in(ftmp,1); 
    h(:,:,k) = flipud(tmp'); 
    
    if uv
       futmp = ['/Users/cgreene/Documents/data/tides/TPXO9_atlas_v5/u_',cons_cell{k},'_tpxo9_atlas_30_v5'];
       % Read each transport constituent and reorient: 
-      [tmp,tmp2] = u_in(futmp,k); 
+      [tmp,tmp2] = u_in(futmp,1); 
       U(:,:,k) = flipud(tmp'); 
       V(:,:,k) = flipud(tmp2'); 
    end
@@ -81,7 +80,7 @@ end
 
 % Scaling factor for saving to NCSHORT (int16):
 scale_h = 32767/max([mxhr mxhi]);
-scale_uv = 32767/max([mxur mxvr mxui mxvi]);
+scale_UV = 32767/max([mxur mxvr mxui mxvi]);
 
 [ispec,amp,ph,omega,alpha] = tmd_constit(cons_cell);
 
@@ -253,7 +252,7 @@ if uv
    netcdf.defVarDeflate(ncid,uRe_var_id,true,true,9);
    netcdf.defVarDeflate(ncid,uIm_var_id,true,true,9);
    netcdf.defVarDeflate(ncid,vRe_var_id,true,true,9);
-   netcdf.defVarDeflate(ncid,vRe_var_id,true,true,9);
+   netcdf.defVarDeflate(ncid,vIm_var_id,true,true,9);
 end
 netcdf.defVarDeflate(ncid,wct_var_id,true,true,9);
 netcdf.defVarDeflate(ncid,mask_var_id,true,true,9);
@@ -283,4 +282,3 @@ netcdf.close(ncid)
 
 disp done
 
-toc/60

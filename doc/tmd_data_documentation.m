@@ -42,7 +42,6 @@
 %  * |'wct'| water column thickness (m) 
 %  * |'mask'| binary land/ocean mask
 %  * |'flexure'| ice shelf flexure coefficient from a linear elastic model applied to BedMachine ice thickness (can slightly exceed 1). Only for CATS model. 
-%  * |'h_range'| full peak-to-peak tidal range 
 %
 % |[...] = tmd_data(...,'constituents',conList)| specifies tidal constituents as a 
 % cell array (e.g, {'m2','s2'}. If constituents are not specified, all model
@@ -63,12 +62,26 @@
 %
 % |[...,cons] = tmd_data(...)| returns a list of constituents in the model.  
 % 
+%% Example: Global Model water column thickness
+
+[wct,lon,lat] = tmd_data('TPXO9_atlas_v5.nc','wct');
+
+figure
+imagesc(lon,lat,wct)
+axis xy image 
+caxis([0 7000]) 
+cb = colorbar; 
+ylabel(cb,'water column thickness (m)') 
+xlabel('longitude')
+ylabel('latitude') 
+cmocean deep % optional colormap from Climate Data Toolbox
+
 %% Example: Exploring tide model data
 % Explore the model data for the height variable |h| in the CATS model.
 % (Here I'm defining |fn| as the filepath to the version of CATS I'm
 % working on at the moment, but you may have a different model filename.)
 
-fn = '/Users/cgreene/Downloads/CATS2008/CATS2008_update_2022-04-22.nc';
+fn = '/Users/cgreene/Downloads/CATS2008/CATS2008_update_2022-06-11.nc';
 
 [h,x,y,cons] = tmd_data(fn,'h'); 
 

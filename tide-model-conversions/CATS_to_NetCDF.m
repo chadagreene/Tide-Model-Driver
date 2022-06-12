@@ -191,7 +191,7 @@ axis([  -1609006.64    -415618.02      63826.14    1152447.96])
 
 % Takes ~5 hours! 
 %h_range = tidal_range(h,conList,mask==1);
-h_range = permute(ncread('CATS2008_update_2022-06-06.nc','h_range'),[2 1]); 
+% h_range = permute(ncread('CATS2008_update_2022-06-06.nc','h_range'),[2 1]); 
 
 %%
 
@@ -202,7 +202,6 @@ scale_UV = floor(32767/max(abs([real(U(:));real(V(:));imag(U(:));imag(V(:));])))
 [ispec,amp,ph,omega,alpha] = tmd_constit(strsplit(con_string));
 
 proj4 = '+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=-70 +x_0=0 +y_0=0 +datum=WGS84 +units=km +no_defs +type=crs';
-
 
 %% Write the netcdf 
 
@@ -352,14 +351,14 @@ flexure_var_id = netcdf.defVar(ncid,'flexure','NC_BYTE',[x_id y_id]);
 netcdf.putAtt(ncid,flexure_var_id,'long_name',    'Forward-modeled coefficient of tidal flexure assuming linear elastic response applied to BedMachine v2 geometry with rho_sw=1027 kg/m3, poisson=0.4, E=4.8 GPa. Can exceed 100% (by a few percent) near the hydrostatic line.');
 netcdf.putAtt(ncid,flexure_var_id,'standard_name','ice_flexure_percent');
 netcdf.putAtt(ncid,flexure_var_id,'grid_mapping', 'polar_stereographic');
-
-% define h_range
-R_var_id = netcdf.defVar(ncid,'h_range','NC_SHORT',[x_id y_id]);
-netcdf.putAtt(ncid,R_var_id,'long_name',    'Peak-to-peak tidal range.');
-netcdf.putAtt(ncid,R_var_id,'standard_name','tidal range');
-netcdf.putAtt(ncid,R_var_id,'grid_mapping', 'polar_stereographic');
-netcdf.putAtt(ncid,R_var_id,'units', 'm');
-netcdf.putAtt(ncid,R_var_id,'scale_factor',1/1000);
+% 
+% % define h_range
+% R_var_id = netcdf.defVar(ncid,'h_range','NC_SHORT',[x_id y_id]);
+% netcdf.putAtt(ncid,R_var_id,'long_name',    'Peak-to-peak tidal range.');
+% netcdf.putAtt(ncid,R_var_id,'standard_name','tidal range');
+% netcdf.putAtt(ncid,R_var_id,'grid_mapping', 'polar_stereographic');
+% netcdf.putAtt(ncid,R_var_id,'units', 'm');
+% netcdf.putAtt(ncid,R_var_id,'scale_factor',1/1000);
 
 % Compress and stop variable definition
 netcdf.defVarDeflate(ncid,lat_var_id,true,true,9);
@@ -369,11 +368,11 @@ netcdf.defVarDeflate(ncid,hIm_var_id,true,true,9);
 netcdf.defVarDeflate(ncid,uRe_var_id,true,true,9);
 netcdf.defVarDeflate(ncid,uIm_var_id,true,true,9);
 netcdf.defVarDeflate(ncid,vRe_var_id,true,true,9);
-netcdf.defVarDeflate(ncid,vRe_var_id,true,true,9);
+netcdf.defVarDeflate(ncid,vIm_var_id,true,true,9);
 netcdf.defVarDeflate(ncid,wct_var_id,true,true,9);
 netcdf.defVarDeflate(ncid,mask_var_id,true,true,9);
 netcdf.defVarDeflate(ncid,flexure_var_id,true,true,9);
-netcdf.defVarDeflate(ncid,R_var_id,true,true,9);
+% netcdf.defVarDeflate(ncid,R_var_id,true,true,9);
 netcdf.endDef(ncid);
 
 %3. Place data
@@ -395,7 +394,7 @@ netcdf.putVar(ncid,vIm_var_id,ipermute(int16(scale_UV*imag(V)),[2 1 3]));
 netcdf.putVar(ncid,wct_var_id,ipermute(wct,[2 1]));
 netcdf.putVar(ncid,mask_var_id,ipermute(mask,[2 1]));
 netcdf.putVar(ncid,flexure_var_id,ipermute(flexure,[2 1]));
-netcdf.putVar(ncid,R_var_id,ipermute(h_range*1000,[2 1]));
+% netcdf.putVar(ncid,R_var_id,ipermute(h_range*1000,[2 1]));
 
 %4. Close file 
 netcdf.close(ncid)

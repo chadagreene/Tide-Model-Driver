@@ -23,7 +23,7 @@ function [umajor,uminor,uphase,uincl] = tmd_ellipse(filename,constituent,lati,lo
 %
 %% Example 
 % % 
-% fn = 'CATS2008_update_2022-06-09.nc'; 
+% fn = 'CATS2008_update_2022-06-12.nc'; 
 % lat = -71.9102; 
 % lon =  172.6590;
 % 

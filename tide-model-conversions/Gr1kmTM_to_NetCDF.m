@@ -276,7 +276,7 @@ netcdf.defVarDeflate(ncid,hIm_var_id,true,true,9);
 netcdf.defVarDeflate(ncid,uRe_var_id,true,true,9);
 netcdf.defVarDeflate(ncid,uIm_var_id,true,true,9);
 netcdf.defVarDeflate(ncid,vRe_var_id,true,true,9);
-netcdf.defVarDeflate(ncid,vRe_var_id,true,true,9);
+netcdf.defVarDeflate(ncid,vIm_var_id,true,true,9);
 netcdf.defVarDeflate(ncid,wct_var_id,true,true,9);
 netcdf.defVarDeflate(ncid,mask_var_id,true,true,9);
 netcdf.endDef(ncid);
