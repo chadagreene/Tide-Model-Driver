@@ -46,8 +46,12 @@ This version of TMD works with NetCDF data, which have been converted from the o
 1. Install TMD 
 2. Get tide model data. 
 
-# Tutorials
+# Tutorials & Other Documentation
+* [TMD Getting Started](doc/tmd_getting_started.md).🚧
+* [TMD Model file format](doc/TMD_model_file_format.md).
 * [ADCP current data analysis](doc/tutorial_currents.md).
+* [Tide animation](doc/tide_animation.md).🚧
+* [Tidal range calculation](doc/tidal_range_calculation.md).🚧
 
 # What's new in TMD 3.0?
 

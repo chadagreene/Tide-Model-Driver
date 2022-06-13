@@ -17,7 +17,7 @@ ncdisp('TPXO9_atlas_v5.nc')
 % treated like the x dimension, and latitude is treated like the y
 % dimension.
 %
-% Regional models (CATS, Arctic models, etc) are presented ongrids that are 
+% Regional models (CATS, Arctic models, etc) are presented on grids that are 
 % regular in _projected_ coordinates, meaning they are spaced equally in
 % meters or kilometers. The proj4 string in the NetCDF file describes the
 % projection parameters for any regional model. Regional models also
@@ -37,8 +37,8 @@ ncdisp('TPXO9_atlas_v5.nc')
 ncreadatt('TPXO9_atlas_v5.nc','constituents','constituent_order')
 
 %%
-% Constituents can also be accessed as cell arrays using the |tmd_data|
-% function: 
+% Constituents can also be accessed as cell arrays using the
+% <tmd_data_documentation.html |tmd_data|> function: 
 
 [wct,lon,lat,cons] = tmd_data('TPXO9_atlas_v5.nc','wct'); 
 
@@ -70,8 +70,8 @@ cons
 %  hPh = angle(hc); 
 % 
 % Note: Some conventions use the complex conjugate of |hc|, and calculate
-% phase angle as |atan2(-imag(h), real(h))|, but TMD3.0 uses the convention
-% that's compatible with MATLAB's built-in |complex| and |angle| functions.
+% phase angle as |atan2(-imag(h), real(h))|, but TMD3.0 uses a convention
+% that matches MATLAB's built-in |complex| and |angle| functions.
 
 %% U and V variables
 % Each tide model file contains real and imaginary components of U and V
