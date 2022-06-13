@@ -15,26 +15,19 @@ into the Command Window. To access documentation for a specific function, type `
 ```matlab
 tmd tmd_predict
 ```
-### Main Function
-Most users will only need to interact with one function. It is: 
+### Main Functions
+For most applications, `tmd_predict` is the only function you will ever need to call directly, although in some cases you may need `tmd_interp` to retrieve bathymetry, or `tmd_ellipse` to tell you about tidal currents. Documentation is provided for all of the functions with hyperlinked names below. 
 
 * `tmd_predict` predicts tidal elevation, transport, or current velocities for given location(s) and time(s). 
-
-### Other useful functions
-
 * `tmd_interp` provides water column thickness, land/ocean mask, ice shelf flexure, and tidal constiuent parameters at specified geographic locations, for a given tide model. 
-* `tmd_data` loads gridded tide model data without interpolation. 
+* [`tmd_data`](doc/tmd_data_documentation.md) loads gridded tide model data without interpolation. 
 * `tmd_ellipse` 
 * `tidal_range` 
-
-### Under-the-hood functions 
-You probably won't need to call any of the following functions directly, but they are called by the functions above. 
-
 * `tmd_astrol` computes the basic astronomical mean longitudes s, h, p, N.
 * `tmd_constit` returns amplitude, phase, frequency, alpha, species for tidal constituents. 
 * `tmd_harp` predicts tidal time series using harmonic constants. 
 * `tmd_InferMinor` returns correction for 16 minor tidal constiuents. 
-* `tmd_nodal`
+* `tmd_nodal` calculates the nodal corrections for tidal constituents.
 * `tmd_ll2ps` converts geographic coordinates to polar stereographic kilometers for polar models. 
 * `tmd_ps2ll` converts polar stereographic kilometers geographic coordinates for polar models. 
 
@@ -46,7 +39,7 @@ This version of TMD works with NetCDF data, which have been converted from the o
 1. Install TMD 
 2. Get tide model data. 
 
-# Tutorials & Other Documentation
+# Tutorials & Further Documentation
 * [TMD Getting Started](doc/tmd_getting_started.md).🚧
 * [TMD Model file format](doc/TMD_model_file_format.md).
 * [ADCP current data analysis](doc/tutorial_currents.md).

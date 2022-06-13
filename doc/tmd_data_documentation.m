@@ -1,6 +1,7 @@
 %% |tmd_data|
 % |tmd_data| loads tide model data into the Matlab workspace. 
 % 
+% <TMD_Contents.html Back to Tide Model Driver Contents>.
 %% Syntax 
 % 
 %  [Z,x,y] = tmd_data(filename,variable)
@@ -14,37 +15,37 @@
 % |[Z,x,y] = tmd_data(filename,variable)| loads any of the following
 % variables from a given tide model file: 
 % 
-%  * |'h'|   complex tidal height (m)  
-%  * |'hRe'| real part of tidal height
-%  * |'hIm'| imaginary part of tidal height 
-%  * |'hAm'| amplitude of tidal height
-%  * |'hPh'| phase of tidal height
-%  * |'u'|   complex zonal velocity (m/s) 
-%  * |'uRe'| real part of zonal velocity 
-%  * |'uIm'| imaginary part of zonal velocity 
-%  * |'uAm'| amplitude of zonal velocity
-%  * |'uPh'| phase of zonal velocity
-%  * |'U'|   complex zonal transport (m^2/s) 
-%  * |'URe'|  real part of zonal transport
-%  * |'UIm'| imaginary part of zonal transport
-%  * |'UAm'| amplitude of zonal transport
-%  * |'UPh'| phase of zonal transport 
-%  * |'v'|   complex meridional velocity (m/s) 
-%  * |'vRe'| real part of meridional velocity 
-%  * |'vIm'| imaginary part of meridional velocity
-%  * |'vAm'| amplitude of meridional velocity
-%  * |'vPh'| phase of meridional velocity 
-%  * |'V'|   complex meridional transport (m^2/s)
-%  * |'VRe'| real part of meridional transport 
-%  * |'VIm'| imaginary part of meridional transport
-%  * |'VAm'| amplitude of meridional transport
-%  * |'VPh'| phase of meridional transport
-%  * |'wct'| water column thickness (m) 
-%  * |'mask'| binary land/ocean mask
-%  * |'flexure'| ice shelf flexure coefficient from a linear elastic model applied to BedMachine ice thickness (can slightly exceed 1). Only for CATS model. 
+% * |'h'|   complex tidal height (m)  
+% * |'hRe'| real part of tidal height
+% * |'hIm'| imaginary part of tidal height 
+% * |'hAm'| amplitude of tidal height
+% * |'hPh'| phase of tidal height
+% * |'u'|   complex zonal velocity (m/s) 
+% * |'uRe'| real part of zonal velocity 
+% * |'uIm'| imaginary part of zonal velocity 
+% * |'uAm'| amplitude of zonal velocity
+% * |'uPh'| phase of zonal velocity
+% * |'U'|   complex zonal transport (m^2/s) 
+% * |'URe'|  real part of zonal transport
+% * |'UIm'| imaginary part of zonal transport
+% * |'UAm'| amplitude of zonal transport
+% * |'UPh'| phase of zonal transport 
+% * |'v'|   complex meridional velocity (m/s) 
+% * |'vRe'| real part of meridional velocity 
+% * |'vIm'| imaginary part of meridional velocity
+% * |'vAm'| amplitude of meridional velocity
+% * |'vPh'| phase of meridional velocity 
+% * |'V'|   complex meridional transport (m^2/s)
+% * |'VRe'| real part of meridional transport 
+% * |'VIm'| imaginary part of meridional transport
+% * |'VAm'| amplitude of meridional transport
+% * |'VPh'| phase of meridional transport
+% * |'wct'| water column thickness (m) 
+% * |'mask'| binary land/ocean mask
+% * |'flexure'| ice shelf flexure coefficient from a linear elastic model applied to BedMachine ice thickness (can slightly exceed 1). Only for CATS model. 
 %
 % |[...] = tmd_data(...,'constituents',conList)| specifies tidal constituents as a 
-% cell array (e.g, {'m2','s2'}. If constituents are not specified, all model
+% cell array (e.g, |{'m2','s2'}|). If constituents are not specified, all model
 % constituents are returned. 
 %
 % |[...] = tmd_data(...,'bounds',[xi yi])| enter an Mx2 matrix of coordinates 
@@ -67,20 +68,24 @@
 % (Here I'm defining |fn| as the filename of the version of CATS I'm
 % working on at the moment, but you may have a different model filename.)
 
+% Filename: 
 fn = 'CATS2008_update_2022-06-11.nc';
 
+% Load complex height coefficients:
 [h,x,y,cons] = tmd_data(fn,'h'); 
 
+% Examine outputs: 
 whos h x y cons
 
 %% 
 % Above, we see that |h| is a complex variable whose dimensions correspond
-% to |y|, |x|, and the constituents inn the model. 
+% to |y|, |x|, and the constituents in the model. 
 
 %% Example: Water column thickness
 % Using the same CATS filename |fn| we defined above, load and plot the water column
 % thickness:
 
+% Load water column thickness:
 [wct,x,y] = tmd_data(fn,'wct'); 
 
 figure
@@ -94,45 +99,40 @@ cmocean deep % optional colormap
 
 %% Example: Geographic coordinates from a regional model
 % You see above that the regional CATS model was generated in a nonstandard
-% projection. You may prefer to get the geographic coordinates of the grid
-% cell centers, like this: (Below I'm plotting with Antarctic Mapping
-% Tools' |pcolorps| function): 
+% projection. If you don't want to work in the CATS model coordinates, you 
+% can unproject them yourself with |tmd_ps2ll| or you can include the |'geo'| 
+% flag to get the geographic coordinates when you call |tmd_data|.
+% 
+% Below, I'm plotting with <https://github.com/chadagreene/Antarctic-Mapping-Tools Antarctic Mapping Tools'>
+% |pcolorps| function, but you can use |lat| and |lon| with any geographic 
+% plotting functions like MATLAB's |pcolorm| or M_Map's |m_pcolor|: 
 
 [wct,lon,lat] = tmd_data(fn,'wct','geo'); 
 
 figure
 pcolorps(lat,lon,wct) % requires AMT
-bedmachine % plots Antarctica's coastline, if tyou have the bedmachine toolbox
+bedmachine % plots Antarctic coastline, if you have the bedmachine toolbox
 cb = colorbar; 
 ylabel(cb,'water column thickness (m)') 
 cmocean deep % optional colormap 
-axis tight
+axis tight off
+graticuleps % geographic grid lines 
 
-%% Example 3
+%% Example: Constituent amplitude and phase
+% Here's how you may load and plot the amplitude and phase of the s2 constituent
+% from a model file: 
 
 [hAm,x,y] = tmd_data(fn,'hAm','constituents','s2');  
 hPh = tmd_data(fn,'hPh','constituents','s2'); 
-
-figure
-imagesc(x,y,hAm); 
-axis xy image
-hold on
-contour(x,y,rad2deg(hPh),-180:30:180,'k')
-xlabel 'easting (km)' 
-ylabel 'northing (km)' 
-caxis([0 1.2])
-
-%%
-
 ocean = tmd_data(fn,'mask'); 
 
-% Set land values to NaN: 
-hAm(~ocean) = nan; 
-hPh(~ocean) = nan; 
+% Mask out land areas: 
+hAm(~ocean) = NaN; 
+hPh(~ocean) = NaN; 
 
 figure
-h=imagesc(x,y,hAm); 
-h.AlphaData = ocean; % sets transparency
+h=imagesc(x,y,hAm);
+h.AlphaData = ocean; % makes land transparent
 axis xy image
 hold on
 contour(x,y,rad2deg(hPh),-180:30:180,'k')
@@ -145,24 +145,61 @@ caxis([0 1.2])
 % models. The only real difference is we let lon=x and lat=y. Here's an
 % example: 
 
-[M2,lon,lat] = tmd_data
+% Load the M2 global tidal height amplitude: 
+[M2,lon,lat] = tmd_data('TPXO9_atlas_v5.nc','hAm','constituents','m2'); 
 
-
-%%
-
-[u1,x1,y1] = tmd_data(fn,'U','bounds',[-2498 3049]);
-
-%%
-%% Example: Global Model water column thickness
-
-[wct,lon,lat] = tmd_data('TPXO9_atlas_v5.nc','wct');
+% Load the global ocean mask: 
+ocean = tmd_data('TPXO9_atlas_v5.nc','mask'); 
 
 figure
-imagesc(lon,lat,wct)
-axis xy image 
-caxis([0 7000]) 
+h=imagesc(lon,lat,M2);
+h.AlphaData = ocean; % makes land transparent
+axis xy image
 cb = colorbar; 
-ylabel(cb,'water column thickness (m)') 
+ylabel(cb,'M2 height amplitude (m)') 
 xlabel('longitude')
 ylabel('latitude') 
-cmocean deep % optional colormap from Climate Data Toolbox
+caxis([0 2])
+cmocean amp % optional colormap
+
+%% Example: Load a small area of data 
+% Let's say you want to use a global tide model, but you're only interested
+% in the ocean around India. In such cases, you may not want to load the
+% entire global dataset, so load the data surrounding your region of
+% interest by specifiying the bounds as an Nx2 array, defining any number N
+% data points whose x (or longitude for a global model) values are the
+% first column, and y values (or latitude for a global model) are the
+% second column. 
+%
+% Below, I'm setting the colormap with the |cmocean| function, and adding
+% hillshade with |shadem|, both of which are in the <https://github.com/chadagreene/CDT Climate Data Toolbox for Matlab>
+% (Greene et al., 2019). 
+
+% Some points defining your region of interest: 
+loni = [63.57 56.40 56.77 57.88 76.30 85.81 98.67 98.29 82.47];
+lati = [26.36 23.77 10.30  1.03  1.15  2.26  6.84 23.89 26.61];    
+
+% Load model data around the points of interest: 
+[wct,lon,lat] = tmd_data('TPXO9_atlas_v5.nc','wct','bounds',[loni(:) lati(:)]); 
+ocean = tmd_data('TPXO9_atlas_v5.nc','mask','bounds',[loni(:) lati(:)]); 
+
+% Set land areas to NaN:
+wct(~ocean) = nan;
+
+figure
+pcolor(lon,lat,wct)
+shading interp
+set(gca,'color',.5*[1 1 1]) % sets background (land) to gray
+axis xy image
+cb = colorbar; 
+ylabel(cb,'water column thickness (m)') 
+hold on
+plot(loni,lati,'ro-','linewidth',2)
+xlabel 'longitude'
+ylabel 'latitude'
+cmocean deep % optional colormap
+shadem(-13) % a tiny bit of hillshade
+
+%% Author Info 
+% The |tmd_data| function and its documentation were written by Chad A.
+% Greene, June 2022. 
