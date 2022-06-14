@@ -21,7 +21,7 @@ addpath(genpath('/Users/cgreene/Documents/data/tides/CATS2008'))
 old_res = 4; % (km) input grid resolution 
 new_res = 2; % (km) output grid resolution 
 
-con_string = 'm2 s2 n2 k2 k1 o1 p1 q1 mf mm'; % constituents in proper order
+con_string = 'm2 s2 n2 k2 k1 o1 p1 q1 mf mm'; % constituents in original model order
 
 %% Load data
 
@@ -115,7 +115,6 @@ end
 
 oldmask = interp2(x4,y4,mask,X,Y,'nearest'); 
 wct_cats = interp2(x4,y4,double(wct),X,Y); 
-
 
 %% Get the GL to agree with BedMachine
 
@@ -214,6 +213,7 @@ netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Title','CATS2022');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Description','This is CATS2008, but resampled at 2 km resolution, and adjusted to match BedMachine v2 ice masks and water column thickness.');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Author','Susan Howard, Svetlana Erofeeva, Laurie Padman, Chad A. Greene, and Tyler Sutterley.');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'creation_date',datestr(now,'yyyy-mm-dd'));
+netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'NetCDF_conversion','Chad A. Greene');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'tmd_version',3.0);
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'license','MIT License');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Data_citation',['Howard, S. L., Erofeeva, S., & Padman, L. (2019) "CATS2008: Circum-Antarctic Tidal Simulation version 2008" u.S. Antarctic Program (USAP) Data Center. doi: https://doi.org/10.15784/601235.'])
@@ -324,7 +324,7 @@ netcdf.putAtt(ncid,vRe_var_id,'scale_factor',  1/scale_UV);
 
 % Define vIm
 vIm_var_id = netcdf.defVar(ncid,'VIm','NC_SHORT',[x_id y_id cons_id]);
-netcdf.putAtt(ncid,vIm_var_id,'long_name',    'imaginary component of V transport constituent.  This is the meridional flow component in geographic coordinates.');
+netcdf.putAtt(ncid,vIm_var_id,'long_name',    'imaginary component of V transport constituent. This is the meridional flow component in geographic coordinates.');
 netcdf.putAtt(ncid,vIm_var_id,'standard_name','height_constituent');
 netcdf.putAtt(ncid,vIm_var_id,'grid_mapping', 'polar_stereographic');
 netcdf.putAtt(ncid,vIm_var_id,'units',        'm^2/s');

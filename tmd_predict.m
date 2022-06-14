@@ -1,17 +1,58 @@
 function z = tmd_predict(filename,lat,lon,t,ptype,varargin)
-% 
+% tmd_predict constructs tidal predictions from the complex constituent 
+% coefficients in consolidated NetCDF tide model files. 
 % 
 %% Syntax 
 % 
 %  z = tmd_predict(filename,lat,lon,time)
 %  z = tmd_predict(filename,lat,lon,time,ptype)
 %  z = tmd_predict(filename,lat,lon,time,ptype,'constituents',conList)
-%  z = tmd_predict(...,'InferMinor',false)
-%  z = tmd_predict(...,'flexure')
+%  z = tmd_predict(...,,'coasts',MaskingMethod)
+%  z = tmd_predict(...,'InferMinor',true_or_false)
 % 
-%% 
-
-
+%% Description 
+% 
+% z = tmd_predict(filename,lat,lon,time) predicts tide heights a the
+% specified lat,lon and time, using the TMD3.0 compatible consolodated
+% NetCDF tide model data file. Location(s) lat,lon are decimal degrees, and
+% can be scalars, vectors, or MxN arrays. Input time can be datetime or
+% MATLAB's datenum format, and must be a scalar or a 1D vector. 
+%
+% z = tmd_predict(filename,lat,lon,time,ptype) specifies a solution type.
+% If ptype is not specified, 'h' is the assumed ptype. Note the ptype is
+% case sensitive! Options for ptype are: 
+%
+%  * 'h' tidal height (m) (default)
+%  * 'u' zonal current velocity, positive pointing east (m/s) 
+%  * 'v' meridional current velocity, positive pointing north (m/s) 
+%  * 'U' zonal transport (m^2/s) 
+%  * 'V' meridional height (m^2/s) 
+%  
+% z = tmd_predict(filename,lat,lon,time,ptype,'constituents',conList) 
+% specifies tidal constituents as a cell array (e.g, {'m2','s2'}). If 
+% constituents are not specified, all constituents from the model are returned. 
+% 
+% z = tmd_predict(...,,'coasts',MaskingMethod) specifies how coastal regions are masked. 
+% Can be NaN, 'flexure', or 'unmask'. By default, MaskingMethod is NaN, meaning outputs 
+% are set to NaN wherever a nearest-neighbor interpolation of the ocean indicates land. 
+% The 'flexure' option scales tidal constituents by a predicted coefficient of tidal 
+% deflection for ice shelf grounding zones. A third option, 'unmask', does not apply 
+% any masking, which may be preferred close to coasts, where, for example, a tide gauge 
+% may exist between land and ocean grid cells. 
+% 
+% z = tmd_predict(...,'InferMinor',true_or_false) specifies whether minor
+% constituents should be inferred (true or false). By default, minor constituents are
+% inferred unless constituents are specified. 
+%
+%% Examples 
+% For examples type 
+% 
+%   tmd tmd_predict
+% 
+%% Author Info 
+% This function was written by Chad A. Greene in 2022. 
+% 
+% See also tmd_data and tmd_predict. 
 
 %% Input checks 
 % 
@@ -39,7 +80,7 @@ end
 % Check ptype and define 'z' as default if user has not defined ptype: 
 if nargin>4 
     assert(~isnumeric(ptype),'Input error: Solution type ptype must be a string.') 
-    assert(ismember(ptype,{'h','z','u','U','v','V'}),['Input error: Unrecognized ptype ',ptype])
+    assert(ismember(ptype,{'h','z','u','U','v','V'}),'Input error: The fifth input to tmd_predict must be one of the following ptypes: ''h'',''z'',''u'',''U'',''v'',''V''.')
     if strcmpi(ptype,'z')
        ptype='h'; % allows z or h as input. 
     end
@@ -47,16 +88,19 @@ if nargin>4
 end
 
 if nargin>5
+   % Which constituents do we solve for? (All by default) 
    tmp = strncmpi(varargin,'constituents',3); 
    if any(tmp)
       conList = varargin{find(tmp)+1}; 
-      InferMinorConstituents = false; 
-      d_minor = 0; % minor constituent correction. 
+      InferMinorConstituents = false; % If user requests specific constituents, assume they don't want to infer minor constituents. 
    end
    
-%    if any(strncmpi(varargin,'flexure',4)) 
-%       flexure = true; 
-%    end
+   % Override InferMinor default behavior if user has a specific preference: 
+   tmp = strncmpi(varargin,'inferminor',6); 
+   if any(tmp)
+      InferMinorConstituents = varargin{find(tmp)+1}; 
+      assert(islogical(InferMinorConstituents),'Preference for InferMinor must be either true or false.') 
+   end
    
    tmp = strncmpi(varargin,'coasts',5); 
    if any(tmp)
@@ -67,6 +111,10 @@ if nargin>5
       assert(ismember(MaskingMethod,{'nan','flex','flexure','unmask'}),'Coastal masking method can only be NaN, ''flexure'', or ''unmask''. Try again.')
    end
 
+end
+
+if ~InferMinorConstituents
+   d_minor = 0; % minor constituent correction. 
 end
    
 % Parse solution type: 

@@ -11,7 +11,7 @@ Ocean models contain water height predictions and the barotropic transport varia
 
 ### Regional Ocean Models 
 * [`CATS2008_update_2022-06-11.nc`](https://www.chadagreene.com/tide_data/CATS2008_update_2022-06-11.nc) [355 MB] 2 km Antarctic regional model with 10 tidal constituents. Updates from the original CATS2008 are described [here](cats2008_updates.md). 
-* `Gr1kmTM_update_2022-05-15.nc` 1 km regional model of Greenland. 
+* [`Gr1kmTM_v1.nc`](https://www.chadagreene.com/tide_data/Gr1kmTm_v1.nc) [193 MB] 1 km resolution, 8 constituent regional model surrounding Greenland. 
 
 # Load Tides
 🚧 Check back soon for load tides.🚧

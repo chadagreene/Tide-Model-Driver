@@ -117,6 +117,7 @@ if nargin>2
    tmp = strncmpi(varargin,'constituents',3); 
    if any(tmp) 
       conSubset = true; 
+      assert(all(ismember(varargin{find(tmp)+1},conList)),'Error: Some of the requested constituents do not exist in the model file.')
       conList = varargin{find(tmp)+1}; 
       if ischar(conList) 
          conList = cellstr(conList); 
@@ -226,7 +227,6 @@ for k = 1:NCons
    end
    
 end
-
 
 % Convert transports to velocities if requested: 
 if ismember(variable,{'uRe','uIm','u','uAm','vRe','vIm','v','vAm'})

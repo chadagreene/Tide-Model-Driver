@@ -1,407 +1,299 @@
-
-
-hc = tmd_interp('CATS2008_update_2022-04-22.nc','h',lat,lon,'constituents',{'m2','mf'});
-hc = permute(hc,[3 1 2]);
-
-
-hg = tmd_interp('/Users/cgreene/Downloads/TPXO9_atlas_v5/TPXO9_atlas30_update_2022-05-16.nc','h',lat,lon,'constituents',{'m2','mf'});
-hg = permute(hg,[3 1 2]);
-
-
-
-%%
-
-addpath(genpath('/Users/cgreene/Downloads/TMD3.00_alpha'))
-addpath(genpath('/Users/cgreene/Downloads/CATS2008'))
-addpath(genpath('/Users/cgreene/Downloads/Gr1kmTM'))
-
-
- fn = '/Users/cgreene/Documents/GitHub/Tide-Model-Driver/doc/h127.nc';% bad
-fn = '/Users/cgreene/Documents/GitHub/Tide-Model-Driver/doc/h189.nc'; % good
-%fn = '/Users/cgreene/Documents/GitHub/Tide-Model-Driver/doc/h700.nc'; 
-lat = ncread(fn,'lat');
-lon = ncread(fn,'lon');
-t = ncdateread(fn,'time');
-sl = ncread(fn,'sea_level')/1000; 
-
-plot(t,sl-mean(sl,'omitnan'))
-
-sl_old = tmd_tide_pred('Model_CATS2008',datenum(t),lat,lon,'z'); 
-hold on
-plot(t,sl_old-mean(sl_old,'omitnan'))
-
-%sl_new = tmd_predict('CATS2022_02-21.nc',lat,lon,t);
-
-sl_cats2 = tmd_predict('CATS2008_update_2022-04-22.nc',lat,lon,t,'h','coast','unmask');
-plot(t,sl_cats2-mean(sl_cats2,'omitnan'),'--')
-
-%%
-
-
-fn = '/Users/cgreene/Documents/GitHub/Tide-Model-Driver/doc/h189.nc'; % good
-lat = ncread(fn,'lat');
-lon = ncread(fn,'lon');
-t = ncdateread(fn,'time');
-sl = ncread(fn,'sea_level')/1000; 
-
-
-sl_cats2 = tmd_predict('CATS2008_update_2022-04-22.nc',lat,lon,t,'h','coast','unmask');
-
-figure
-plot(t,sl-mean(sl,'omitnan'),'color',.5*[1 1 1])
-hold on
-plot(t,sl_cats2-mean(sl_cats2,'omitnan'),'linewidth',2)
-hold on
-sl_tpxo = tmd_predict('/Users/cgreene/Downloads/TPXO9_atlas_v5/TPXO9_atlas30_update_2022-05-16.nc',lat,lon,t,'h','constituents',{'m2','s2','n2','k2','k1','o1','p1','q1','mf','mm'}); 
-
-plot(t,sl_tpxo-mean(sl_tpxo,'omitnan'),'linewidth',2)
-
-xlim(datetime([datenum('Jun 20, 2009, 12:00:56') datenum('Jul 02, 2009, 09:44:26')],'convertfrom','datenum'))
-
-
-%%
-
-sl_cats2 = tmd_predict('CATS2008_update_2022-04-22.nc',lat,lon,t,'h','coast','unmask','constituents',{'m2'});
-sl_tpx = tmd_predict('/Users/cgreene/Downloads/TPXO9_atlas_v5/TPXO9_atlas30_update_2022-05-16.nc',lat,lon,t,'h','coast','unmask','constituents',{'m2'});
-plot(t,sl_cats2)
-hold on
-plot(t,sl_tpx)
-
-%%
-figure
-plot(t,sl)
-hold on
-plot(t,sl-sl_new)
-
-%% Example: NaNs near the coast 
-% In some cases, you may be interested in a tide gauge close to the coast
-% that gets NaN'd out because it's closest to a land mask pixel by the
-% default nearest-neighbor interpolation. Here's an example:
-
-fn = '/Users/cgreene/Documents/GitHub/Tide-Model-Driver/doc/h127.nc';% bad
-
-lat = ncread(fn,'lat');
-lon = ncread(fn,'lon');
-t = ncdateread(fn,'time');
-sl = ncread(fn,'sea_level')/1000; 
-
-% Predict tides at the location of interest: 
-sl_predict = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'h');
-
-% Look how many tide predictions are NaNs: 
-sum(isnan(sl_predict))
-
-%%
-figure
-mapzoomps(lat,lon,'mapwidth',100,'inset','ne') % centers a map on the region of interest
-plotps(lat,lon,'ko','markerfacecolor','y') % plots the tide gauge location
-modismoaps('contrast','low') % background image
-
-%%
-
-figure
-plot(t,sl-mean(sl,'omitnan'))
-
-sl_predict = tmd_predict('CATS2008_update_2022-06-06.nc',lat,lon,t,'h','coast','unmask');
-hold on
-plot(t,sl_predict)
-plot(t,sl - mean(sl,'omitnan') - sl_predict)
-legend('observations','prediction','detided observation','location','northwest')
-
-
-xlim(datetime([datenum('Sep 07, 2001, 17:03:49') datenum('Sep 21, 2001, 22:29:18')],'convertfrom','datenum'))
-
-
-%%
-tic
-sl_old = tmd_tide_pred('Model_CATS2008',datenum(t),lat*ones(size(t)),lon*ones(size(t)),'z'); 
-toc 
-
-tic
-sl_new2 = tmd_predict('CATS2022_02-21.nc',lat*ones(size(t)),lon*ones(size(t)),t); 
-toc
-
-%%
-
-profile clear 
-profile on
-sl_new2 = tmd_predict('CATS2022_02-21.nc',lat,lon,t); 
-profile viewer 
-
-plot(t,sl_new2)
-%%
-
-
-
-ptype = 'h'; 
-filename = 'CATS2022_02-21.nc';
-
-[lat,lon] = psgrid('amundsen sea',900,1); 
-
-t = datenum(1984,5,27,2,17,0); 
-
-ptype = 'h'; 
-
-
-tic
-sl_old = tmd_tide_pred('Model_CATS2008',t,lat,lon,'z'); 
-toc % 21 sec
-
+%% |tmd_predict| documentation
+% |tmd_predict| constructs tidal predictions from the complex constituent 
+% coefficients in consolidated NetCDF tide model files. 
+% 
+%% Syntax 
+% 
+%  z = tmd_predict(filename,lat,lon,time)
+%  z = tmd_predict(filename,lat,lon,time,ptype)
+%  z = tmd_predict(filename,lat,lon,time,ptype,'constituents',conList)
+%  z = tmd_predict(...,,'coasts',MaskingMethod)
+%  z = tmd_predict(...,'InferMinor',true_or_false)
+% 
+%% Description 
+% 
+% |z = tmd_predict(filename,lat,lon,time)| predicts tide heights a the
+% specified |lat,lon| and |time|, using the TMD3.0 compatible consolodated
+% NetCDF tide model data file. Location(s) |lat,lon| are decimal degrees, and
+% can be scalars, vectors, or MxN arrays. Input |time| can be datetime or
+% MATLAB's datenum format, and must be a scalar or a 1D vector. 
 %
-tic
-z = tmd_predict('CATS2008_update_2022-04-11.nc',lat,lon,t,'h','flexure'); 
-toc
+% |z = tmd_predict(filename,lat,lon,time,ptype)| specifies a solution type.
+% If |ptype| is not specified, |'h'| is the assumed |ptype|. Note the |ptype| is
+% case sensitive! Options for |ptype| are: 
+%
+% * |'h'| tidal height (m) (default)
+% * |'u'| zonal current velocity, positive pointing east (m/s) 
+% * |'v'| meridional current velocity, positive pointing north (m/s) 
+% * |'U'| zonal transport (m^2/s) 
+% * |'V'| meridional height (m^2/s) 
+%  
+% |z = tmd_predict(filename,lat,lon,time,ptype,'constituents',conList)| 
+% specifies tidal constituents as a cell array (e.g, |{'m2','s2'}|). If 
+% constituents are not specified, all constituents from the model are returned. 
+% 
+% |z = tmd_predict(...,,'coasts',MaskingMethod)| specifies how coastal regions are masked. 
+% Can be |NaN|, |'flexure'|, or |'unmask'|. By default, |MaskingMethod| is |NaN|, meaning outputs 
+% are set to |NaN| wherever a nearest-neighbor interpolation of the ocean indicates land. 
+% The |'flexure'| option scales tidal constituents by a predicted coefficient of tidal 
+% deflection for ice shelf grounding zones. A third option, |'unmask'|, does not apply 
+% any masking, which may be preferred close to coasts, where, for example, a tide gauge 
+% may exist between land and ocean grid cells. 
+% 
+% |z = tmd_predict(...,'InferMinor',true_or_false)| specifies whether minor
+% constituents should be inferred (|true| or |false|). By default, minor constituents are
+% inferred unless constituents are specified. 
+% 
+%% Example: Tide gauge time series  
+% This example uses data from a tide gauge near Nuuk, Greenland. The
+% example data is in the |doc/example_data| folder of this toolbox. 
+% 
+% Start by loading the tide gauge data, then predict tides at that location
+% using the 15 constituent global `TPXO9_atlas_v5` model and the 8
+% constituent `Gr1kmTM` regional model.  
 
-
-%%
-
-m2 = tmd_interp('CATS2008_update_2022-04-11.nc','h',lat,lon);
-
-%%
-
-mx = max(abs([sl_old(:);z(:)])); 
-
-figure
-subplot(1,2,1)
-pcolorps(lat,lon,sl_old)
-colorbar
-axis image off
-bedmachine
-ax(1) = gca; 
-caxis([-1 1]*mx)
-cmocean bal
-shading interp
-
-subplot(1,2,2)
-pcolorps(lat,lon,z)
-colorbar
-axis image off
-bedmachine
-ax(2) = gca; 
-linkaxes(ax,'xy')
-caxis([-1 1]*mx)
-cmocean bal
-shading interp
-
-%%
-
-
-addpath(genpath('/Users/cgreene/Downloads/TMD3.00_alpha'))
-addpath(genpath('/Users/cgreene/Downloads/CATS2008'))
-
-
-ptype = 'h'; 
-
-%%
-
-filename = 'CATS2008_update_2022-06-06.nc';
-
-[lat,lon] = psgrid('amundsen sea',800,1); 
-
-%t = datenum(1901,2,6,12,0,0); 
-
-t = datenum(1984,5,27,2,17,0);
-
-
-%t = [t t+.2]; 
-
-
-wct = tmd_interp(filename,'wct',lat,lon); 
-
-z = tmd_predict(filename,lat,lon,t);
-
-
-figure
-surfps(lat,lon,-wct,z(:,:,1))
-view(2)
-axis off
-shadem(-3)
-
-%%
-
-[u,v] = tmd_predict(filename,lat,lon,t,'uv');
-
-%%
-
-[X,Y] = ll2ps(lat,lon); 
-
-[vx,vy] = uv2vxvy(lat,lon,u,v); 
-
-hold on
-q = quiversc(X,Y,vx,vy); 
-q.AutoScaleFactor = 10; 
-
-%%
-
-
-u_true = u .* cosd(lon) - v.* sind(lon);
-v_true = v .* cosd(lon) + u.* sind(lon);
-
-
-vx = u.*cosd(lon) + v.*sind(lon); 
-vy = - u.*sind(lon) + v.*cosd(lon); 
-
-q2 = quiversc(X,Y,vx,vy); 
-q2.AutoScaleFactor=10;
-
-%%
-
-
-ptype = 'h'; 
-conList = strsplit(ncreadatt(filename,'cons','long_name')); 
-
-if isdatetime(t)
-   t = datenum(t); 
-end
-
-% Columnate input coordinates for consistent behavior: 
-InputGridSize = size(lat); 
-lat = reshape(lat,[],1); 
-lon = reshape(lon,[],1); 
-
-InputTimeSize = size(t); 
-t = reshape(t,[],1); 
-
-
-hc = tmd_interp(filename,ptype,lat,lon,'constituents',conList);
-
-hc = permute(hc,[3 1 2])/1000;
-
-hc = complex(real(hc),-imag(hc)); 
-
-[astrol_s,astrol_h,astrol_p,astrol_N] = tmd_astrol(t);
-
-%% Greenland 
-
+% Load tide gauge data: 
 fn = 'h820_nuuk.nc';
 lat = ncread(fn,'lat');
 lon = ncread(fn,'lon');
-t = ncdateread(fn,'time');
+t = ncread(fn,'time')+datenum(1800,1,1,0,0,0); % units = 'days since 1800-01-01 00:00:00' 
 sl = ncread(fn,'sea_level')/1000; 
 
-plot(t,sl-mean(sl,'omitnan'),'color',.6*[1 1 1])
+% Predict tides at the tide gauge location: 
+sl_tpxo9 = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'h');
+sl_Gr1km = tmd_predict('Gr1kmTM_v1.nc',lat,lon,t,'h');
 
-
-sl_Gr = tmd_predict('Gr1kmTM_update_2022-05-15.nc',lat,lon,t,'h');
-sl_tpx = tmd_predict('TPXO9_atlas30_update_2022-05-16.nc',lat,lon,t,'h');
-
-hold on
-
-%plot(t,sl)
-plot(t,sl_Gr)
-plot(t,sl_tpx)
-legend('obs','Gr','tpx')
-
-std(sl,'omitnan')
-std(sl-sl_Gr,'omitnan')
-std(sl-sl_tpx,'omitnan')
-
-%%
-filename = '/Users/cgreene/Downloads/Gr1kmTM/Gr1kmTM_update_2022-05-06.nc'; 
-Model='Model_Gr1kmTM_v1'
-
-
-%%
+% Plot observed and predicted tides: 
 figure
-plot(t,sl)
+plot(t,sl-mean(sl,'omitnan'),'k','linewidth',2)
 hold on
-plot(t,sl-sl_predict)
+plot(t,sl_tpxo9,'linewidth',1)
+plot(t,sl_Gr1km,'linewidth',1)
+ylabel 'tide height (m)'
+legend('observations','TPXO9_atlas_v5','Gr1kmTm','interpreter','none')
+xlim([datenum('mar 26, 2017') datenum('april 3, 2017')])
+datetick('x','keeplimits')
 
 %%
+% In the figure above, we see that both the global and regional models match 
+% the observations pretty well, but neither is perfect. One way to assess 
+% tide model performance is to measure the distribution of the residuals 
+% after detiding an observation dataset. Here's what that might look like: 
 
-fn = '/Users/cgreene/Documents/GitHub/Tide-Model-Driver/doc/h189.nc'; % good
+% Residuals of raw data, detided w/tpxo0, & detided w/Gr1km:
+std([sl sl-sl_tpxo9 sl-sl_Gr1km],'omitnan')
+
+%% 
+% The numbers above show that the raw data have a standard deviation of
+% about 1.08 m. The 0.17 m standard deviation of residuals after detiding
+% with TPXO9 suggests that TPXO9 does a slightly better job of capturing
+% tidal variability here than Gr1kmTM, which has a 0.19 m distribution of 
+% residuals after detiding. In reality, a tide gauge captures dynamic ocean 
+% topography, variations in atmospheric pressure, and other phenomena that are 
+% not directly related to tidal variability, so the presence of residuals should 
+% not indicate failure of a model. It is possible that Gr1kmTM is as good or
+% better than TPXO9 at this particular location, but further analysis is
+% beyond the scope of this function reference page. 
+
+%% Example: Map of tidal amplitude and currents
+% Here's a map of tidal amplitudes at 12:30 in the afternoon on March 29,
+% 2017. Note that TPXO9_atlas_v5 is a high resolution dataset with 15
+% constituents, so it may take a few seconds to predict a dense grid
+% covering a large area. The Z prediction takes about 5 seconds on my laptop 
+% from 2019. 
+% 
+% Below, we also use <tmd_interp_documentation.html |tmd_interp|> to get the 
+% model's water column thicknes for context, and we plot 500 m wct contours
+% as thin gray lines.  
+% 
+% The |cmocean| colormap function is part of the Climate Data Toolbox for
+% MATLAB and is also available as a standalone function from the MathWorks
+% File Exchange. 
+
+% Define a time:
+t = datetime('march 29, 2017 12:30');
+
+% A grid of lat,lon locations: 
+lon = -85:0.025:-40; 
+lat = 85:-0.025:50; 
+[Lon,Lat] = meshgrid(lon,lat); 
+
+% Predict tidal heights at time t (may take a few seconds): 
+Z = tmd_predict('TPXO9_atlas_v5.nc',Lat,Lon,t); 
+
+% Get water column thickness: 
+wct = tmd_interp('TPXO9_atlas_v5.nc','wct',Lat,Lon);
+
+% Make a map: 
+figure
+h = imagesc(lon,lat,Z);
+h.AlphaData = isfinite(Z); % makes nans transparent
+set(gca,'color',.4*[1 1 1]) % makes transparent areas gray
+axis xy image 
+hold on
+[~,hC] = contour(lon,lat,wct,500:500:5000);
+hC.Color = 0.5*[1 1 1]; % gray contour lines 
+hC.LineWidth = 0.3; % thin contour lines
+caxis([-6 6]) % color axis limits 
+cb = colorbar; 
+ylabel(cb,'tide height (m)') 
+xlabel longitude
+ylabel latitude 
+title(datestr(t))
+cmocean balance % optional colormap
+
+%%
+% Now add tidal currents. Again, it will take about 5 seconds for each
+% component. Below, I'm using Climate Data Toolbox functions |quiversc| and
+% |earthimage|. The |quiversc| function is convenient because it performs 
+% anti-aliased downsampling of the dense u,v grid. 
+
+% Calculate zonal and meridional components of tidal currents: 
+u = tmd_predict('TPXO9_atlas_v5.nc',Lat,Lon,t,'u'); 
+v = tmd_predict('TPXO9_atlas_v5.nc',Lat,Lon,t,'v'); 
+
+% Add u and v to the previous map: 
+ax = axis; 
+q = quiversc(Lon,Lat,u,v,'density',100,'k'); 
+q.AutoScaleFactor = 20; 
+axis(ax) % resets limits after quiver might've adjusted them
+he = earthimage; % optional, part of Climate Data Toolbox
+uistack(he,'bottom') % places earth image under ocean data. 
+
+%% Example: NaNs near the coast 
+% In some cases, you may be interested in a tide gauge close to the coast
+% that gets NaN'd out by default because it lies between land and ocean
+% pixels. Consider this tide gauge near Syowa Station, Antarctica: 
+
+% Load example tide gauge data (found in the doc/example_data folder.)
+fn = 'h127_syowa.nc'; 
 lat = ncread(fn,'lat');
 lon = ncread(fn,'lon');
 t = ncdateread(fn,'time');
 sl = ncread(fn,'sea_level')/1000; 
 
-plot(t,sl-mean(sl,'omitnan'))
+figure
+plot(t,sl,'k','linewidth',1)
+box off
+axis tight
+ylabel 'tide gauge measurement (m)')
+title 'Syowa station tide gauge'
+
+%% 
+% For 26 years, the tide gauge at Syowa station has logged hourly tides,
+% with only a few interuptions. Clearly, tidal variability exists here, but
+% what does the CATS model think? 
+
+% Predict tides at the location of interest: 
+sl_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'h');
+
+% See how many tide predictions are finite: 
+sum(isfinite(sl_cats))
+
+%% 
+% The Syowa tide gauge is closer to a land pixel than an ocean pixel in 
+% the CATS model, so it gets NaN'd out by default. To un-NaN the
+% interpolation, choose the |'unmask'| option: 
+
+sl_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'h','coasts','unmask');
+sl_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'h','coasts','unmask');
+
+% Plot observations "detided" by each model: 
+hold on
+plot(t,sl-sl_cats,'linewidth',1)
+plot(t,sl-sl_tpxo,'linewidth',1)
+xlim([datetime('apr 9, 1998') datetime('apr 21, 1998')]) % zooms for clarity
+legend('observations','detided by cats','detided by tpxo','locaton','best')
+
+%% Example: Ice shelf flexure 
+% This example assumes you have Antarctic Mapping Tools with the MODIS MOA
+% and BedMachine plugins. Sorry about all of the dependencies, but I think
+% it's important for context. 
+% 
+% Start by defining a 500 m resolution grid around the grounding line of
+% Rutford Ice Stream, Antarctica. Then calculate and display the estimated
+% ice shelf flexure everywhere on the grid. 
+
+% Create a polar stereographic grid: 
+res = 500; % grid resolution in meters
+x = -1474594:res:-991780;
+y = 521366:-res:-38552;
+[X,Y] = meshgrid(x,y); 
+[Lat,Lon] = ps2ll(X,Y); % ll2ps is an AMT function.
+
+% Estimate ice shelf flexure at each point on the grid: 
+flex = tmd_interp('CATS2008_update_2022-06-11.nc','flexure',Lat,Lon); 
+
+figure
+h = imagesc(x,y,flex); 
+h.AlphaData = 0.8; % transparency
+axis xy image off
+modismoaps('contrast','white')
+cb = colorbar; 
+ylabel(cb,'ice shelf flexure coefficient')
+bedmachine % plots a gray grounding line 
+scalebarps('color','w')
+
+%%
+% Let's imagine you collected laser altimetry by flying an airplaine down
+% the central trunk of Rutford Ice Stream. (For this example, we'll neglect
+% the time it takes to fly the plane, and imagine you flew the whole flight
+% path instantaneously). 
+% 
+% Here's what your flight line looks like: 
+
+% Define a crude flowline: 
+[xi,yi] = pspath([-1314322 -1181878 -1166297 -1231962],...
+                 [  130911   191012   300084   468143],...
+                 100,'method','makima'); % 100 m spacing, makima interpolation 
+
+% Calculate the distance along the flowline in kilometers: 
+di = pathdistps(xi,yi,'km'); 
 
 hold on
+plot(xi,yi,'r','linewidth',3)
+text(xi(1),yi(1),'Flight path','color','r','fontsize',14,'vert','top')
 
-sl_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'h');
-sl_tpxo = tmd_predict('TPXO9_atlas_v5_update_2022-06-12.nc',lat,lon,t,'h');
+%% 
+% Detiding your airborne laser altimetry along this flight line requres
+% some knowledge of how much the ice surface should move as a result of
+% tides. The default behavior of |tmd_predict| assumes the entire ice shelf
+% is in total hydrostatic equilibrium and moves up and down with the total
+% deflection of the tides, while grounded ice is NaN'd out. You can
+% |'unmask'| the solution to get some information landward of the ocean
+% pixels, or you can try to estimate ice |'flexure'| from a forward model. 
+%
+% Here's what the tidal solutions look like by default, unmasked, and
+% accounting for ice shelf flexure: 
 
-plot(t,sl_cats)
-plot(t,sl_tpxo)
+% Convert to geo coordinates: 
+[lati,loni] = ps2ll(xi,yi); 
 
-%%
+% Time of high tide at Rutford Ice Stream: 
+t = datenum('22-Jan-2000 03:28:00');
 
-[phc,lon,lat,cons] = tmd_data('CATS2008_update_2022-06-11.nc','h','geo');
-phci = tmd_interp('CATS2008_update_2022-06-11.nc','h',lat,lon,'constituents',cons); 
-pht = tmd_interp('TPXO9_atlas_v5_update_2022-06-11.nc','h',lat,lon,'constituents',cons); 
-%pht = tmd_interp('TPXO9_atlas_v5_update_2022-06-11.nc','hPh',lat,lon); 
-
-%%
-
-k=k+1;
-k=1;
-clf
-subsubplot(1,3,1)
-imagescn(angle(phc(:,:,k)));
-axis image off
-subsubplot(1,3,2)
-imagescn(angle(phci(:,:,k)));
-axis image off
-
-subsubplot(1,3,3)
-imagescn(angle(conj(hi(:,:,k))))
-axis image off
-%%
-k=k+1;
-subsubplot(1,3,3)
-imagescn(pht(:,:,k))
-axis image off
-
-
-%%
-
-tmpc=angle(conj(phci(:,:,k)));
-tmpt=angle(conj(hi(:,:,k)));
+% Predict tides along the flight path at time t: 
+fn = 'CATS2008_update_2022-06-11.nc';
+z_default = tmd_predict(fn,lati,loni,t,'h'); 
+z_unmask = tmd_predict(fn,lati,loni,t,'h','coasts','unmask'); 
+z_flexure = tmd_predict(fn,lati,loni,t,'h','coasts','flexure'); 
 
 figure
-plot(tmpc(:),tmpt(:),'.')
+subplot(2,1,1) 
+plot(di,z_default,'k','linewidth',4)
+hold on
+plot(di,z_unmask,'linewidth',2)
+plot(di,z_flexure,'linewidth',2)
+box off
+axis tight
+legend('NaN (default)','unmask','flexure','location','best')
 
-%%
+% Plot bedmachine profile for context: 
+subplot(2,1,2) 
+bedmachine_profile(lati,loni,'horiz',di)
+axis tight
+xlabel 'distance along profile (km)'
 
-fn='/Users/cgreene/Downloads/h_m2_tpxo9_atlas_30_v3.nc'; 
-
-lon_z = ncread(fn,'lon_z'); 
-lat_z = ncread(fn,'lat_z'); 
-hRe = double(ncread(fn,'hRe')); 
-hIm = double(ncread(fn,'hIm')); 
-
-hn = flipud(complex(hRe,hIm)); 
-
-% Read each tidal height constituent and reorient: 
-tmp = h_in('/Users/cgreene/Documents/data/tides/TPXO9_atlas_v5/h_m2_tpxo9_atlas_30_v5',4); 
-
-hb = rot90(tmp); 
-
-
-figure
-subplot(2,2,1)
-imagesc(abs(hn))
-axis image off
-
-subplot(2,2,2)
-imagesc(abs(hb))
-axis image off
-
-subplot(2,2,3)
-imagesc(angle(hn))
-axis image off
-cmocean phase
-
-subplot(2,2,4)
-imagesc(angle(hb))
-axis image off
-cmocean phase
-
-
-%%
-lon(lon<0) = lon(lon<0)+360;
-
-hi = complex(interp2(lonz,latz,double(hRe),lon,lat),interp2(lonz,latz,double(hIm),lon,lat)); 
-
-
+%% Author Info 
+% The |tmd_predict| function and its documentation were written by Chad A.
+% Greene, June 2022. 

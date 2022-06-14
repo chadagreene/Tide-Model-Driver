@@ -43,7 +43,7 @@ function zi = tmd_interp(filename,variable,lati,loni,varargin)
 %  * 'flexure' ice shelf flexure coefficient from a linear elastic model applied to BedMachine ice thickness (can slightly exceed 1). Only for CATS model. 
 %
 % zi = tmd_interp(...,'constituents',conList) specifies tidal constituents as a 
-% cell array (e.g, {'m2','s2'}. If constituents are not specified, all constituents 
+% cell array (e.g, {'m2','s2'}). If constituents are not specified, all constituents 
 % from the model are returned. 
 % 
 % zi = tmd_interp(...,'coasts',MaskingMethod) specifies how coastal regions are masked. 
@@ -53,6 +53,11 @@ function zi = tmd_interp(filename,variable,lati,loni,varargin)
 % deflection for ice shelf grounding zones. A third option, 'unmask', does not apply 
 % any masking, which may be preferred close to coasts, where, for example, a tide gauge 
 % may exist between land and ocean grid cells. 
+% 
+%% Examples 
+% For examples type 
+% 
+%   tmd tmd_interp
 % 
 %% Author Info 
 % This function was written by Chad A. Greene in 2022. 
