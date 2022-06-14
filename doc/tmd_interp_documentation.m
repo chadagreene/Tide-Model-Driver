@@ -176,13 +176,14 @@ plot(di,s2_unmask,'linewidth',2)
 plot(di,s2_flexure,'linewidth',2)
 box off
 axis tight
-xlim([380 max(di)+20])
+ylabel 's2 amplitude (m)'
+xlim([380 max(di)])
 legend('NaN (default)','unmask','flexure','location','best')
 
 % Plot a BedMachine profile for context: 
 subplot(2,1,2)
 bedmachine_profile(lati,loni,'horiz',di)
-xlim([380 max(di)+20])
+xlim([380 max(di)])
 
 %%
 % Above, you see that by default |tmd_interp| returns the full amplitude along 

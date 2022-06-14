@@ -135,8 +135,8 @@ For the updated CATS2008 model, we've attempted to model the ice shelf
 using a simple 1d linear elastic forward model applied to BedMachine ice 
 thickness, with an elastic modulus E=4.8 Gpa and Poisson's ratio nu=0.4. 
 
-This example uses Antarctic Mapping Tools with the BedMachine and
-ITS_LIVE plugins. (Sorry about all of the extra dependencies, but I think
+This example uses [Antarctic Mapping Tools](https://github.com/chadagreene/Antarctic-Mapping-Tools) with the [BedMachine](https://github.com/chadagreene/BedMachine) and
+[ITS_LIVE](https://github.com/chadagreene/ITS_LIVE) plugins. (Sorry about all of the extra dependencies, but I think
 the context is important to aid in understanding, even if it's not worth
 downloading all the extras to replicate the example on your own.) 
 
@@ -167,13 +167,14 @@ plot(di,s2_unmask,'linewidth',2)
 plot(di,s2_flexure,'linewidth',2)
 box off
 axis tight
-xlim([380 max(di)+20])
+ylabel 's2 amplitude (m)'
+xlim([380 max(di)])
 legend('NaN (default)','unmask','flexure','location','best')
 
 % Plot a BedMachine profile for context: 
 subplot(2,1,2)
 bedmachine_profile(lati,loni,'horiz',di)
-xlim([380 max(di)+20])
+xlim([380 max(di)])
 ```
 <img src="markdown_figures/tmd_interp_documentation_03_hires.png" width="500"/>
 
@@ -196,7 +197,6 @@ to a bathymetric pinning point in the middle of the ice shelf. You may
 also notice the flexure model goes just a few percent above neutral near
 the hydrostatic line, and this represents true ice behavior. 
 
-
 ## Author Info 
-The `tmd_data` function and its documentation were written by Chad A.
+The `tmd_interp` function and its documentation were written by Chad A.
 Greene, June 2022. 
