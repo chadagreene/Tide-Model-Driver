@@ -8,7 +8,7 @@
 %  zi = tmd_interp(...,'constituents',conList) 
 %  zi = tmd_interp(...,'coasts',MaskingMethod)
 % 
-%% Syntax 
+%% Description 
 % 
 % |zi = tmd_interp(filename,variable,lati,loni)| uses the NetCDF tide model
 % specified by |filename| to interpolate a specified variable at the
@@ -55,135 +55,154 @@
 % any masking, which may be preferred close to coasts, where, for example, a tide gauge 
 % may exist between land and ocean grid cells. 
 
-%% Example: Water column thickness (Global model)
+%% Example: Global Model
+% The |tmd_interp| function loads data from any TMD3.0 compatible tide
+% model data file. Here's how you may get the water column thickness and an
+% ocean mask corresponding to the |TPXO_atlas_v5| global tide model file. 
+% 
+% We'll also get the M2 constituent amplitude and overlay it in 0.5 m
+% contours. 
+% 
+% A minor note: The model file is published on a 1/30 degree grid, so below
+% we're doing a proper job of interpolating to 1/100 degree grid, to
+% prevent aliasing:
 
+% Define a 1/100 degree lat,lon grid:
 lon = -90:0.01:-20;
 lat = -40:-0.01:-75; 
 [Lon,Lat] = meshgrid(lon,lat); 
 
+% Get water column thickness and ocean mask corresponding to the grid: 
 Z_tpxo = tmd_interp('TPXO9_atlas_v5.nc','wct',Lat,Lon); 
 ocean = tmd_interp('TPXO9_atlas_v5.nc','mask',Lat,Lon); 
+
+% Get the M2 constituent amplitude: 
+m2 = tmd_interp('TPXO9_atlas_v5.nc','hAm',Lat,Lon,'constituent','m2'); 
 
 figure
 h = imagesc(lon,lat,Z_tpxo);
 h.AlphaData = ocean; % makes land transparent
-set(gca,'color',0.75*[1 1 1]) % makes transparent areas gray
+set(gca,'color',0.4*[1 1 1]) % makes transparent areas appear gray
 axis xy image
+hold on
+contour(lon,lat,m2,0:0.5:4,'r') % M2 amplitude contours
 xlabel 'longitude'
 ylabel 'latitude' 
 caxis([0 6000])
+cb = colorbar;
+ylabel(cb,'water column thickness (m)')
 cmocean deep % optional colormap
 
-%% Example: Water column thickness (Regional model) 
+%% Example: Regional Model
+% The |tmd_interp| function works exactly the same for regional models as
+% it does for global models. Just enter the geographic coordinates, and
+% it'll give you the data you request. 
+% 
+% Here we compare the bathymetry in the updated CATS2008 model to the
+% bathymetry we obtained in the previous example: 
 
 Z_cats = tmd_interp('CATS2008_update_2022-06-11.nc','wct',Lat,Lon); 
 
 figure
 h = imagesc(lon,lat,Z_cats-Z_tpxo);
 h.AlphaData = ocean & isfinite(Z_cats); 
-set(gca,'color',0.75*[1 1 1]) % makes transparent areas gray
+set(gca,'color',0.4*[1 1 1]) % makes transparent areas gray
 axis xy image
 xlabel 'longitude'
 ylabel 'latitude' 
 caxis([-1 1]*1000)
+cb = colorbar;
+ylabel(cb,'CATS - TPXO water column thickness (m)')
 cmocean balance % optional colormap
 
-%%
+%% 
+% The curving areas of missing data at the top of the figure above indicate
+% regions outside the CATS2008 model domain. In CATS model space, that's a
+% straight line, but in unprojected coordinates, it curves. 
 
-% Create a grid (using the AMT function psgrid): 
-[Lat,Lon] = psgrid('scar inlet',1500,1); 
+%% Example: Multiple constituents
+% Perhaps you want all of the complex coefficients of all of the tidal
+% constituents at some locations. Here are the complex tidal height
+% coefficients for a location near Florida, and another location near
+% Maine: 
 
-% Get water column thickness at each grid point: 
-%wct = tmd_interp('CATS2008_update_2022-04-22.nc','wct',Lat,Lon); 
-wct = tmd_interp('/Users/cgreene/Downloads/TPXO9_atlas_v5/TPXO9_atlas30_update_2022-05-03.nc','wct',Lat,Lon); 
+% Locations near Florida and Maine: 
+lat = [28.7 42.1];
+lon = [-79.6 -67.6]; 
 
-% Plot: 
+% Get the complex tide coefficients: 
+hc = tmd_interp('TPXO9_atlas_v5.nc','h',lat,lon); 
+
+% Describe the size and type of these variables: 
+whos lat lon hc
+
+%% 
+% Above we see |lat| and |lon| are both 1x2, while |hc| is 1x2x15, meaning
+% 15 constituents at each geographic location. 
+
+%% Example: Ice shelf flexure
+% For the updated CATS2008 model, we've attempted to model the ice shelf
+% using a simple 1d linear elastic forward model applied to BedMachine ice 
+% thickness, with an elastic modulus E=4.8 Gpa and Poisson's ratio nu=0.4. 
+% 
+% This example uses Antarctic Mapping Tools with the BedMachine and
+% ITS_LIVE plugins. (Sorry about all of the extra dependencies, but I think
+% the context is important to aid in understanding, even if it's not worth
+% downloading all the extras to replicate the example on your own.) 
+% 
+% In this example, we calculate an ice flowline starting from a seed
+% location on Pine Island Glacier, then calculate the s2 constituent
+% amplitude along the flowline. This constituent has a wavelength that's
+% much larger than Pine Island Ice Shelf, so we expect it to be relatively
+% constant along the entire ice shelf. 
+
+% Flowline from a seed location on Pine Island Glacier:
+[lati,loni] = itslive_flowline(-75.34,-98.23);
+
+di = pathdistps(lati,loni,'km'); % distance along flowline
+
+% Get the s2 tidal amplitudes along the flowline: 
+fn = 'CATS2008_update_2022-06-11.nc'; 
+s2_default = tmd_interp(fn,'hAm',lati,loni,'constituents','s2');
+s2_unmask = tmd_interp(fn,'hAm',lati,loni,'constituents','s2','coasts','unmask');  
+s2_flexure = tmd_interp(fn,'hAm',lati,loni,'constituents','s2','coasts','flexure'); 
+
+% Plot s2 constituent amplitudes: 
 figure
-pcolorps(Lat,Lon,wct)
-axis tight off
-bedmachine   % plots coastline and gl
-cmocean deep % colormap
-shadem(10)   % hillshade with gain of 10
-cb = colorbar; 
-ylabel(cb,'water column thickness (m)')
-
-%%
-
-
-% 600 km wide grid at 0.2 km resolution, centered on (75S,100.5W).
-[Lat,Lon] = psgrid(-75,-100.5,100,.2); 
-
-h_default = tmd_interp('CATS2008_update_2022-04-22.nc','hAm',Lat,Lon,'constituents','m2');
-h_flexure = tmd_interp('CATS2008_update_2022-04-22.nc','hAm',Lat,Lon,'constituents','m2','coasts','flexure');
-h_unmask = tmd_interp('CATS2008_update_2022-04-22.nc','hAm',Lat,Lon,'constituents','m2','coasts','unmask');
-
-figure
-subsubplot(1,3,1) 
-pcolorps(Lat,Lon,h_default)
-axis tight off
-bedmachine
-caxis([0 0.06])
-title 'NaN (default)'
-
-subsubplot(1,3,2) 
-pcolorps(Lat,Lon,h_flexure)
-axis tight off
-bedmachine
-caxis([0 0.06])
-title 'flexure'
-
-subsubplot(1,3,3) 
-pcolorps(Lat,Lon,h_unmask)
-axis tight off
-bedmachine
-caxis([0 0.06])
-title 'unmask'
-
-%%
-
-[Lat,Lon] = psgrid('ronne ice shelf',1500,.5); 
-
-h_default = tmd_interp('CATS2008_update_2022-04-22.nc','hAm',Lat,Lon,'constituents','m2');
-
-figure
-pcolorps(Lat,Lon,h_default)
-axis tight off
-bedmachine
-
-%%
-
-%mask = tmd_interp('CATS2008_update_2022-04-11.nc','mask',Lat,Lon); 
-
-h = tmd_interp('CATS2008_update_2022-04-22.nc','hAm',Lat,Lon,'constituent','k2'); 
-
+subplot(2,1,1) 
+plot(di,s2_default,'linewidth',4)
 hold on
-contourps(Lat,Lon,h,'k')
+plot(di,s2_unmask,'linewidth',2)
+plot(di,s2_flexure,'linewidth',2)
+box off
+axis tight
+xlim([380 max(di)+20])
+legend('NaN (default)','unmask','flexure','location','best')
+
+% Plot a BedMachine profile for context: 
+subplot(2,1,2)
+bedmachine_profile(lati,loni,'horiz',di)
+xlim([380 max(di)+20])
 
 %%
-
-U2 = tmd_interp('CATS2008_update_2022-04-22.nc','uAm',Lat,Lon,'constituent','k2'); 
-V2 = tmd_interp('CATS2008_update_2022-04-22.nc','vAm',Lat,Lon,'constituent','k2'); 
-
-U(~isfinite(U)) = 0; 
-V(~isfinite(V)) = 0; 
-
-[Vx,Vy] = uv2vxvy(Lat,Lon,U,V); 
-
-
-[X,Y] = ll2ps(Lat,Lon); 
-
-sc = 0.02; 
-Xr = imresize(X,sc); 
-Yr = imresize(Y,sc); 
-Vxr = imresize(Vx,sc); 
-Vyr = imresize(Vy,sc); 
-
-
-hold on
-q = quiver(Xr,Yr,Vxr,Vyr,'r'); 
-q.AutoScaleFactor = 3; 
-
-%%
+% Above, you see that by default |tmd_interp| returns the full amplitude along 
+% the floating ice shelf, and NaN where the ice is grounded.
+% 
+% The |'unmask'| option exists to allow interpolation where the default
+% behavior produces NaNs. This is mainly for cases where a point of
+% interest, like a tide gauge, may lie just slightly landward of valid
+% ocean model data. Above, you see that the unmasked data is pretty smooth
+% up to about 15 km inland of the ocean boundary, which is reasonable for
+% any interpolation close to the coast. 
+% 
+% The third option |'flexure'| attempts to model ice flexure based on a simple 1D
+% forward elastic model. It says that grounded ice has 0 tidal motion,
+% while fully hydostatic ice experiences the full range of tidal motion. 
+% The transition from 0 amplitude to full amplitude is fairly smooth, but
+% dips down slightly along the way, as this particular flowline passes next
+% to a bathymetric pinning point in the middle of the ice shelf. You may
+% also notice the flexure model goes just a few percent above neutral near
+% the hydrostatic line, and this represents true ice behavior. 
 
 %% Author Info 
 % The |tmd_interp| function and its documentation were written by Chad A.

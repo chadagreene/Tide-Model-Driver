@@ -3,6 +3,8 @@
 % 
 % Written by Chad A. Greene, NASA/JPL, June 2022. 
 
+error('This script has not been completed, and may never be.')
+
 %% Enter initial file info 
 
 % Output file: 

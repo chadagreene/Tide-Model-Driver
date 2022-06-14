@@ -3,6 +3,8 @@
 # `tmd_data` documentation
 `tmd_data` loads tide model data into the Matlab workspace. 
 
+See also: [`tmd_interp`](tmd_interp_documentation.md) and [`tmd_predict`](tmd_predict_documentation.md). 
+
 ## Syntax 
 ```matlab
 [Z,x,y] = tmd_data(filename,variable)

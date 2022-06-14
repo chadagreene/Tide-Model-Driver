@@ -14,7 +14,7 @@ For most applications, **`tmd_predict` is the only function you will need to cal
 
 #### Main functions:
 * `tmd_predict` predicts tidal elevation, transport, or current velocities for given location(s) and time(s). 
-* `tmd_interp` provides water column thickness, land/ocean mask, ice shelf flexure, and tidal constiuent parameters at specified geographic locations, for a given tide model. 
+* [`tmd_interp`](doc/tmd_interp_documentation.md) provides water column thickness, land/ocean mask, ice shelf flexure, and tidal constiuent parameters at specified geographic locations, for a given tide model. 
 * [`tmd_data`](doc/tmd_data_documentation.md) loads gridded tide model data without interpolation. 
 * `tmd_ellipse` gives tidal ellipse parameters at specified location(s).  
 
@@ -64,16 +64,12 @@ TMD3.0 is a rewrite of the [Tide Model Driver for MATLAB v2.5](https://github.co
 * All new documentation.
 * Made updates to the CATS2008 model, as described [here](doc/cats2008_updates.md).
 
-## Conversion to TMD3.0 NetCDF format
-
-This version of TMD works with NetCDF data, which we have converted from the original binary OTIS format using scripts found in the `tide-model-conversions` folder. 
-
 # Alternatives to MATLAB
 Don't like MATLAB? No worries, just try one of these alternatives: 
 
 * **PYTHON:** Tyler Sutterley's [pyTMD](https://github.com/tsutterley/pyTMD) is based on TMD2.5, and reads OTIS and GOT formatted tidal solutions for calculating ocean and load tides.
 * **FORTRAN:** A Fortran version of this package is made available through OSU: [OSU Tidal Prediction software (OTPS)](https://www.tpxo.net/otps).
-* **Octave** It is *possible* that TMD3.0 works with [Octave](https://www.gnu.org/software/octave/index) as it is currently written. I haven't checked, but most of the TMD functions are pretty simple. If you use Octave and you want to give TMD3.0 a try, please let me know how it goes! 
+* **Octave:** It is *possible* that TMD3.0 works with [Octave](https://www.gnu.org/software/octave/index) as it is currently written. I haven't checked, but most of the TMD functions are pretty simple. If you use Octave and you want to give TMD3.0 a try, please let me know how it goes! 
 
 
 # Author Info & Citation Information
