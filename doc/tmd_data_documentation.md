@@ -1,4 +1,4 @@
-[Back to Tide Model Driver Contents](../README.md).
+[&larr; Back to TMD3.0 Main Page](../README.md)
 
 # `tmd_data` documentation
 `tmd_data` loads tide model data into the Matlab workspace. 

@@ -1,7 +1,7 @@
+[&larr; Back to TMD3.0 Main Page](../README.md)
+
 # Tutorial: Tidal Currents
 This tutorial covers how to detide and interpret ADCP (current) measurements near Getz Ice Shelf, Antarctica. Here we use the CATS tide model, but you can just as easily use any other TMD3.0 compatible if you wish.
-
-[Back to Tide Model Driver Contents](../README.md).
  
 ## Explore the measurements 
 ### View data file contents

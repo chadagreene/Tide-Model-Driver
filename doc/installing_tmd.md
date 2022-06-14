@@ -1,4 +1,4 @@
-[Back to Tide Model Driver Contents](../README.md).
+[&larr; Back to TMD3.0 Main Page](../README.md)
 
 # Installing TMD3.0 
 Installing TMD3.0 is pretty straightforward. There are a few ways you can do it, but here's the easiest: 

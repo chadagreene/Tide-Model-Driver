@@ -1,4 +1,4 @@
-[Back to Tide Model Driver Contents](../README.md).
+[&larr; Back to TMD3.0 Main Page](../README.md)
 
 # TMD3.0 Model File Format
 TMD3.0 introduces a new, consolidated NetCDF data format for global and regional tide models. The new, consolidated NetCDF format:
