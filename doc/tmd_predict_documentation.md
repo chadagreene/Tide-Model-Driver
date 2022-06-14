@@ -78,7 +78,7 @@ Here's a map of tidal amplitudes at 12:30 in the afternoon on March 29, 2017. No
 
 Below, we also use [`tmd_interp`](tmd_interp_documentation.md) to get the model's water column thicknes for context, and we plot 500 m wct contours as thin gray lines.  
 
-The `cmocean` colormap function is part of the Climate Data Toolbox for MATLAB and is also available as a standalone function from the MathWorks File Exchange. 
+The `cmocean` colormap function is part of the [Climate Data Toolbox for MATLAB](https://github.com/chadagreene/CDT) and is also available as a standalone function from the MathWorks File Exchange. 
 
 ```matlab
 % Define a time:
@@ -115,7 +115,7 @@ cmocean balance % optional colormap
 ```
 <img src="markdown_figures/tmd_predict_documentation_02_hires.png" width="500"/>
 
-Now add tidal currents. Again, it will take about 5 seconds for each component. Below, I'm using Climate Data Toolbox functions `quiversc` and `earthimage`. The `quiversc` function is convenient because it performs anti-aliased downsampling of the dense u,v grid. 
+Now add tidal currents. Again, it will take about 5 seconds for each component. Below, I'm using [Climate Data Toolbox](https://github.com/chadagreene/CDT) functions `quiversc` and `earthimage`. The `quiversc` function is convenient because it performs anti-aliased downsampling of the dense u,v grid. 
 
 ```matlab
 % Calculate zonal and meridional components of tidal currents: 
@@ -180,7 +180,7 @@ legend('observations','detided by cats','detided by tpxo','locaton','best')
 <img src="markdown_figures/tmd_predict_documentation_05_hires.png" width="500"/>
 
 ## Example: Ice shelf flexure 
-This example assumes you have Antarctic Mapping Tools with the MODIS MOA and BedMachine plugins. Sorry about all of the dependencies, but I think it's important for context. 
+This example assumes you have [Antarctic Mapping Tools](https://github.com/chadagreene/Antarctic-Mapping-Tools) with the [MODIS MOA](https://github.com/chadagreene/MODIS-MOA) and [BedMachine](https://github.com/chadagreene/BedMachine/) plugins. Sorry about all of the dependencies, but I think it's important for context. 
 
 Start by defining a 500 m resolution grid around the grounding line of Rutford Ice Stream, Antarctica. Then calculate and display the estimated ice shelf flexure everywhere on the grid. 
 

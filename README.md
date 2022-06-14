@@ -13,7 +13,7 @@ To start predicting tides, just add TMD to MATLAB and download your favorite tid
 For most applications, **`tmd_predict` is the only function you will need to call directly**, although you may occasionally want `tmd_interp` to retrieve bathymetry, `tmd_ellipse` to get tidal current characteristics, or `tmd_conlist` for a quick list of tidal constituents in a given model. Complete documentation is provided for the functions whose names are hyperlinked below, and simple text documentation can be found in the headers of all functions. 
 
 #### Main functions:
-* `tmd_predict` predicts tidal elevation, transport, or current velocities for given location(s) and time(s). 
+* [`tmd_predict`](doc/tmd_predict_documentation.md) predicts tidal elevation, transport, or current velocities for given location(s) and time(s). 
 * [`tmd_interp`](doc/tmd_interp_documentation.md) provides water column thickness, land/ocean mask, ice shelf flexure, and tidal constiuent parameters at specified geographic locations, for a given tide model. 
 * [`tmd_data`](doc/tmd_data_documentation.md) loads gridded tide model data without interpolation. 
 * [`tmd_conlist`](doc/tmd_conlist_documentation.md) returns a list of tidal constituents in a TMD3.0 compatible consolidated NetCDF tide model file. 
