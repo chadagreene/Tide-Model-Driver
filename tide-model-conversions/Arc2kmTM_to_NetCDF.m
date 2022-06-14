@@ -1,4 +1,4 @@
-% This file reads the old binary Gr1kmTM tide model and converts it to NetCDF. 
+% This file reads the old binary Arc2kmTM_v1 tide model and converts it to NetCDF. 
 % 
 % This script calls some legacy functions from TMD2.5 to load the old data.
 % 
@@ -9,16 +9,16 @@ addpath(genpath('/Users/cgreene/Documents/MATLAB/TMD3.00_alpha'))
 %% Enter initial file info 
 
 % Output file: 
-newfilename = ['/Users/cgreene/Documents/data/tides/Gr1kmTM_v1.nc']; 
+newfilename = ['/Users/cgreene/Documents/data/tides/Arc2kmTM_v1.nc']; 
 
 % Input files: 
-filename_grd = '/Users/cgreene/Documents/data/tides/Gr1kmTM/grid_Gr1kmTM_v1'; 
-filename_h = '/Users/cgreene/Documents/data/tides/Gr1kmTM/h_Gr1kmTM_v1'; 
-filename_u = '/Users/cgreene/Documents/data/tides/Gr1kmTM/UV_Gr1kmTM_v1'; 
+filename_grd = '/Users/cgreene/Documents/data/tides/Arc2kmTM_v1/grid_Arc2kmTM_v1'; 
+filename_h = '/Users/cgreene/Documents/data/tides/Arc2kmTM_v1/h_Arc2kmTM_v1'; 
+filename_u = '/Users/cgreene/Documents/data/tides/Arc2kmTM_v1/UV_Arc2kmTM_v1'; 
 
-res = 1; % (km) input grid resolution 
+res = 2; % (km) input grid resolution 
 
-con_string = 'm2 s2 k1 o1 n2 p1 k2 q1'; % constituents in original model order
+con_string = 'm2 s2 k1 o1 n2 p1 k2 q1'; % constituents in original model order, obtained by rd_con('h_Arc2kmTM_v1') 
 
 %% Load data
 
@@ -130,7 +130,7 @@ scale_UV= 32767/max([mxur mxui mxvr mxvi])
 [ispec,amp,ph,omega,alpha] = tmd_constit(strsplit(con_string));
 
 proj4 = '+proj=stere +lat_0=90 +lat_ts=70 +lon_0=-45 +x_0=0 +y_0=0 +datum=WGS84 +units=km +no_defs +type=crs';
-
+return
 %% Write the netcdf 
 
 % 1. Create netCDF file handle and Attributes
@@ -138,14 +138,14 @@ mode = netcdf.getConstant('NETCDF4');
 mode = bitor(mode,netcdf.getConstant('CLASSIC_MODEL'));
 ncid=netcdf.create(newfilename,mode);
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Conventions','CF-1.7');
-netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Title','Gr1kmTM');
-netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Description','The Greenland 1 kilometer Tide Model (Gr1kmTM) is a barotropic ocean tide model on a 1 km x 1 km polar stereographic grid, developed using the Regional Ocean Modeling System (ROMS). Gr1kmTM consists of spatial grids of complex amplitude coefficients for sea surface height and depth-integrated currents (“volume transports”) for 8 principal tidal constituents: 4 semidiurnal (M2, S2, K2, N2) and 4 diurnal (K1, O1, P1, Q1).');
+netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Title','Arc2kmTM_v1');
+netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Description','The Arctic 2 km (kilometer) Tide Model (Arc2kmTM) is a barotropic ocean tide model on a 2x2 km polar stereographic grid, developed using the Regional Ocean Modeling System (ROMS). Arc2kmTM consists of spatial grids of complex amplitude coefficients for sea surface height and depth-integrated currents (“volume transports”) for 8 principal tidal constituents: 4 semidiurnal (M2, S2, K2, N2) and 4 diurnal (K1, O1, P1, Q1).');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Author','Susan L. Howard & Laurie Padman');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'creation_date',datestr(now,'yyyy-mm-dd'));
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'NetCDF_conversion','Chad A. Greene');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'tmd_version',3.0);
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'license','MIT License');
-netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Data_citation',['Susan L. Howard and Laurie Padman. 2021. Gr1kmTM: Greenland 1 kilometer Tide Model, 2021. urn:node:ARCTIC. doi:10.18739/A2251FM3S.'])
+netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Data_citation',['Susan L. Howard and Laurie Padman. 2021. Arc2kmTM: Arctic 2 kilometer Tide Model, 2021. Arctic Data Center. doi:10.18739/A2PV6B79W.'])
 
 % 2. Define dimensions
 % Define mapping variable
@@ -311,4 +311,3 @@ netcdf.putVar(ncid,mask_var_id,ipermute(mask,[2 1]));
 netcdf.close(ncid)
 
 disp done
-
