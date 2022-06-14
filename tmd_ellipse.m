@@ -1,5 +1,5 @@
 function [umajor,uminor,uphase,uincl] = tmd_ellipse(filename,constituent,lati,loni)
-% tmd_ellipse extracts tidal ellipse grids from a model.  
+% tmd_ellipse gives tidal ellipse parameters at specified location(s).  
 % 
 %% Syntax
 % 

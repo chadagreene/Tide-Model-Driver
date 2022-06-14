@@ -1,7 +1,7 @@
+[Back to Tide Model Driver Contents](../README.md).
+
 # `tmd_data` documentation
 `tmd_data` loads tide model data into the Matlab workspace. 
-
-[Back to Tide Model Driver Contents](../README.md).
 
 ## Syntax 
 ```matlab

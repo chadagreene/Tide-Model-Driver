@@ -1,6 +1,7 @@
 %% |tmd_interp| documentation
-% tmd_interp interpolates tide model data at specified geographic locations. 
+% |tmd_interp| interpolates tide model data at specified geographic locations. 
 % 
+% <TMD_Contents.html Back to Tide Model Driver Contents>.
 %% Syntax 
 % 
 %  zi = tmd_interp(filename,variable,lati,loni)
@@ -13,49 +14,81 @@
 % specified by |filename| to interpolate a specified variable at the
 % geographic coordinates |lati,loni|. The variable can be: 
 % 
-%  * |'h'|   complex tidal height (m)  
-%  * |'hRe'| real part of tidal height
-%  * |'hIm'| imaginary part of tidal height 
-%  * |'hAm'| amplitude of tidal height
-%  * |'hPh'| phase of tidal height
-%  * |'u'|   complex zonal velocity (m/s) 
-%  * |'uRe'| real part of zonal velocity 
-%  * |'uIm'| imaginary part of zonal velocity 
-%  * |'uAm'| amplitude of zonal velocity
-%  * |'uPh'| phase of zonal velocity
-%  * |'U'|   complex zonal transport (m^2/s) 
-%  * |'URe'|  real part of zonal transport
-%  * |'UIm'| imaginary part of zonal transport
-%  * |'UAm'| amplitude of zonal transport
-%  * |'UPh'| phase of zonal transport 
-%  * |'v'|   complex meridional velocity (m/s) 
-%  * |'vRe'| real part of meridional velocity 
-%  * |'vIm'| imaginary part of meridional velocity
-%  * |'vAm'| amplitude of meridional velocity
-%  * |'vPh'| phase of meridional velocity 
-%  * |'V'|   complex meridional transport (m^2/s)
-%  * |'VRe'| real part of meridional transport 
-%  * |'VIm'| imaginary part of meridional transport
-%  * |'VAm'| amplitude of meridional transport
-%  * |'VPh'| phase of meridional transport
-%  * |'wct'| water column thickness (m) 
-%  * |'mask'| binary land/ocean mask
-%  * |'flexure'| ice shelf flexure coefficient from a linear elastic model applied to BedMachine ice thickness (can slightly exceed 1). 
-%  * |'h_range'| full peak-to-peak tidal range 
-% 
+% * |'h'|   complex tidal height (m)  
+% * |'hRe'| real part of tidal height
+% * |'hIm'| imaginary part of tidal height 
+% * |'hAm'| amplitude of tidal height
+% * |'hPh'| phase of tidal height
+% * |'u'|   complex zonal velocity (m/s) 
+% * |'uRe'| real part of zonal velocity 
+% * |'uIm'| imaginary part of zonal velocity 
+% * |'uAm'| amplitude of zonal velocity
+% * |'uPh'| phase of zonal velocity
+% * |'U'|   complex zonal transport (m^2/s) 
+% * |'URe'|  real part of zonal transport
+% * |'UIm'| imaginary part of zonal transport
+% * |'UAm'| amplitude of zonal transport
+% * |'UPh'| phase of zonal transport 
+% * |'v'|   complex meridional velocity (m/s) 
+% * |'vRe'| real part of meridional velocity 
+% * |'vIm'| imaginary part of meridional velocity
+% * |'vAm'| amplitude of meridional velocity
+% * |'vPh'| phase of meridional velocity 
+% * |'V'|   complex meridional transport (m^2/s)
+% * |'VRe'| real part of meridional transport 
+% * |'VIm'| imaginary part of meridional transport
+% * |'VAm'| amplitude of meridional transport
+% * |'VPh'| phase of meridional transport
+% * |'wct'| water column thickness (m) 
+% * |'mask'| binary land/ocean mask
+% * |'flexure'| ice shelf flexure coefficient from a linear elastic model applied to BedMachine ice thickness (can slightly exceed 1). Only for CATS model. 
+%
 % |zi = tmd_interp(...,'constituents',conList)| specifies tidal constituents as a 
-% cell array (e.g, |{'m2','s2'}|. If constituents are not specified, all constituents 
+% cell array (e.g, |{'m2','s2'}|). If constituents are not specified, all constituents 
 % from the model are returned. 
 % 
 % |zi = tmd_interp(...,'coasts',MaskingMethod)| specifies how coastal regions are masked. 
-% Can be NaN, 'flexure', or 'unmask'. By default, |MaskingMethod| is |NaN|, meaning outputs 
+% Can be |NaN|, |'flexure'|, or |'unmask'|. By default, |MaskingMethod| is |NaN|, meaning outputs 
 % are set to |NaN| wherever a nearest-neighbor interpolation of the ocean indicates land. 
 % The |'flexure'| option scales tidal constituents by a predicted coefficient of tidal 
 % deflection for ice shelf grounding zones. A third option, |'unmask'|, does not apply 
 % any masking, which may be preferred close to coasts, where, for example, a tide gauge 
 % may exist between land and ocean grid cells. 
 
-%% Example: Water column thickness 
+%% Example: Water column thickness (Global model)
+
+lon = -90:0.01:-20;
+lat = -40:-0.01:-75; 
+[Lon,Lat] = meshgrid(lon,lat); 
+
+Z_tpxo = tmd_interp('TPXO9_atlas_v5.nc','wct',Lat,Lon); 
+ocean = tmd_interp('TPXO9_atlas_v5.nc','mask',Lat,Lon); 
+
+figure
+h = imagesc(lon,lat,Z_tpxo);
+h.AlphaData = ocean; % makes land transparent
+set(gca,'color',0.75*[1 1 1]) % makes transparent areas gray
+axis xy image
+xlabel 'longitude'
+ylabel 'latitude' 
+caxis([0 6000])
+cmocean deep % optional colormap
+
+%% Example: Water column thickness (Regional model) 
+
+Z_cats = tmd_interp('CATS2008_update_2022-06-11.nc','wct',Lat,Lon); 
+
+figure
+h = imagesc(lon,lat,Z_cats-Z_tpxo);
+h.AlphaData = ocean & isfinite(Z_cats); 
+set(gca,'color',0.75*[1 1 1]) % makes transparent areas gray
+axis xy image
+xlabel 'longitude'
+ylabel 'latitude' 
+caxis([-1 1]*1000)
+cmocean balance % optional colormap
+
+%%
 
 % Create a grid (using the AMT function psgrid): 
 [Lat,Lon] = psgrid('scar inlet',1500,1); 
@@ -152,3 +185,6 @@ q.AutoScaleFactor = 3;
 
 %%
 
+%% Author Info 
+% The |tmd_interp| function and its documentation were written by Chad A.
+% Greene, June 2022. 

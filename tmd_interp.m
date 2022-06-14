@@ -62,6 +62,7 @@ function zi = tmd_interp(filename,variable,lati,loni,varargin)
 %% Input checks 
 
 narginchk(4,Inf) 
+assert(~isnumeric(variable),'Input variable must be a string.')
 assert(islatlon(lati,loni),'Inputs lati,loni must be in the range of possible latitude and longitudes.') 
 assert(isequal(size(lati),size(loni)),'Dimensions of input lati,loni coordinates must agree.') 
 assert(contains(filename,'.nc'),'Input filename must end in .nc.')

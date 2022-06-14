@@ -1,8 +1,14 @@
-# TMD3.0 Model File Format
-This page describes the NetCDF data format for TMD3.0 compatible tide
-model files. 
-
 [Back to Tide Model Driver Contents](../README.md).
+
+# TMD3.0 Model File Format
+TMD3.0 introduces a new, consolidated NetCDF data format for global and regional tide models. The new, consolidated NetCDF format:
+
+* Reduces complexity by placing all of the model constituents of the `h`, `U`, and `V` coefficients into a single data file, without the need for any extra grid files; 
+* Is easier to work with than the old binary format; 
+* Significantly reduces total model file size by taking advantage of data compression;
+* Includes metadata such as units, grid information, map projection parameters, version information, and author attribution. 
+
+This page describes the consolidated NetCDF data format for TMD3.0 compatible tide model files. 
 
 ## Explore file contents 
 Take a look inside any TMD3.0 compatible NetCDF, and the contents should
@@ -267,6 +273,8 @@ estimates is subject to the accuracy of the bathymetry estimate.
 TMD3.0 model file format does not account for vertical variations in
 tidal transport or current velocity. In other words, this is a strictly
 barotropic model, and does not attempt to represent baroclinic flow. 
+
+**Important:** Previous versions of TMD interpreted U and V on staggered grids, in which each variable would be interpolated at a location offset by half a pixel. In the new, consolidated NetCDF format, all variables are centered on their respective coordinates. 
 
 ## Units 
 TMD3.0 uses meters, seconds, and combinations of meters and seconds. Previous 
