@@ -1,0 +1,11 @@
+._*
+*.jar
+*.log
+*.m~
+*.m~~
+*.sw*
+*.tar
+*.zip
+.DS_Store*
+.Trashes
+octave-workspace

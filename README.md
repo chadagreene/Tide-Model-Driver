@@ -67,7 +67,7 @@ TMD3.0 is a rewrite of the [Tide Model Driver for MATLAB v2.5](https://github.co
 # Alternatives to MATLAB
 Don't like MATLAB? No worries, just try one of these alternatives: 
 
-* **PYTHON:** Tyler Sutterley's [pyTMD](https://github.com/tsutterley/pyTMD) is based on TMD2.5, and reads OTIS and GOT formatted tidal solutions for calculating ocean and load tides.
+* **PYTHON:** [pyTMD](https://github.com/tsutterley/pyTMD) is a tidal prediction software that can read OTIS, GOT and FES formatted tidal solutions for predicting ocean and load tides.
 * **FORTRAN:** A Fortran version of this package is made available through OSU: [OSU Tidal Prediction software (OTPS)](https://www.tpxo.net/otps).
 * **Octave:** It is *possible* that TMD3.0 works with [Octave](https://www.gnu.org/software/octave/index) as it is currently written. I haven't checked, but most of the TMD functions are pretty basic, so Octave's functions might be exact clones. If you use Octave and you want to give TMD3.0 a try, please let me know how it goes! 
 
