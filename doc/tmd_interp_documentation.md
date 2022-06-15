@@ -13,6 +13,8 @@ zi = tmd_interp(...,'coasts',MaskingMethod)
 ```
 ## Description 
 
+`zi = tmd_interp(filename,variable,lati,loni)` uses the NetCDF tide model specified by `filename` to interpolate a specified variable at the geographic coordinates `lati,loni`. The `variable` can be: 
+
 * `'h'`   complex tidal height (m)  
 * `'hRe'` real part of tidal height
 * `'hIm'` imaginary part of tidal height 
