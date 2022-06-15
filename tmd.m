@@ -31,20 +31,20 @@ switch TMDFunctionName
    case 'tmd'
       showdemo TMD_function_list
       
-   case {'tide_pred','tmd_tide_pred'}
-      showdemo tmd_tide_pred_documentation
+   case {'predict','tmd_predict'}
+      showdemo tmd_predict_documentation
       
-   case {'get_coeff','tmd_get_coeff'}
-      showdemo tmd_get_coeff_documentation
+   case {'interp','tmd_interp'}
+      showdemo tmd_interp_documentation
       
-   case {'get_ellipse','tmd_get_ellipse'}
-      showdemo tmd_get_ellipse_documentation
+   case {'data','tmd_data'}
+      showdemo tmd_data_documentation
       
-   case {'extract_HC','tmd_extract_HC'}
+   case {'conlist','tmd_conlist'}
       showdemo tmd_extract_HC_documentation
       
-   case {'get_bathy','tmd_get_bathy'}
-      showdemo tmd_get_bathy_documentation
+   case {'ellipse','tmd_ellipse'}
+      showdemo tmd_ellipse_documentation
       
    otherwise 
       warning(['Unrecognized TMD function ',TMDFunctionName,'.'])

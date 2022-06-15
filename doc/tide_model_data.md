@@ -18,7 +18,7 @@ Ocean models contain water height predictions and the barotropic transport varia
 🚧 Check back soon for load tides.🚧
 
 # Tide Model Intercomparison
-For a quick intercomparison of tide model performance, check out [this intercomparison](doc/tide_model_intercomparison.md) page.
+For a quick intercomparison of tide model performance, check out [this intercomparison](tide_model_intercomparison.md) page.
 
 # Author Info
 This page was written by [Chad A. Greene](https://www.chadagreene.com), June 2022. 

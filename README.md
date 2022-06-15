@@ -1,13 +1,11 @@
-# Tide Model Driver 3.0 
-Tide Model Driver for MATLAB, version 3.0. This is a fast, user-friendly, and well-documented rewrite of [ESR](https://www.esr.org/)'s classic Tide Model Driver by [Svetlana Erofeeva](https://ceoas.oregonstate.edu/svetlana-erofeeva).
-
-🚧 This repo is under construction. 🚧
+# Tide Model Driver 3.0 (under construction🚧)
+Tide Model Driver for MATLAB, version 3.0. This is a fast, user-friendly, well-documented rewrite of [ESR](https://www.esr.org/)'s classic Tide Model Driver by [Svetlana Erofeeva](https://ceoas.oregonstate.edu/svetlana-erofeeva).
 
 # Installation 
 To start predicting tides, just add TMD to MATLAB and download your favorite tide model data. Each step is described in the links below: 
 
-1. [Add TMD to MATLAB](doc/installing_tmd.md), & 
-2. [Get tide model data](doc/tide_model_data.md). 
+1. [Add TMD to MATLAB.](doc/installing_tmd.md)
+2. [Get tide model data.](doc/tide_model_data.md)
 
 # TMD Functions
 For most applications, **`tmd_predict` is the only function you will need to call directly**, although you may occasionally want `tmd_interp` to retrieve bathymetry, `tmd_ellipse` to get tidal current characteristics, or `tmd_conlist` for a quick list of tidal constituents in a given model. Complete documentation is provided for the functions whose names are hyperlinked below, and simple text documentation can be found in the headers of all functions. 
@@ -48,7 +46,7 @@ If you're not sure what function name you're looking for, just type `tmd` into t
 ```
 
 # Tutorials & More Documentation
-Be sure to check out the documentation for each of the **Main functions**. There, you'll find multiple examples of how to use each function. In addition, the following tutorials and explanations may be of interest: 
+Be sure to check out the documentation for each of the **Main functions**. There, you'll find multiple examples of how to use each function. In addition, the following tutorials and other documentation may be of interest: 
 
 * TMD Getting Started🚧
 * [TMD Model file format](doc/TMD_model_file_format.md)
@@ -58,13 +56,13 @@ Be sure to check out the documentation for each of the **Main functions**. There
 * How to: Animate tidal motion🚧
 
 # What's new in TMD 3.0?
-TMD3.0 is a rewrite of the [Tide Model Driver for MATLAB v2.5](https://github.com/EarthAndSpaceResearch/TMD_Matlab_Toolbox_v2.5). The goal of this update was to create a cleaner, more efficient set of functions that are better documented, easier to use, easier to debug. We also wanted to reduce the size, complexity, and overall hassle of dealing with multi-file or binary tide model data files. The biggest changes in this update to TMD3.0 are as follows: 
+TMD3.0 is a rewrite of the [Tide Model Driver for MATLAB v2.5](https://github.com/EarthAndSpaceResearch/TMD_Matlab_Toolbox_v2.5). The goal of this update was to create a clean, efficient set of functions that are well documented, easy to use, easy to debug. We also wanted to reduce the size, complexity, and overall hassle of dealing with multi-file or binary tide model data files. The biggest changes in this update to TMD3.0 are as follows: 
 
 * Introduced a new, [consolidated NetCDF model data format](doc/TMD_model_file_format.md).  
 * All functions rewritten for improved performance (*much faster* and lower memory usage than TMD2.5). 
 * Most functions were renamed and inputs have changed to make them more intuitive and easier to use.
 * All new documentation.
-* Made updates to the CATS2008 model, as described [here](doc/cats2008_updates.md).
+* Updated the CATS2008 model, as described [here](doc/cats2008_updates.md).
 
 # Alternatives to MATLAB
 Don't like MATLAB? No worries, just try one of these alternatives: 
