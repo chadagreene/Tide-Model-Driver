@@ -19,9 +19,7 @@ function tmd(TMDFunctionName)
 %  tmd tmd_predict
 % 
 %% Author Info
-% TMD version 3.00; August 2018; Chad A. Greene (chad@chadagreene.com). 
-% Modified from TMD version 2.04 & 2.05 by Lana Erofeeva (Oregon State 
-% University) and Laurie Padman (Earth & Space Research). 
+% This function was written by Chad A. Greene.
 
 if nargin==0
    TMDFunctionName = 'tmd'; 
@@ -29,7 +27,7 @@ end
 
 switch TMDFunctionName
    case 'tmd'
-      showdemo TMD_function_list
+      showdemo TMD_main_page
       
    case {'predict','tmd_predict'}
       showdemo tmd_predict_documentation
@@ -47,8 +45,8 @@ switch TMDFunctionName
       showdemo tmd_ellipse_documentation
       
    otherwise 
-      warning(['Unrecognized TMD function ',TMDFunctionName,'.'])
-      showdemo TMD_function_list
+      warning(['Sorry, there''s no fancy documentation for ',TMDFunctionName,'. Here''s what we''ve got, or you can try typing ',TMDFunctionName,'.'])
+      showdemo TMD_main_page
 
 end
 
