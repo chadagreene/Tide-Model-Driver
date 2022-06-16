@@ -3,8 +3,8 @@
 # Getting Tide Model Data
 After you [add TMD3.0 to MATLAB](installing_tmd.md), you'll need to get some tide model data. Click on any of the links below to download tide model data files.
 
-# Ocean Models
-Ocean models contain water height predictions and the barotropic transport variables used to calculate tidal current velocities. Ocean models are either *global* or *regional*. 
+# Barotropic Ocean Models
+Barotropic ocean models contain tidal coefficients for water height and depth-integrated transport. Depth-averaged tidal current velocities are calculated as the predicted transport values divided by water column thickness. Ocean models are either *global* or *regional*. 
 
 ### Global Ocean Models 
 * [`TPXO9_atlas_v5.nc`](https://www.chadagreene.com/tide_data/TPXO9_atlas_v5.nc) [963 MB] 1/30 degree global model with 15 tidal consituents, from Gary Egbert and Svetlana Erofeeva. More information on TPXO9-atlas models can be found [here](https://www.tpxo.net/global/tpxo9-atlas).

@@ -7,12 +7,12 @@ TMD3.0 introduces a new, consolidated NetCDF data format for global and regional
 * Is easier to work with than the old binary format; 
 * Significantly reduces total model file size by taking advantage of data compression;
 * Includes metadata such as units, grid information, map projection parameters, version information, and author attribution. 
+* Variables `U` and `V` are now interpolated to the `h` nodes, meaning transport data is no longer offset by half a pixel from the grid. 
 
 This page describes the consolidated NetCDF data format for TMD3.0 compatible tide model files. 
 
 ## Explore file contents 
-Take a look inside any TMD3.0 compatible NetCDF, and the contents should
-be fairly straightforward. Here's an example: 
+Take a look inside any TMD3.0 compatible NetCDF, and the contents should be fairly straightforward. Here's an example: 
 
 ```matlab
 >> ncdisp('TPXO9_atlas_v5.nc')
@@ -29,6 +29,7 @@ Global Attributes:
            tmd_version   = 3
            license       = 'ask'
            Data_citation = 'Egbert, Gary D., and Svetlana Y. Erofeeva. "Efficient inverse modeling of barotropic ocean tides." Journal of Atmospheric and Oceanic Technology 19.2 (2002): 183-204.'
+           model_type    = 'ocean'
 Dimensions:
            lon          = 10802
            lat          = 5401
@@ -180,28 +181,16 @@ Variables:
 ```
 
 ## Global models vs regional models 
-All model files are either *global* or *regional*. Global models, like the
-one above, are presented on a regular grid in geographic coordinates (degrees) 
-and have 1D `lon` and `lat` variables. For global models, longitude is
-treated like the x dimension, and latitude is treated like the y
-dimension.
+All model files are either *global* or *regional*. Global models, like the one above, are presented on a regular grid in geographic coordinates (degrees) and have 1D `lon` and `lat` variables. For global models, longitude is treated like the x dimension, and latitude is treated like the y dimension.
 
-Regional models (CATS, Arctic models, etc) are presented on grids that are 
-regular in *projected* coordinates, meaning they are spaced equally in
-meters or kilometers. The proj4 string in the NetCDF file describes the
-projection parameters for any regional model. Regional models also
-include MxN arrays of latitude and longitude values. 
+Regional models (CATS, Arctic models, etc) can be on regular geographic grids, but are often presented on grids that are regular in *projected* coordinates, meaning they are spaced equally in meters or kilometers. The proj4 string in the NetCDF file describes the projection parameters for any regional model. Regional models also include MxN arrays of latitude and longitude values. 
 
-In both global and regional models, all coordinates correspond to grid
-cell centers. 
+In both global and regional models, all coordinates correspond to grid cell centers. 
 
-Most TMD functions accept latitude and longitude as inputs, and
-automatically project them to regional model coordinates where necessary.
+Most TMD functions accept latitude and longitude as inputs, and automatically project them to regional model coordinates where necessary.
 
 ## Constituents 
-The tidal constituents are easy to miss in the NetCDF. They appear as a
-simple string, in the `constituent_order` attribute of the `constituents`
-variable. Here's how to access them: 
+The tidal constituents are easy to miss in the NetCDF. They appear as a simple string, in the `constituent_order` attribute of the `constituents` variable. Here's how to access them: 
 
 ```matlab
 >> ncreadatt('TPXO9_atlas_v5.nc','constituents','constituent_order')
@@ -210,7 +199,7 @@ ans =
 ```
 
 Constituents can also be accessed as cell arrays using the
-<tmd_data_documentation.html `tmd_data`> function: 
+[`tmd_data`](tmd_data_documentation.md) function: 
 
 ```matlab
 >> [wct,lon,lat,cons] = tmd_data('TPXO9_atlas_v5.nc','wct');
@@ -223,16 +212,10 @@ cons =
     {'q1'}    {'s1'}    {'s2'}
 ```
 
-
-I realize this is a somewhat strange way to package the constituent
-names, but it's the simplest way I could figure out how to do it, given
-the limitations of the NetCDF format. 
+I realize this is a somewhat strange way to package the constituent names, but it's the simplest way I could figure out how to do it, given the limitations of the NetCDF format. 
 
 ## Real and Imaginary Components 
-For tidal height h, zonal transport U, and meridional transport V, you'll
-find real and imaginary components hRe, hIm, URe, UIm, VRe, and VIm in
-the model file. The complex constituent can then be constucted following
-the format 
+For tidal height h, zonal transport U, and meridional transport V, you'll find real and imaginary components hRe, hIm, URe, UIm, VRe, and VIm in the model file. The complex constituent can then be constucted following the format 
 
 ```matlab
 hc = complex(hRe,hIm); 
@@ -277,15 +260,10 @@ barotropic model, and does not attempt to represent baroclinic flow.
 **Important:** Previous versions of TMD interpreted U and V on staggered grids, in which each variable would be interpolated at a location offset by half a pixel. In the new, consolidated NetCDF format, all variables are centered on their respective coordinates. 
 
 ## Units 
-TMD3.0 uses meters, seconds, and combinations of meters and seconds. Previous 
-versions of TMD produced tidal currents in cm/s, but we now package
-transports in units of m^2 /s, so they may easily be divided by water
-column thickness (m), to get velocities of m/s. 
+TMD3.0 uses meters, seconds, and combinations of meters and seconds. Previous versions of TMD produced tidal currents in cm/s, but we now package transports in units of m^2 /s, so they may easily be divided by water column thickness (m), to get velocities of m/s. 
 
 ## Masks 
-TMD does something new with masking: The scripts that create each model
-file use `regionfill` to interpolate values of tidal constituents
-across all land areas. 
+TMD does something new with masking: The scripts that create each model file use `regionfill` to interpolate values of tidal constituents across all land areas. 
 
 Here's what the m2 constituent amplitude looks like in the TPXO9 file:
 
@@ -331,7 +309,7 @@ amplitude, phase, omega, and alpha. You probably won't need to interact
 with these variables directly, but they are from the `tmd_constit`
 function. 
 
-`scale_factor` 
+## `scale_factor` 
 The real and imaginary components of h, U, and V are all scaled by a
 strange number listed as the `scale_factor` of each variable. MATLAB
 automatically parses the `scale_factor` when reading in the variables, so
@@ -370,4 +348,4 @@ exceed 100 by a few percent near the hydrostatic line.
 The MATLAB scripts we used to convert tide models from the original binary OTIS format to the new, consolidated NetCDF can found in the `tide-model-conversions` folder of this GitHub repo. 
 
 ## Author Info
-This document was written by Chad A. Greene, June 2022. 
+This document was written by [Chad A. Greene](https://www.chadagreene.com), June 2022. 

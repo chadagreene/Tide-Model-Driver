@@ -12,7 +12,7 @@ For most applications, **`tmd_predict` is the only function you will need to cal
 
 #### Main functions:
 * [`tmd_predict`](doc/tmd_predict_documentation.md) predicts tidal elevation, transport, or current velocities for given location(s) and time(s). 
-* [`tmd_interp`](doc/tmd_interp_documentation.md) provides water column thickness, land/ocean mask, ice shelf flexure, and tidal constiuent parameters at specified geographic locations, for a given tide model. 
+* [`tmd_interp`](doc/tmd_interp_documentation.md) provides water column thickness, land/ocean mask, ice shelf flexure, and tidal constituent parameters at specified geographic locations, for a given tide model. 
 * [`tmd_data`](doc/tmd_data_documentation.md) loads gridded tide model data without interpolation. 
 * [`tmd_conlist`](doc/tmd_conlist_documentation.md) returns a list of tidal constituents in a TMD3.0 compatible consolidated NetCDF tide model file. 
 * [`tmd_ellipse`](doc/tmd_ellipse_documentation.md) gives tidal ellipse parameters at specified location(s).  

@@ -17,7 +17,8 @@ ncdisp('TPXO9_atlas_v5.nc')
 % treated like the x dimension, and latitude is treated like the y
 % dimension.
 %
-% Regional models (CATS, Arctic models, etc) are presented on grids that are 
+% Regional models (CATS, Arctic models, etc) can be on regular geographic grids, 
+% but are often presented on grids that are 
 % regular in _projected_ coordinates, meaning they are spaced equally in
 % meters or kilometers. The proj4 string in the NetCDF file describes the
 % projection parameters for any regional model. Regional models also

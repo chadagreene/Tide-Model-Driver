@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>TMD3.0 Model File Format</title><meta name="generator" content="MATLAB 9.10"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2022-06-12"><meta name="DC.source" content="TMD_model_file_format.m"><style type="text/css">
+      --><title>TMD3.0 Model File Format</title><meta name="generator" content="MATLAB 9.10"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2022-06-16"><meta name="DC.source" content="TMD_model_file_format.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -81,6 +81,7 @@ Global Attributes:
            tmd_version   = 3
            license       = 'ask'
            Data_citation = 'Egbert, Gary D., and Svetlana Y. Erofeeva. "Efficient inverse modeling of barotropic ocean tides." Journal of Atmospheric and Oceanic Technology 19.2 (2002): 183-204.'
+           model_type    = 'ocean'
 Dimensions:
            lon          = 10802
            lat          = 5401
@@ -229,7 +230,7 @@ Variables:
                        valid_range   = [0  1]
                        flag_values   = [0  1]
                        flag_meanings = 'land ocean'
-</pre><h2 id="2">Global models vs regional models</h2><p>All model files are either <i>global</i> or <i>regional</i>. Global models, like the one above, are presented on a regular grid in geographic coordinates (degrees) and have 1D <tt>lon</tt> and <tt>lat</tt> variables. For global models, longitude is treated like the x dimension, and latitude is treated like the y dimension.</p><p>Regional models (CATS, Arctic models, etc) are presented on grids that are regular in <i>projected</i> coordinates, meaning they are spaced equally in meters or kilometers. The proj4 string in the NetCDF file describes the projection parameters for any regional model. Regional models also include MxN arrays of latitude and longitude values.</p><p>In both global and regional models, all coordinates correspond to grid cell centers.</p><p>Most TMD functions accept latitude and longitude as inputs, and automatically project them to regional model coordinates where necessary.</p><h2 id="3">Constituents</h2><p>The tidal constituents are easy to miss in the NetCDF. They appear as a simple string, in the <tt>constituent_order</tt> attribute of the <tt>constituents</tt> variable. Here's how to access them:</p><pre class="codeinput">ncreadatt(<span class="string">'TPXO9_atlas_v5.nc'</span>,<span class="string">'constituents'</span>,<span class="string">'constituent_order'</span>)
+</pre><h2 id="2">Global models vs regional models</h2><p>All model files are either <i>global</i> or <i>regional</i>. Global models, like the one above, are presented on a regular grid in geographic coordinates (degrees) and have 1D <tt>lon</tt> and <tt>lat</tt> variables. For global models, longitude is treated like the x dimension, and latitude is treated like the y dimension.</p><p>Regional models (CATS, Arctic models, etc) can be on regular geographic grids, but are often presented on grids that are regular in <i>projected</i> coordinates, meaning they are spaced equally in meters or kilometers. The proj4 string in the NetCDF file describes the projection parameters for any regional model. Regional models also include MxN arrays of latitude and longitude values.</p><p>In both global and regional models, all coordinates correspond to grid cell centers.</p><p>Most TMD functions accept latitude and longitude as inputs, and automatically project them to regional model coordinates where necessary.</p><h2 id="3">Constituents</h2><p>The tidal constituents are easy to miss in the NetCDF. They appear as a simple string, in the <tt>constituent_order</tt> attribute of the <tt>constituents</tt> variable. Here's how to access them:</p><pre class="codeinput">ncreadatt(<span class="string">'TPXO9_atlas_v5.nc'</span>,<span class="string">'constituents'</span>,<span class="string">'constituent_order'</span>)
 </pre><pre class="codeoutput">ans =
     '2n2 k1 k2 m2 m4 mf mm mn4 ms4 n2 o1 p1 q1 s1 s2'
 </pre><p>Constituents can also be accessed as cell arrays using the <a href="tmd_data_documentation.html"><tt>tmd_data</tt></a> function:</p><pre class="codeinput">[wct,lon,lat,cons] = tmd_data(<span class="string">'TPXO9_atlas_v5.nc'</span>,<span class="string">'wct'</span>);
@@ -274,7 +275,8 @@ ncdisp('TPXO9_atlas_v5.nc')
 % treated like the x dimension, and latitude is treated like the y
 % dimension.
 %
-% Regional models (CATS, Arctic models, etc) are presented on grids that are 
+% Regional models (CATS, Arctic models, etc) can be on regular geographic grids, 
+% but are often presented on grids that are 
 % regular in _projected_ coordinates, meaning they are spaced equally in
 % meters or kilometers. The proj4 string in the NetCDF file describes the
 % projection parameters for any regional model. Regional models also

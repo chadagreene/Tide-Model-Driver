@@ -13,7 +13,7 @@ function z = tmd_predict(filename,lat,lon,t,ptype,varargin)
 %% Description 
 % 
 % z = tmd_predict(filename,lat,lon,time) predicts tide heights a the
-% specified lat,lon and time, using the TMD3.0 compatible consolodated
+% specified lat,lon and time, using the TMD3.0 compatible consolidated
 % NetCDF tide model data file. Location(s) lat,lon are decimal degrees, and
 % can be scalars, vectors, or MxN arrays. Input time can be datetime or
 % MATLAB's datenum format, and must be a scalar or a 1D vector. 

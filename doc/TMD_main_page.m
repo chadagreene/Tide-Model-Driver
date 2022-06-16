@@ -12,7 +12,7 @@
 % 
 % * Main functions:* 
 % * <tmd_predict_documentation.html *|tmd_predict|*> predicts tidal elevation, transport, or current velocities for given location(s) and time(s). 
-% * <tmd_interp_documentation.html *|tmd_interp|*> provides water column thickness, land/ocean mask, ice shelf flexure, and tidal constiuent parameters at specified geographic locations, for a given tide model. 
+% * <tmd_interp_documentation.html *|tmd_interp|*> provides water column thickness, land/ocean mask, ice shelf flexure, and tidal constituent parameters at specified geographic locations, for a given tide model. 
 % * <tmd_data_documentation.html *|tmd_data|*> loads gridded tide model data without interpolation. 
 % * <tmd_conlist_documentation.html *|tmd_conlist|*> returns a list of tidal constituents in a TMD3.0 compatible consolidated NetCDF tide model file. 
 % * <tmd_ellipse_documentation.html *|tmd_ellipse|*> gives tidal ellipse parameters at specified location(s).  
