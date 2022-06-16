@@ -1,0 +1,243 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>tmd_ellipse documentation</title><meta name="generator" content="MATLAB 9.10"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2022-06-16"><meta name="DC.source" content="tmd_ellipse_documentation.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1><tt>tmd_ellipse</tt> documentation</h1><!--introduction--><p>tmd_ellipse gives tidal ellipse parameters at specified location(s).</p><p><a href="TMD_Contents.html">Back to Tide Model Driver Contents</a>.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Syntax</a></li><li><a href="#2">Description</a></li><li><a href="#3">Example</a></li><li><a href="#5">Explanation of the ellipse parameters</a></li><li><a href="#8">Are the ellipse parameters wrong?</a></li><li><a href="#9">References</a></li><li><a href="#10">Author Info</a></li></ul></div><h2 id="1">Syntax</h2><pre>[umajor,uminor,uphase,uincl] = tmd_ellipse(filename,constituent,lati,loni)</pre><h2 id="2">Description</h2><p><tt>[umajor,uminor,uphase,uincl] = tmd_ellipse(filename,constituent,lati,loni)</tt> gives the major and minor axes of tidal current velocities.</p><p><b>Inputs:</b></p><div><ul><li><b><tt>filename</tt></b> TMD3.0 compatible tide model ending in .nc.</li><li><b><tt>constituent</tt></b> string constituent (e.g., 'm2')</li><li><b><tt>lati,loni</tt></b> geographic coordinates (can be any size)</li></ul></div><p><b>Outputs:</b></p><div><ul><li><b><tt>umajor</tt></b> Major axis, the largest current for the constituent (m/s). Always positive.</li><li><b><tt>uminior</tt></b> Minor axis, the smallest current (m/s). Negative uminor indicates clockwise flow.</li><li><b><tt>uphase</tt></b> Reference point on the ellipse (degrees)</li><li><b><tt>uincl</tt></b> Inclination (degrees)</li></ul></div><h2 id="3">Example</h2><p>Get the tidal ellipse parameters for the o1 constituent:</p><pre class="codeinput">fn = <span class="string">'CATS2008_update_2022-06-11.nc'</span>;
+lat = -71.9102;
+lon =  172.6590;
+
+<span class="comment">% Get ellipse parameters:</span>
+[umaj,umin,uphase,uincl] = tmd_ellipse(fn,<span class="string">'o1'</span>,lat,lon);
+
+<span class="comment">% Print the numbers:</span>
+[umaj umin uphase uincl]
+</pre><pre class="codeoutput">ans =
+    0.2060   -0.0886   36.9514   56.3513
+</pre><p>The numbers above describe a clockwise flow (negative umin) with a maximum tidal velocity of 20.6 cm/s.</p><h2 id="5">Explanation of the ellipse parameters</h2><p>What exactly do the major and minor axes mean? Let's dig in to what the o1 constituent looks like at this location. For this, we will plot one complete cycle of tidal currents for the o1 constituent. How long does it take to complete one o1 cycle?</p><pre class="codeinput"><span class="comment">% Get the o1 constituent angular frequency (rad/s):</span>
+[~,~,~,omega] = tmd_constit(<span class="string">'o1'</span>);
+
+<span class="comment">% Convert omega to period in days:</span>
+T = (2*pi/omega)/(24*60*60)
+</pre><pre class="codeoutput">T =
+    1.0758
+</pre><p>The o1 constituent has a period of about 1.08 days, so we'll start by making an hourly time array that spans 1.08 days. Then we'll solve tidal currents u and v at times t for the location defined above.</p><pre class="codeinput"><span class="comment">% Hourly time array spanning one o1 period:</span>
+t = datenum(2022,1,1):1/24:(datenum(2022,1,1)+T);
+
+<span class="comment">% Predict hourly tides, considering only the o1 constituent:</span>
+u = tmd_predict(fn,lat,lon,t,<span class="string">'u'</span>,<span class="string">'constituent'</span>,<span class="string">'o1'</span>);
+v = tmd_predict(fn,lat,lon,t,<span class="string">'v'</span>,<span class="string">'constituent'</span>,<span class="string">'o1'</span>);
+
+<span class="comment">% Define an array of colors:</span>
+col = flipud(parula(length(t)));
+
+figure
+hold <span class="string">on</span>
+<span class="keyword">for</span> k=1:length(t)
+    plot([0 u(k)],[0 v(k)],<span class="string">'color'</span>,col(k,:));
+    text(u(k),v(k),num2str(k-1),<span class="string">'color'</span>,col(k,:))
+<span class="keyword">end</span>
+grid <span class="string">on</span>
+axis <span class="string">equal</span>
+xlabel <span class="string">'eastward velocity (m/s)'</span>
+ylabel <span class="string">'northward velocity (m/s)'</span>
+</pre><img vspace="5" hspace="5" src="tmd_ellipse_documentation_01.png" alt=""> <p>Above, we see that at hour 0, o1 current velocity was to the northeast. The negative value of <tt>umin</tt> already told us it's a clockwise ellipse, and as expected, the current sweeps through an elliptical path over the course of the day, ending up back at the starting place just under 26 hours later.</p><p>Here is an ellipse plotted directly from the tidal ellipse parameters:</p><pre class="codeinput"><span class="comment">% Equation of an unrotated ellipse:</span>
+foo = linspace(0,2*pi,500);
+x = umaj*cos(foo);
+y = umin*sin(foo);
+
+<span class="comment">% Rotate the ellipse:</span>
+[theta,r] = cart2pol(x,y);
+[xr,yr] = pol2cart(theta+uincl*pi/180,r);
+
+<span class="comment">% Plot the rotated ellipse:</span>
+plot(xr,yr,<span class="string">'r'</span>)
+</pre><img vspace="5" hspace="5" src="tmd_ellipse_documentation_02.png" alt=""> <h2 id="8">Are the ellipse parameters wrong?</h2><p>Here's a question I do not know the answer to: Why doesn't the red ellipse line up perfectly with the predicted hourly currents? The <tt>umaj</tt> and <tt>umin</tt> parameters are slightly smaller than necessary to meet the hourly predictions. Have I plotted the red ellipse incorrectly, is there a mistake in the <tt>tmd_ellipse</tt> code, or is there some fundamental concept I'm misunderstanding here? If you know the answer and this section of the doc is still on GitHub, please reach out and explain it to me.</p><h2 id="9">References</h2><p>Foreman, M. G. G., &amp; Henry, R. F. (1989). The harmonic analysis of tidal model time series. Advances in water resources, 12(3), 109-120. <a href="https://doi.org/10.1016/0309-1708(89)90017-1">https://doi.org/10.1016/0309-1708(89)90017-1</a></p><h2 id="10">Author Info</h2><p>The <tt>tmd_ellipse</tt> function and its documentation were written by Chad A. Greene and Laurie Padman, June 2022.</p><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2021a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% |tmd_ellipse| documentation
+% tmd_ellipse gives tidal ellipse parameters at specified location(s).  
+% 
+% <TMD_Contents.html Back to Tide Model Driver Contents>.
+%% Syntax
+% 
+%  [umajor,uminor,uphase,uincl] = tmd_ellipse(filename,constituent,lati,loni)
+% 
+%% Description
+% 
+% |[umajor,uminor,uphase,uincl] = tmd_ellipse(filename,constituent,lati,loni)|
+% gives the major and minor axes of tidal current velocities. 
+%
+% *Inputs:*
+%  
+% * *|filename|* TMD3.0 compatible tide model ending in .nc. 
+% * *|constituent|* string constituent (e.g., 'm2') 
+% * *|lati,loni|* geographic coordinates (can be any size)
+% 
+% *Outputs:* 
+%
+% * *|umajor|* Major axis, the largest current for the constituent (m/s). Always positive. 
+% * *|uminior|* Minor axis, the smallest current (m/s). Negative uminor indicates clockwise flow.  
+% * *|uphase|* Reference point on the ellipse (degrees)
+% * *|uincl|* Inclination (degrees) 
+%
+%% Example 
+% Get the tidal ellipse parameters for the o1 constituent:
+
+fn = 'CATS2008_update_2022-06-11.nc'; 
+lat = -71.9102; 
+lon =  172.6590;
+
+% Get ellipse parameters: 
+[umaj,umin,uphase,uincl] = tmd_ellipse(fn,'o1',lat,lon);
+
+% Print the numbers: 
+[umaj umin uphase uincl]
+
+%%
+% The numbers above describe a clockwise flow (negative umin) with a
+% maximum tidal velocity of 20.6 cm/s. 
+
+%% Explanation of the ellipse parameters
+% What exactly do the major and minor axes mean? Let's dig in to what the
+% o1 constituent looks like at this location. For this, we will plot one
+% complete cycle of tidal currents for the o1 constituent. How long does it
+% take to complete one o1 cycle? 
+
+% Get the o1 constituent angular frequency (rad/s):
+[~,~,~,omega] = tmd_constit('o1'); 
+
+% Convert omega to period in days: 
+T = (2*pi/omega)/(24*60*60) 
+
+%%
+% The o1 constituent has a period of about 1.08 days, so we'll start by making 
+% an hourly time array that spans 1.08 days. Then we'll solve tidal currents 
+% u and v at times t for the location defined above. 
+
+% Hourly time array spanning one o1 period: 
+t = datenum(2022,1,1):1/24:(datenum(2022,1,1)+T); 
+
+% Predict hourly tides, considering only the o1 constituent: 
+u = tmd_predict(fn,lat,lon,t,'u','constituent','o1'); 
+v = tmd_predict(fn,lat,lon,t,'v','constituent','o1'); 
+
+% Define an array of colors:
+col = flipud(parula(length(t))); 
+
+figure
+hold on
+for k=1:length(t)
+    plot([0 u(k)],[0 v(k)],'color',col(k,:));
+    text(u(k),v(k),num2str(k-1),'color',col(k,:))
+end
+grid on
+axis equal
+xlabel 'eastward velocity (m/s)' 
+ylabel 'northward velocity (m/s)' 
+
+%%
+% Above, we see that at hour 0, o1 current velocity was to the northeast.
+% The negative value of |umin| already told us it's a clockwise ellipse,
+% and as expected, the current sweeps through an elliptical path over the
+% course of the day, ending up back at the starting place just under 26
+% hours later. 
+% 
+% Here is an ellipse plotted directly from the tidal ellipse parameters: 
+
+% Equation of an unrotated ellipse: 
+foo = linspace(0,2*pi,500); 
+x = umaj*cos(foo); 
+y = umin*sin(foo); 
+
+% Rotate the ellipse: 
+[theta,r] = cart2pol(x,y);
+[xr,yr] = pol2cart(theta+uincl*pi/180,r);
+
+% Plot the rotated ellipse:
+plot(xr,yr,'r')
+
+%% Are the ellipse parameters wrong? 
+% Here's a question I do not know the answer to: Why doesn't the red
+% ellipse line up perfectly with the predicted hourly currents? The |umaj| 
+% and |umin| parameters are slightly smaller than necessary to meet the
+% hourly predictions. Have I plotted the red ellipse incorrectly, is there 
+% a mistake in the |tmd_ellipse| code, or is there some fundamental concept
+% I'm misunderstanding here? If you know the answer and this section of the
+% doc is still on GitHub, please reach out and explain it to me. 
+
+%% References 
+% 
+% Foreman, M. G. G., & Henry, R. F. (1989). The harmonic analysis of tidal 
+% model time series. Advances in water resources, 12(3), 109-120.
+% <https://doi.org/10.1016/0309-1708(89)90017-1>
+% 
+%% Author Info 
+% The |tmd_ellipse| function and its documentation were written by Chad A.
+% Greene and Laurie Padman, June 2022. 
+
+##### SOURCE END #####
+--></body></html>

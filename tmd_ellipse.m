@@ -19,26 +19,12 @@ function [umajor,uminor,uphase,uincl] = tmd_ellipse(filename,constituent,lati,lo
 %    umajor: Major axis, the largest current for the constituent (m/s). Always positive. 
 %    uminior: Minor axis, the smallest current (m/s). Negative uminor indicates clockwise flow.  
 %    uphase: Reference point on the ellipse (degrees)
-%    uincl: Inclination
+%    uincl: Inclination (degrees) 
 %
 %% Example 
-% % 
-% fn = 'CATS2008_update_2022-06-12.nc'; 
-% lat = -71.9102; 
-% lon =  172.6590;
+% For examples, type 
 % 
-% [umaji,umini,uphasei,uincli] = tmd_ellipse(fn,'o1',lat,lon)
-% umaji =
-%     0.2060
-% umini =
-%    -0.0886
-% uphasei =
-%    36.9514
-% uincli =
-%    56.3513
-% 
-% % The above indicates clockwise flow with a max velocity of about 20
-% cm/s.
+%  tmd tmd_ellipse
 %
 %% References 
 % 
@@ -58,6 +44,8 @@ function [umajor,uminor,uphase,uincl] = tmd_ellipse(filename,constituent,lati,lo
 %% Input checks
 
 narginchk(4,4)
+assert(ischar(constituent),'Input error: Constituent must be a string.')
+assert(isnumeric(lati)&isnumeric(loni),'Input error: lati and loni must be numeric.') 
 assert(isequal(size(lati),size(loni)),'Dimensions of lati,loni must agree.')
 
 %% Load data 
@@ -68,7 +56,7 @@ v = tmd_interp(filename,'v',lati,loni,'constituents',constituent);
 %% Calculate ellipses 
 
 % change to polar coordinates 
-% Chad Greene swapped +/- to adapt to TMD3.0's complex number convention.  
+% Chad Greene swapped +/- to match TMD3.0's complex number convention.  
 t1p = (real(u) + imag(v));
 t2p = (real(v) - imag(u));
 t1m = (real(u) - imag(v));

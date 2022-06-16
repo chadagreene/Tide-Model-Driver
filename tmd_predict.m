@@ -144,10 +144,6 @@ hc = permute(hc,[3 1 2]); % puts constituents in first column.
 [s,h,p,N] = tmd_astrol(t);
 [~,~,ph,omega,~] = tmd_constit(conList);
 
-% if flexure 
-%    flex = tmd_interp(filename,'flexure',lat,lon); 
-% end
-
 %% Predict tides
 
 if MapSolution
@@ -181,11 +177,6 @@ else % Single-location time series or drift track
    end
    z = d_minor + hhat; 
 end
-
-% Account for ice shelf flexure in the grounding zone: 
-% if flexure 
-%    z = z.*flex; 
-% end
 
 %% Clean up 
 

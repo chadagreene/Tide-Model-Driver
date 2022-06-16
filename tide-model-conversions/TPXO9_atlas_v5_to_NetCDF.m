@@ -126,6 +126,7 @@ netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Description','Global tide mo
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Author','Egbert, Gary D., and Svetlana Y. Erofeeva.');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'creation_date',datestr(now,'yyyy-mm-dd'));
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'tmd_version',3.0);
+netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'model_type','ocean');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'license','ask');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Data_citation','Egbert, Gary D., and Svetlana Y. Erofeeva. "Efficient inverse modeling of barotropic ocean tides." Journal of Atmospheric and Oceanic Technology 19.2 (2002): 183-204.')
    

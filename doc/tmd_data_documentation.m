@@ -1,4 +1,4 @@
-%% |tmd_data|
+%% |tmd_data| documentation 
 % |tmd_data| loads tide model data into the Matlab workspace. 
 % 
 % <TMD_Contents.html Back to Tide Model Driver Contents>.

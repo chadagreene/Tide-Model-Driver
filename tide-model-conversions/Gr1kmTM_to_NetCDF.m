@@ -144,6 +144,7 @@ netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Author','Susan L. Howard & L
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'creation_date',datestr(now,'yyyy-mm-dd'));
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'NetCDF_conversion','Chad A. Greene');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'tmd_version',3.0);
+netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'model_type','ocean');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'license','MIT License');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Data_citation',['Susan L. Howard and Laurie Padman. 2021. Gr1kmTM: Greenland 1 kilometer Tide Model, 2021. urn:node:ARCTIC. doi:10.18739/A2251FM3S.'])
 

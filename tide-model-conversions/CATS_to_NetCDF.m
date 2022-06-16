@@ -215,6 +215,7 @@ netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Author','Susan Howard, Svetl
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'creation_date',datestr(now,'yyyy-mm-dd'));
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'NetCDF_conversion','Chad A. Greene');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'tmd_version',3.0);
+netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'model_type','ocean');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'license','MIT License');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Data_citation',['Howard, S. L., Erofeeva, S., & Padman, L. (2019) "CATS2008: Circum-Antarctic Tidal Simulation version 2008" u.S. Antarctic Program (USAP) Data Center. doi: https://doi.org/10.15784/601235.'])
 

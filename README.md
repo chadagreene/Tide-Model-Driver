@@ -15,7 +15,7 @@ For most applications, **`tmd_predict` is the only function you will need to cal
 * [`tmd_interp`](doc/tmd_interp_documentation.md) provides water column thickness, land/ocean mask, ice shelf flexure, and tidal constiuent parameters at specified geographic locations, for a given tide model. 
 * [`tmd_data`](doc/tmd_data_documentation.md) loads gridded tide model data without interpolation. 
 * [`tmd_conlist`](doc/tmd_conlist_documentation.md) returns a list of tidal constituents in a TMD3.0 compatible consolidated NetCDF tide model file. 
-* `tmd_ellipse` gives tidal ellipse parameters at specified location(s).  
+* [`tmd_ellipse`](doc/tmd_ellipse_documentation.md) gives tidal ellipse parameters at specified location(s).  
 
 #### Under-the-hood functions:
 
@@ -67,8 +67,8 @@ TMD3.0 is a rewrite of the [Tide Model Driver for MATLAB v2.5](https://github.co
 # Alternatives to MATLAB
 Don't like MATLAB? No worries, just try one of these alternatives: 
 
-* **PYTHON:** [pyTMD](https://github.com/tsutterley/pyTMD) is a tidal prediction software that can read OTIS, GOT and FES formatted tidal solutions for predicting ocean and load tides.
-* **FORTRAN:** A Fortran version of this package is made available through OSU: [OSU Tidal Prediction software (OTPS)](https://www.tpxo.net/otps).
+* **Python:** [pyTMD](https://github.com/tsutterley/pyTMD) is a tidal prediction software that can read OTIS, GOT and FES formatted tidal solutions for predicting ocean and load tides.
+* **Fortran:** A Fortran version of this package is made available through OSU: [OSU Tidal Prediction software (OTPS)](https://www.tpxo.net/otps).
 * **Octave:** It is *possible* that TMD3.0 works with [Octave](https://www.gnu.org/software/octave/index) as it is currently written. I haven't checked, but most of the TMD functions are pretty basic, so Octave's functions might be exact clones. If you use Octave and you want to give TMD3.0 a try, please let me know how it goes! 
 
 # Author Info & Citation Information
