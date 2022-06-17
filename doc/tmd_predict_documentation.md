@@ -253,6 +253,7 @@ plot(di,z_flexure,'linewidth',2)
 box off
 axis tight
 legend('NaN (default)','unmask','flexure','location','best')
+ylabel 'tidal deflection (m)'
 
 % Plot bedmachine profile for context: 
 subplot(2,1,2) 
