@@ -122,6 +122,12 @@ if numel(lat)>1 & ~isequal(size(lat),size(lon),size(t))
    MapSolution = true; 
 end
    
+if MapSolution & numel(t)>1
+   MakeWaitbar=true; 
+else
+   MakeWaitbar=false; 
+end
+
 %%
 
 if isdatetime(t)
@@ -153,6 +159,10 @@ if MapSolution
    
    isf = all(isfinite(hc),1); % continent or out-of-model-domain values are nan.  
    
+   if MakeWaitbar
+      w = waitbar(0,'Predicting tides...');
+   end
+   
    % Solve for each timestep:
    for k = 1:length(t)
       
@@ -165,6 +175,14 @@ if MapSolution
       end
    
       z(isf,k) = d_minor + hhat; 
+      
+      if MakeWaitbar
+         waitbar(k/length(t),w,'Predicting tides...')
+      end
+   end
+   
+   if MakeWaitbar
+      close(w)
    end
 
 else % Single-location time series or drift track  

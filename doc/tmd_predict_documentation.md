@@ -152,7 +152,7 @@ title 'Syowa station tide gauge'
 ```
 <img src="markdown_figures/tmd_predict_documentation_04_hires.png" width="500"/>
 
-For 26 years, the tide gauge at Syowa station has logged hourly tides, with only a few interuptions. Clearly, tidal variability exists here, but what does the CATS model think? 
+For 26 years, the tide gauge at Syowa station has logged hourly tides, with only a few interruptions. Clearly, tidal variability exists here, but what does the CATS model think? 
 
 ```matlab
 % Predict tides at the location of interest: 
@@ -263,6 +263,100 @@ xlabel 'distance along profile (km)'
 ```
 
 <img src="markdown_figures/tmd_predict_documentation_08_hires.png" width="500"/>
+
+## Example: Drift Track
+We've all been there. You've gassed up your dinghy, and you're about to run some illegal substances from Miami Beach to Red Bay, Bahamas. You know the trip will take 24 hours, but you're not sure what kind of tides you'll experience along the way. Well there's nothing to worry about, because we have TMD! 
+
+```matlab
+% 24 hours of data at 1 minute resolution: 
+t = datetime('may 27, 2022 6:00'):minutes(1):datetime('may 28, 2022 6:00'); 
+
+% GPS locations along the way from Miami to Bahamas: 
+lat = linspace(25.8063895,25.1288549,length(t)); 
+lon = linspace(-80.1228916,-78.2059635,length(t)); 
+
+% Predict tides along the drift track: 
+z = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'z','coasts','unmask'); 
+
+figure
+geoscatter(lat,lon,20,z,'filled')
+geolimits([24.5 26.5],[-81 -77.5])
+geobasemap streets
+caxis([-1 1]*.35)
+cmocean balance 
+cb = colorbar; 
+ylabel(cb,'tide height (m)')
+```
+
+<img src="markdown_figures/tmd_predict_documentation_09_hires.png" width="500"/>
+
+The blue on each end of the trip means you'll depart and arrive at low-ish tide, and the two red sections means you'll experience two high tides along the way. 
+
+## Example: Time series of maps 
+If you give |tmd_predict| an MxN array of geographic points along with a 1D vector of times, the function will return a cube of tide solutions whose dimensions correspond to the dimensions of the geographic grid and the number of timesteps. 
+ 
+*Be careful:* Depending on the number of grid points and the number of timesteps, the cubes created by |tmd_predict| can easily become huge and/or take a long time to solve. Here we predict for 25 hourly solutions for the Arctic Ocean. 
+
+For this example, we're creating a grid in equally spaced polar stereographic meters and then we convert the grid points to geographic coordinates. You can just as easily solve in equally-space geo points, but for for this particular application, polar stereographic makes a little sense, because every grid cell will end up being the same size. Below I'm using the [Arctic Mapping Tools](https://github.com/chadagreene/arctic-mapping-tools)' `psn2ll` to convert the ps meters to lat,lon coordinates: 
+
+```matlab
+% Create a grid
+x = (-2700:5:3600)*1000;
+y = (2000:-5:-4000)*1000; 
+[X,Y] = meshgrid(x,y); 
+[Lat,Lon] = psn2ll(X,Y); 
+
+t = datenum('march 29, 2017'):1/24:datenum('march 30, 2017'); 
+Z = tmd_predict('Arc2kmTM_v1.nc',Lat,Lon,t); 
+```
+
+If you're following along, you probably noticed it took a minute to churn  through all 25 hourly solutions for a grid this size. That is expected, so again, be mindful that solving a long time series with short timesteps and a big grid will probably take a while to solve. 
+
+Here's a look at the data we just created:
+
+``` matlab
+>> whos Lat Lon Z t
+  Name         Size                     Bytes  Class     Attributes
+
+  Lat       1201x1261                12115688  double              
+  Lon       1201x1261                12115688  double              
+  Z         1201x1261x25            302892200  double              
+  t            1x25                       200  double 
+```
+
+Above, you see that `Lat` and `Lon` are both 1201x1261, `t` has 25 hourly timesteps, and `Z`'s dimensions are then 1201x1261x25. 
+
+Here's what the data looks like when we animate it. Below, I'm using the |`cmocean` and `gif` functions from the [Climate Data Toolbox for MATLAB](https://github.com/chadagreene/CDT).
+
+```matlab
+% Get water column thickness for visual context: 
+wct = tmd_interp('Arc2kmTM_v1.nc','wct',Lat,Lon); 
+  
+figure
+h = imagesc(x,y,Z(:,:,1));
+h.AlphaData = wct>0; % makes land transparent
+hold on
+axis xy tight
+[~,hC] = contourpsn(Lat,Lon,wct,0:500:7000); 
+hC.LineWidth = 0.25; 
+hC.Color = .5*[1 1 1]; 
+caxis([-1 1]*5)
+cmocean bal
+set(gca,'color',[.01 .21 0],... % makes land dark green
+   'xtick',[],'ytick',[],...  % removes tick labels
+   'position',[0 0 1 1]); % fills the entire figure
+txt = text(.5,1,datestr(t(1),'mmm dd, yyyy HH:MM:SS'),...
+   'units','normalized','vert','top','horiz','center',...
+   'fontweight','bold','fontsize',16,'backgroundcolor','w'); 
+
+gif('html/arctic_tides.gif','delaytime',1/10)
+for k = 2:25
+   h.CData = Z(:,:,k); 
+   txt.String = datestr(t(k),'mmm dd, yyyy HH:MM:SS');
+   gif
+end
+```
+<img src="html/arctic_tides.gif" width="500"/>
 
 ## Author Info 
 The `tmd_predict` function and its documentation were written by Chad A. Greene, June 2022. 
