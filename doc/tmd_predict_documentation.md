@@ -293,9 +293,9 @@ ylabel(cb,'tide height (m)')
 The blue on each end of the trip means you'll depart and arrive at low-ish tide, and the two red sections means you'll experience two high tides along the way. 
 
 ## Example: Time series of maps 
-If you give |tmd_predict| an MxN array of geographic points along with a 1D vector of times, the function will return a cube of tide solutions whose dimensions correspond to the dimensions of the geographic grid and the number of timesteps. 
+If you give `tmd_predict` an MxN array of geographic points along with a 1D vector of times, the function will return a cube of tide solutions whose dimensions correspond to the dimensions of the geographic grid and the number of timesteps. 
  
-*Be careful:* Depending on the number of grid points and the number of timesteps, the cubes created by |tmd_predict| can easily become huge and/or take a long time to solve. Here we predict for 25 hourly solutions for the Arctic Ocean. 
+**Be careful:** Depending on the number of grid points and the number of timesteps, the cubes created by `tmd_predict` can easily become huge and/or take a long time to solve. Here we predict for 25 hourly solutions for the Arctic Ocean. 
 
 For this example, we're creating a grid in equally spaced polar stereographic meters and then we convert the grid points to geographic coordinates. You can just as easily solve in equally-space geo points, but for for this particular application, polar stereographic makes a little sense, because every grid cell will end up being the same size. Below I'm using the [Arctic Mapping Tools](https://github.com/chadagreene/arctic-mapping-tools)' `psn2ll` to convert the ps meters to lat,lon coordinates: 
 
@@ -326,7 +326,7 @@ Here's a look at the data we just created:
 
 Above, you see that `Lat` and `Lon` are both 1201x1261, `t` has 25 hourly timesteps, and `Z`'s dimensions are then 1201x1261x25. 
 
-Here's what the data looks like when we animate it. Below, I'm using the |`cmocean` and `gif` functions from the [Climate Data Toolbox for MATLAB](https://github.com/chadagreene/CDT).
+Here's what the data looks like when we animate it. Below, I'm using the `cmocean` and `gif` functions from the [Climate Data Toolbox for MATLAB](https://github.com/chadagreene/CDT).
 
 ```matlab
 % Get water column thickness for visual context: 
