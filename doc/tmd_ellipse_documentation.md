@@ -39,6 +39,8 @@ lon =  172.6590;
 
 % Print the numbers: 
 [umaj umin uphase uincl]
+ans =
+    0.2060   -0.0886   36.9514   56.3513
 ```
 
 The numbers above describe a clockwise flow (negative umin) with a maximum tidal velocity of 20.6 cm/s. 
@@ -52,6 +54,8 @@ What exactly do the major and minor axes mean? Let's dig in to what the o1 const
 
 % Convert omega to period in days: 
 T = (2*pi/omega)/(24*60*60) 
+T =
+    1.0758
 ```
 
 The o1 constituent has a period of about 1.08 days, so we'll start by making  an hourly time array that spans 1.08 days. Then we'll solve tidal currents  u and v at times t for the location defined above. 
