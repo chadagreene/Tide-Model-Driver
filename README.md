@@ -1,4 +1,5 @@
-# Tide Model Driver 3.0 (under construction🚧)
+# Tide Model Driver 3.0
+![TMD logo](doc/markdown_figures/tmd_logo.gif)
 Tide Model Driver for MATLAB, version 3.0. This is a fast, user-friendly, well-documented rewrite of [ESR](https://www.esr.org/)'s classic Tide Model Driver by [Svetlana Erofeeva](https://ceoas.oregonstate.edu/svetlana-erofeeva).
 
 # Installation 
@@ -53,7 +54,7 @@ Be sure to check out the documentation for each of the **Main functions**. There
 * [Tide Model Intercomparison](doc/tide_model_intercomparison.md)
 * [How to: Analyze ADCP current data](doc/tutorial_currents.md)
 * How to: Calculate tidal range🚧
-* How to: Animate tidal motion🚧
+* [How to: Animate tidal motion](doc/tmd_logo_animation.md)
 
 # What's new in TMD 3.0?
 TMD3.0 is a rewrite of the [Tide Model Driver for MATLAB v2.5](https://github.com/EarthAndSpaceResearch/TMD_Matlab_Toolbox_v2.5). The goal of this update was to create a clean, efficient set of functions that are well documented, easy to use, easy to debug. We also wanted to reduce the size, complexity, and overall hassle of dealing with multi-file or binary tide model data files. The biggest changes in this update to TMD3.0 are as follows: 

@@ -50,6 +50,7 @@
 % * <TMD_model_file_format.html TMD Model file format> 
 % * <tide_model_intercomparison.html Tide Model Intercomparison>
 % * <tutorial_currents.html How to: Analyze ADCP current data>
+% * <tmd_logo_animation.html How to: Animate Tide Data>
 
 %% Author Info & Citation Information
 % We are working on a proper literature citation. For now, if you use TMD3.0, please cite the following: 
