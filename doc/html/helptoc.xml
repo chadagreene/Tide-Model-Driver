@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding="utf-8"?>
+
+<toc version="2.0">
+<!-- First tocitem specifies top level in Help browser Contents pane -->
+<!-- This can be a roadmap page, as shown below, or a content page -->
+    <tocitem target="TMD_main_page.html">Tide Model Driver
+        <!-- Nest tocitems to create hierarchical entries in  Contents-->
+        <!-- To include icons, use the following syntax for tocitems: -->
+        <!-- <tocitem target="foo.html" image="HelpIcon.NAME"> -->
+        <!-- Title-of-Section </tocitem> -->
+        <!-- where NAME is one of the following (use capital letters): -->
+        <!-- FUNCTION, USER_GUIDE, EXAMPLES, BLOCK, GETTING_STARTED, -->
+        <!-- DEMOS, RELEASE_NOTES --> 
+        <!-- Icon images used for these entries are also stored in -->
+        <!-- matlabroot/toolbox/matlab/icons -->
+        <!-- A Getting Started Guide usually comes first -->
+
+        <tocitem target="TMD_main_page.html">Functions 
+            <tocitem target="tmd_predict_documentation.html">tmd_predict</tocitem>
+            <tocitem target="tmd_interp_documentation.html">tmd_interp</tocitem>
+            <tocitem target="tmd_data_documentation.html">tmd_data</tocitem>
+            <tocitem target="tmd_conlist_documentation.html">tmd_conlist</tocitem>
+            <tocitem target="tmd_ellipse_documentation.html">tmd_ellipse</tocitem>
+        </tocitem>
+        
+
+        <tocitem target="TMD_main_page.html">Examples, etc 
+            <tocitem target="TMD_model_file_format.html">TMD model file format</tocitem>
+            <tocitem target="tide_model_intercomparison.html">Tide Model Intercomparison</tocitem>
+            <tocitem target="tutorial_currents.html">How to: Analyze ADCP current data</tocitem>
+            <tocitem target="tutorial_tidal_range.html">How to: Calculate tidal range</tocitem>
+            <tocitem target="tmd_logo_animation.html">How to: Animate tidal motion</tocitem>
+        </tocitem>
+
+
+        <!-- Optional link or links to your or other Web sites -->
+        <tocitem target="https://github.com/chadagreene/Tide-Model-Driver" 
+                 image="$toolbox/matlab/icons/webicon.gif">
+        TMD GitHub page
+        </tocitem>
+    </tocitem>
+</toc>
