@@ -11,7 +11,7 @@ function R = tidal_range(filename_or_hc,conList,mask)
 % 
 % R = tidal_range(filename) returns the peak-to-peak tidal height range for
 % a given TMD3.0 tide model file. Tidal range is calculated as the maximum
-% minus minimum predicted values over a 14 day period, calculated at 30
+% minus minimum predicted values over a one year period, calculated at 30
 % minute temporal resolution, including major and minor constituents. 
 % 
 % R = tidal_range(hc,conList,mask) computes the tidal range for the
@@ -22,15 +22,15 @@ function R = tidal_range(filename_or_hc,conList,mask)
 %
 %% Example 
 % 
-% R = tidal_range('/Users/cgreene/data/CATS2008_update_2022-04-22.nc');
+% R = tidal_range('CATS2008_update_2022-06-11.nc');
 % 
 %% Author Info 
 % Written by Chad A. Greene, June 2022. 
 
 %% 
 
-% A month of 30 minute timesteps: 
-t = (datenum(2000,1,1):1/48:datenum(2000,1,31))';
+% A year of 30 minute timesteps: 
+t = (datenum(2000,1,1):1/48:datenum(2001,1,1))';
 
 %% Load data
 

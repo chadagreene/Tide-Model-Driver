@@ -53,7 +53,7 @@ Be sure to check out the documentation for each of the **Main functions**. There
 * [TMD Model file format](doc/TMD_model_file_format.md)
 * [Tide Model Intercomparison](doc/tide_model_intercomparison.md)
 * [How to: Analyze ADCP current data](doc/tutorial_currents.md)
-* How to: Calculate tidal range🚧
+* [How to: Calculate tidal range](doc/tutorial_tidal_range.md)
 * [How to: Animate tidal motion](doc/tmd_logo_animation.md)
 
 # What's new in TMD 3.0?
