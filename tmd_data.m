@@ -54,6 +54,12 @@ function [Z,x_or_lon,y_or_lat,conList] = tmd_data(filename,variable,varargin)
 % are loaded, when only a small area within a larger tide model is of
 % interest. 
 % 
+% [Z,lon,lat] = tmd_data(...,'geo') returns grid coordinates as
+% geographic coordinates. This is the default behavior for global models,
+% whereas regional models return projected coordinates by default. 
+%
+% [...,cons] = tmd_data(...) returns a list of constituents in the model.  
+% 
 %% Examples 
 % For examples type 
 % 
