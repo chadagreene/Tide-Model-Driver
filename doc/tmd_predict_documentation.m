@@ -12,7 +12,7 @@
 % 
 %% Description 
 % 
-% |z = tmd_predict(filename,lat,lon,time)| predicts tide heights a the
+% |z = tmd_predict(filename,lat,lon,time)| predicts tide heights at the
 % specified |lat,lon| and |time|, using the TMD3.0 compatible consolidated
 % NetCDF tide model data file. Location(s) |lat,lon| are decimal degrees, and
 % can be scalars, vectors, or MxN arrays. Input |time| can be datetime or
@@ -30,13 +30,13 @@
 %  
 % |z = tmd_predict(filename,lat,lon,time,ptype,'constituents',conList)| 
 % specifies tidal constituents as a cell array (e.g, |{'m2','s2'}|). If 
-% constituents are not specified, all constituents from the model are returned. 
+% constituents are not specified, all constituents from the model are used. 
 % 
 % |z = tmd_predict(...,,'coasts',MaskingMethod)| specifies how coastal regions are masked. 
 % Can be |NaN|, |'flexure'|, or |'unmask'|. By default, |MaskingMethod| is |NaN|, meaning outputs 
 % are set to |NaN| wherever a nearest-neighbor interpolation of the ocean indicates land. 
 % The |'flexure'| option scales tidal constituents by a predicted coefficient of tidal 
-% deflection for ice shelf grounding zones. A third option, |'unmask'|, does not apply 
+% deflection for ice shelf grounding zones (for CATS only). A third option, |'unmask'|, does not apply 
 % any masking, which may be preferred close to coasts, where, for example, a tide gauge 
 % may exist between land and ocean grid cells. 
 % 
@@ -235,7 +235,7 @@ bedmachine % plots a gray grounding line
 scalebarps('color','w')
 
 %%
-% Let's imagine you collected laser altimetry by flying an airplaine down
+% Let's imagine you collected laser altimetry by flying an airplane down
 % the central trunk of Rutford Ice Stream. (For this example, we'll neglect
 % the time it takes to fly the plane, and imagine you flew the whole flight
 % path instantaneously). 
@@ -255,7 +255,7 @@ plot(xi,yi,'r','linewidth',3)
 text(xi(1),yi(1),'Flight path','color','r','fontsize',14,'vert','top')
 
 %% 
-% Detiding your airborne laser altimetry along this flight line requres
+% Detiding your airborne laser altimetry along this flight line requires
 % some knowledge of how much the ice surface should move as a result of
 % tides. The default behavior of |tmd_predict| assumes the entire ice shelf
 % is in total hydrostatic equilibrium and moves up and down with the total
@@ -299,7 +299,7 @@ xlabel 'distance along profile (km)'
 % We've all been there. You've gassed up your dinghy, and you're about to
 % run some illegal substances from Miami Beach to Red Bay, Bahamas. You know 
 % the trip will take 24 hours, but you're not sure what kind of tides
-% you'll experience along the way. Well there's nothing to worry about,
+% you'll experience along the way. Well, there's nothing to worry about,
 % because we have TMD! 
 
 % 24 hours of data at 1 minute resolution: 
@@ -339,9 +339,9 @@ ylabel(cb,'tide height (m)')
 %
 % For this example, we're creating a grid in equally spaced
 % polar stereographic meters and then we convert the grid points to geographic
-% coordinates. You can just as easily solve in equally-space geo points,
-% but for for this particular application, polar stereographic makes a
-% little sense, because every grid cell will end up being the same size.
+% coordinates. You can just as easily solve in equally-spaced geo points,
+% but for this particular application, polar stereographic makes more 
+% sense, because every grid cell will end up being the same size.
 % Below I'm using the <https://github.com/chadagreene/arctic-mapping-tools Arctic Mapping Tools'>
 % |psn2ll| to convert the ps meters to lat,lon coordinates: 
 

@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>tmd_predict documentation</title><meta name="generator" content="MATLAB 9.10"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2022-06-17"><meta name="DC.source" content="tmd_predict_documentation.m"><style type="text/css">
+      --><title>tmd_predict documentation</title><meta name="generator" content="MATLAB 9.10"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2022-06-22"><meta name="DC.source" content="tmd_predict_documentation.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -71,7 +71,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 z = tmd_predict(filename,lat,lon,time,ptype)
 z = tmd_predict(filename,lat,lon,time,ptype,'constituents',conList)
 z = tmd_predict(...,,'coasts',MaskingMethod)
-z = tmd_predict(...,'InferMinor',true_or_false)</pre><h2 id="2">Description</h2><p><tt>z = tmd_predict(filename,lat,lon,time)</tt> predicts tide heights a the specified <tt>lat,lon</tt> and <tt>time</tt>, using the TMD3.0 compatible consolidated NetCDF tide model data file. Location(s) <tt>lat,lon</tt> are decimal degrees, and can be scalars, vectors, or MxN arrays. Input <tt>time</tt> can be datetime or MATLAB's datenum format, and must be a scalar or a 1D vector.</p><p><tt>z = tmd_predict(filename,lat,lon,time,ptype)</tt> specifies a solution type. If <tt>ptype</tt> is not specified, <tt>'h'</tt> is the assumed <tt>ptype</tt>. Note the <tt>ptype</tt> is case sensitive! Options for <tt>ptype</tt> are:</p><div><ul><li><tt>'h'</tt> tidal height (m) (default)</li><li><tt>'u'</tt> zonal current velocity, positive pointing east (m/s)</li><li><tt>'v'</tt> meridional current velocity, positive pointing north (m/s)</li><li><tt>'U'</tt> zonal transport (m^2/s)</li><li><tt>'V'</tt> meridional height (m^2/s)</li></ul></div><p><tt>z = tmd_predict(filename,lat,lon,time,ptype,'constituents',conList)</tt> specifies tidal constituents as a cell array (e.g, <tt>{'m2','s2'}</tt>). If constituents are not specified, all constituents from the model are returned.</p><p><tt>z = tmd_predict(...,,'coasts',MaskingMethod)</tt> specifies how coastal regions are masked. Can be <tt>NaN</tt>, <tt>'flexure'</tt>, or <tt>'unmask'</tt>. By default, <tt>MaskingMethod</tt> is <tt>NaN</tt>, meaning outputs are set to <tt>NaN</tt> wherever a nearest-neighbor interpolation of the ocean indicates land. The <tt>'flexure'</tt> option scales tidal constituents by a predicted coefficient of tidal deflection for ice shelf grounding zones. A third option, <tt>'unmask'</tt>, does not apply any masking, which may be preferred close to coasts, where, for example, a tide gauge may exist between land and ocean grid cells.</p><p><tt>z = tmd_predict(...,'InferMinor',true_or_false)</tt> specifies whether minor constituents should be inferred (<tt>true</tt> or <tt>false</tt>). By default, minor constituents are inferred unless constituents are specified.</p><h2 id="3">Example: Tide gauge time series</h2><p>This example uses data from a tide gauge near Nuuk, Greenland. The example data is in the <tt>doc/example_data</tt> folder of this toolbox.</p><p>Start by loading the tide gauge data, then predict tides at that location using the 15 constituent global `TPXO9_atlas_v5` model and the 8 constituent `Gr1kmTM` regional model.</p><pre class="codeinput"><span class="comment">% Load tide gauge data:</span>
+z = tmd_predict(...,'InferMinor',true_or_false)</pre><h2 id="2">Description</h2><p><tt>z = tmd_predict(filename,lat,lon,time)</tt> predicts tide heights at the specified <tt>lat,lon</tt> and <tt>time</tt>, using the TMD3.0 compatible consolidated NetCDF tide model data file. Location(s) <tt>lat,lon</tt> are decimal degrees, and can be scalars, vectors, or MxN arrays. Input <tt>time</tt> can be datetime or MATLAB's datenum format, and must be a scalar or a 1D vector.</p><p><tt>z = tmd_predict(filename,lat,lon,time,ptype)</tt> specifies a solution type. If <tt>ptype</tt> is not specified, <tt>'h'</tt> is the assumed <tt>ptype</tt>. Note the <tt>ptype</tt> is case sensitive! Options for <tt>ptype</tt> are:</p><div><ul><li><tt>'h'</tt> tidal height (m) (default)</li><li><tt>'u'</tt> zonal current velocity, positive pointing east (m/s)</li><li><tt>'v'</tt> meridional current velocity, positive pointing north (m/s)</li><li><tt>'U'</tt> zonal transport (m^2/s)</li><li><tt>'V'</tt> meridional height (m^2/s)</li></ul></div><p><tt>z = tmd_predict(filename,lat,lon,time,ptype,'constituents',conList)</tt> specifies tidal constituents as a cell array (e.g, <tt>{'m2','s2'}</tt>). If constituents are not specified, all constituents from the model are used.</p><p><tt>z = tmd_predict(...,,'coasts',MaskingMethod)</tt> specifies how coastal regions are masked. Can be <tt>NaN</tt>, <tt>'flexure'</tt>, or <tt>'unmask'</tt>. By default, <tt>MaskingMethod</tt> is <tt>NaN</tt>, meaning outputs are set to <tt>NaN</tt> wherever a nearest-neighbor interpolation of the ocean indicates land. The <tt>'flexure'</tt> option scales tidal constituents by a predicted coefficient of tidal deflection for ice shelf grounding zones (for CATS only). A third option, <tt>'unmask'</tt>, does not apply any masking, which may be preferred close to coasts, where, for example, a tide gauge may exist between land and ocean grid cells.</p><p><tt>z = tmd_predict(...,'InferMinor',true_or_false)</tt> specifies whether minor constituents should be inferred (<tt>true</tt> or <tt>false</tt>). By default, minor constituents are inferred unless constituents are specified.</p><h2 id="3">Example: Tide gauge time series</h2><p>This example uses data from a tide gauge near Nuuk, Greenland. The example data is in the <tt>doc/example_data</tt> folder of this toolbox.</p><p>Start by loading the tide gauge data, then predict tides at that location using the 15 constituent global `TPXO9_atlas_v5` model and the 8 constituent `Gr1kmTM` regional model.</p><pre class="codeinput"><span class="comment">% Load tide gauge data:</span>
 fn = <span class="string">'h820_nuuk.nc'</span>;
 lat = ncread(fn,<span class="string">'lat'</span>);
 lon = ncread(fn,<span class="string">'lon'</span>);
@@ -95,7 +95,7 @@ datetick(<span class="string">'x'</span>,<span class="string">'keeplimits'</span
 </pre><img vspace="5" hspace="5" src="tmd_predict_documentation_01.png" alt=""> <p>In the figure above, we see that both the global and regional models match the observations pretty well, but neither is perfect. One way to assess tide model performance is to measure the distribution of the residuals after detiding an observation dataset. Here's what that might look like:</p><pre class="codeinput"><span class="comment">% Residuals of raw data, detided w/tpxo0, &amp; detided w/Gr1km:</span>
 std([sl sl-sl_tpxo9 sl-sl_Gr1km],<span class="string">'omitnan'</span>)
 </pre><pre class="codeoutput">ans =
-          1.08          0.17          0.19
+    1.0836    0.1747    0.1927
 </pre><p>The numbers above show that the raw data have a standard deviation of about 1.08 m. The 0.17 m standard deviation of residuals after detiding with TPXO9 suggests that TPXO9 does a slightly better job of capturing tidal variability here than Gr1kmTM, which has a 0.19 m distribution of residuals after detiding. In reality, a tide gauge captures dynamic ocean topography, variations in atmospheric pressure, and other phenomena that are not directly related to tidal variability, so the presence of residuals should not indicate failure of a model. It is possible that Gr1kmTM is as good or better than TPXO9 at this particular location, but further analysis is beyond the scope of this function reference page.</p><h2 id="6">Example: Map of tidal amplitude and currents</h2><p>Here's a map of tidal amplitudes at 12:30 in the afternoon on March 29, 2017. Note that TPXO9_atlas_v5 is a high resolution dataset with 15 constituents, so it may take a few seconds to predict a dense grid covering a large area. The Z prediction takes about 5 seconds on my laptop from 2019.</p><p>Below, we also use <a href="tmd_interp_documentation.html"><tt>tmd_interp</tt></a> to get the model's water column thicknes for context, and we plot 500 m wct contours as thin gray lines.</p><p>The <tt>cmocean</tt> colormap function is part of the Climate Data Toolbox for MATLAB and is also available as a standalone function from the MathWorks File Exchange.</p><pre class="codeinput"><span class="comment">% Define a time:</span>
 t = datetime(<span class="string">'march 29, 2017 12:30'</span>);
 
@@ -151,13 +151,13 @@ box <span class="string">off</span>
 axis <span class="string">tight</span>
 ylabel <span class="string">'tide gauge measurement (m)')</span>
 title <span class="string">'Syowa station tide gauge'</span>
-</pre><img vspace="5" hspace="5" src="tmd_predict_documentation_04.png" alt=""> <img vspace="5" hspace="5" src="tmd_predict_documentation_05.png" alt=""> <p>For 26 years, the tide gauge at Syowa station has logged hourly tides, with only a few interruptions. Clearly, tidal variability exists here, but what does the CATS model think?</p><pre class="codeinput"><span class="comment">% Predict tides at the location of interest:</span>
+</pre><img vspace="5" hspace="5" src="tmd_predict_documentation_04.png" alt=""> <p>For 26 years, the tide gauge at Syowa station has logged hourly tides, with only a few interruptions. Clearly, tidal variability exists here, but what does the CATS model think?</p><pre class="codeinput"><span class="comment">% Predict tides at the location of interest:</span>
 sl_cats = tmd_predict(<span class="string">'CATS2008_update_2022-06-11.nc'</span>,lat,lon,t,<span class="string">'h'</span>);
 
 <span class="comment">% See how many tide predictions are finite:</span>
 sum(isfinite(sl_cats))
 </pre><pre class="codeoutput">ans =
-             0
+     0
 </pre><p>The Syowa tide gauge is closer to a land pixel than an ocean pixel in the CATS model, so it gets NaN'd out by default. To un-NaN the interpolation, choose the <tt>'unmask'</tt> option:</p><pre class="codeinput">sl_cats = tmd_predict(<span class="string">'CATS2008_update_2022-06-11.nc'</span>,lat,lon,t,<span class="string">'h'</span>,<span class="string">'coasts'</span>,<span class="string">'unmask'</span>);
 sl_tpxo = tmd_predict(<span class="string">'TPXO9_atlas_v5.nc'</span>,lat,lon,t,<span class="string">'h'</span>,<span class="string">'coasts'</span>,<span class="string">'unmask'</span>);
 
@@ -167,7 +167,8 @@ plot(t,sl-sl_cats,<span class="string">'linewidth'</span>,1)
 plot(t,sl-sl_tpxo,<span class="string">'linewidth'</span>,1)
 xlim([datetime(<span class="string">'apr 9, 1998'</span>) datetime(<span class="string">'apr 21, 1998'</span>)]) <span class="comment">% zooms for clarity</span>
 legend(<span class="string">'observations'</span>,<span class="string">'detided by cats'</span>,<span class="string">'detided by tpxo'</span>,<span class="string">'locaton'</span>,<span class="string">'best'</span>)
-</pre><img vspace="5" hspace="5" src="tmd_predict_documentation_06.png" alt=""> <h2 id="11">Example: Ice shelf flexure</h2><p>This example assumes you have Antarctic Mapping Tools with the MODIS MOA and BedMachine plugins. Sorry about all of the dependencies, but I think it's important for context.</p><p>Start by defining a 500 m resolution grid around the grounding line of Rutford Ice Stream, Antarctica. Then calculate and display the estimated ice shelf flexure everywhere on the grid.</p><pre class="codeinput"><span class="comment">% Create a polar stereographic grid:</span>
+</pre><pre class="codeoutput">Warning: Ignoring extra legend entries. 
+</pre><img vspace="5" hspace="5" src="tmd_predict_documentation_05.png" alt=""> <h2 id="11">Example: Ice shelf flexure</h2><p>This example assumes you have Antarctic Mapping Tools with the MODIS MOA and BedMachine plugins. Sorry about all of the dependencies, but I think it's important for context.</p><p>Start by defining a 500 m resolution grid around the grounding line of Rutford Ice Stream, Antarctica. Then calculate and display the estimated ice shelf flexure everywhere on the grid.</p><pre class="codeinput"><span class="comment">% Create a polar stereographic grid:</span>
 res = 500; <span class="comment">% grid resolution in meters</span>
 x = -1474594:res:-991780;
 y = 521366:-res:-38552;
@@ -186,7 +187,7 @@ cb = colorbar;
 ylabel(cb,<span class="string">'ice shelf flexure coefficient'</span>)
 bedmachine <span class="comment">% plots a gray grounding line</span>
 scalebarps(<span class="string">'color'</span>,<span class="string">'w'</span>)
-</pre><img vspace="5" hspace="5" src="tmd_predict_documentation_07.png" alt=""> <p>Let's imagine you collected laser altimetry by flying an airplaine down the central trunk of Rutford Ice Stream. (For this example, we'll neglect the time it takes to fly the plane, and imagine you flew the whole flight path instantaneously).</p><p>Here's what your flight line looks like:</p><pre class="codeinput"><span class="comment">% Define a crude flowline:</span>
+</pre><img vspace="5" hspace="5" src="tmd_predict_documentation_06.png" alt=""> <p>Let's imagine you collected laser altimetry by flying an airplane down the central trunk of Rutford Ice Stream. (For this example, we'll neglect the time it takes to fly the plane, and imagine you flew the whole flight path instantaneously).</p><p>Here's what your flight line looks like:</p><pre class="codeinput"><span class="comment">% Define a crude flowline:</span>
 [xi,yi] = pspath([-1314322 -1181878 -1166297 -1231962],<span class="keyword">...</span>
                  [  130911   191012   300084   468143],<span class="keyword">...</span>
                  100,<span class="string">'method'</span>,<span class="string">'makima'</span>); <span class="comment">% 100 m spacing, makima interpolation</span>
@@ -197,7 +198,7 @@ di = pathdistps(xi,yi,<span class="string">'km'</span>);
 hold <span class="string">on</span>
 plot(xi,yi,<span class="string">'r'</span>,<span class="string">'linewidth'</span>,3)
 text(xi(1),yi(1),<span class="string">'Flight path'</span>,<span class="string">'color'</span>,<span class="string">'r'</span>,<span class="string">'fontsize'</span>,14,<span class="string">'vert'</span>,<span class="string">'top'</span>)
-</pre><img vspace="5" hspace="5" src="tmd_predict_documentation_08.png" alt=""> <p>Detiding your airborne laser altimetry along this flight line requres some knowledge of how much the ice surface should move as a result of tides. The default behavior of <tt>tmd_predict</tt> assumes the entire ice shelf is in total hydrostatic equilibrium and moves up and down with the total deflection of the tides, while grounded ice is NaN'd out. You can <tt>'unmask'</tt> the solution to get some information landward of the ocean pixels, or you can try to estimate ice <tt>'flexure'</tt> from a forward model.</p><p>Here's what the tidal solutions look like by default, unmasked, and accounting for ice shelf flexure:</p><pre class="codeinput"><span class="comment">% Convert to geo coordinates:</span>
+</pre><img vspace="5" hspace="5" src="tmd_predict_documentation_07.png" alt=""> <p>Detiding your airborne laser altimetry along this flight line requires some knowledge of how much the ice surface should move as a result of tides. The default behavior of <tt>tmd_predict</tt> assumes the entire ice shelf is in total hydrostatic equilibrium and moves up and down with the total deflection of the tides, while grounded ice is NaN'd out. You can <tt>'unmask'</tt> the solution to get some information landward of the ocean pixels, or you can try to estimate ice <tt>'flexure'</tt> from a forward model.</p><p>Here's what the tidal solutions look like by default, unmasked, and accounting for ice shelf flexure:</p><pre class="codeinput"><span class="comment">% Convert to geo coordinates:</span>
 [lati,loni] = ps2ll(xi,yi);
 
 <span class="comment">% Time of high tide at Rutford Ice Stream:</span>
@@ -225,7 +226,7 @@ subplot(2,1,2)
 bedmachine_profile(lati,loni,<span class="string">'horiz'</span>,di)
 axis <span class="string">tight</span>
 xlabel <span class="string">'distance along profile (km)'</span>
-</pre><img vspace="5" hspace="5" src="tmd_predict_documentation_09.png" alt=""> <h2 id="14">Example: Drift track</h2><p>We've all been there. You've gassed up your dinghy, and you're about to run some illegal substances from Miami Beach to Red Bay, Bahamas. You know the trip will take 24 hours, but you're not sure what kind of tides you'll experience along the way. Well there's nothing to worry about, because we have TMD!</p><pre class="codeinput"><span class="comment">% 24 hours of data at 1 minute resolution:</span>
+</pre><img vspace="5" hspace="5" src="tmd_predict_documentation_08.png" alt=""> <h2 id="14">Example: Drift track</h2><p>We've all been there. You've gassed up your dinghy, and you're about to run some illegal substances from Miami Beach to Red Bay, Bahamas. You know the trip will take 24 hours, but you're not sure what kind of tides you'll experience along the way. Well, there's nothing to worry about, because we have TMD!</p><pre class="codeinput"><span class="comment">% 24 hours of data at 1 minute resolution:</span>
 t = datetime(<span class="string">'may 27, 2022 6:00'</span>):minutes(1):datetime(<span class="string">'may 28, 2022 6:00'</span>);
 
 <span class="comment">% GPS locations along the way from Miami to Bahamas:</span>
@@ -243,7 +244,7 @@ caxis([-1 1]*.35)
 cmocean <span class="string">balance</span>
 cb = colorbar;
 ylabel(cb,<span class="string">'tide height (m)'</span>)
-</pre><img vspace="5" hspace="5" src="tmd_predict_documentation_10.png" alt=""> <p>The blue on each end of the trip means you'll depart and arrive at low-ish tide, and the two red sections means you'll experience two high tides along the way.</p><h2 id="16">Example: Time series of maps</h2><p>If you give <tt>tmd_predict</tt> an MxN array of geographic points along with a 1D vector of times, the function will return a cube of tide solutions whose dimensions correspond to the dimensions of the geographic grid and the number of timesteps.</p><p><b>Be careful:</b> Depending on the number of grid points and the number of timesteps, the cubes created by <tt>tmd_predict</tt> can easily become huge and/or take a long time to solve. Here we predict for 25 hourly solutions for the Arctic Ocean.</p><p>For this example, we're creating a grid in equally spaced polar stereographic meters and then we convert the grid points to geographic coordinates. You can just as easily solve in equally-space geo points, but for for this particular application, polar stereographic makes a little sense, because every grid cell will end up being the same size. Below I'm using the <a href="https://github.com/chadagreene/arctic-mapping-tools">Arctic Mapping Tools'</a> <tt>psn2ll</tt> to convert the ps meters to lat,lon coordinates:</p><pre class="codeinput"><span class="comment">% Create a grid</span>
+</pre><img vspace="5" hspace="5" src="tmd_predict_documentation_09.png" alt=""> <p>The blue on each end of the trip means you'll depart and arrive at low-ish tide, and the two red sections means you'll experience two high tides along the way.</p><h2 id="16">Example: Time series of maps</h2><p>If you give <tt>tmd_predict</tt> an MxN array of geographic points along with a 1D vector of times, the function will return a cube of tide solutions whose dimensions correspond to the dimensions of the geographic grid and the number of timesteps.</p><p><b>Be careful:</b> Depending on the number of grid points and the number of timesteps, the cubes created by <tt>tmd_predict</tt> can easily become huge and/or take a long time to solve. Here we predict for 25 hourly solutions for the Arctic Ocean.</p><p>For this example, we're creating a grid in equally spaced polar stereographic meters and then we convert the grid points to geographic coordinates. You can just as easily solve in equally-spaced geo points, but for this particular application, polar stereographic makes more sense, because every grid cell will end up being the same size. Below I'm using the <a href="https://github.com/chadagreene/arctic-mapping-tools">Arctic Mapping Tools'</a> <tt>psn2ll</tt> to convert the ps meters to lat,lon coordinates:</p><pre class="codeinput"><span class="comment">% Create a grid</span>
 x = (-2700:5:3600)*1000;
 y = (2000:-5:-4000)*1000;
 [X,Y] = meshgrid(x,y);
@@ -251,7 +252,7 @@ y = (2000:-5:-4000)*1000;
 
 t = datenum(<span class="string">'march 29, 2017'</span>):1/24:datenum(<span class="string">'march 30, 2017'</span>);
 Z = tmd_predict(<span class="string">'Arc2kmTM_v1.nc'</span>,Lat,Lon,t);
-</pre><p>If you're following along, you probably noticed it took a minute to churn through all 25 hourly solutions for a grid this size. That is expected, so again, be mindful that solving a long time series with short timesteps and a big grid will probably take a while to solve.</p><p>Here's a look at the data we just created:</p><pre class="codeinput">whos <span class="string">Lat</span> <span class="string">Lon</span> <span class="string">Z</span> <span class="string">t</span>
+</pre><img vspace="5" hspace="5" src="tmd_predict_documentation_10.png" alt=""> <p>If you're following along, you probably noticed it took a minute to churn through all 25 hourly solutions for a grid this size. That is expected, so again, be mindful that solving a long time series with short timesteps and a big grid will probably take a while to solve.</p><p>Here's a look at the data we just created:</p><pre class="codeinput">whos <span class="string">Lat</span> <span class="string">Lon</span> <span class="string">Z</span> <span class="string">t</span>
 </pre><pre class="codeoutput">  Name         Size                     Bytes  Class     Attributes
 
   Lat       1201x1261                12115688  double              
@@ -296,7 +297,7 @@ end</pre><p><img vspace="5" hspace="5" src="arctic_tides.gif" alt=""> </p><h2 id
 % 
 %% Description 
 % 
-% |z = tmd_predict(filename,lat,lon,time)| predicts tide heights a the
+% |z = tmd_predict(filename,lat,lon,time)| predicts tide heights at the
 % specified |lat,lon| and |time|, using the TMD3.0 compatible consolidated
 % NetCDF tide model data file. Location(s) |lat,lon| are decimal degrees, and
 % can be scalars, vectors, or MxN arrays. Input |time| can be datetime or
@@ -314,13 +315,13 @@ end</pre><p><img vspace="5" hspace="5" src="arctic_tides.gif" alt=""> </p><h2 id
 %  
 % |z = tmd_predict(filename,lat,lon,time,ptype,'constituents',conList)| 
 % specifies tidal constituents as a cell array (e.g, |{'m2','s2'}|). If 
-% constituents are not specified, all constituents from the model are returned. 
+% constituents are not specified, all constituents from the model are used. 
 % 
 % |z = tmd_predict(...,,'coasts',MaskingMethod)| specifies how coastal regions are masked. 
 % Can be |NaN|, |'flexure'|, or |'unmask'|. By default, |MaskingMethod| is |NaN|, meaning outputs 
 % are set to |NaN| wherever a nearest-neighbor interpolation of the ocean indicates land. 
 % The |'flexure'| option scales tidal constituents by a predicted coefficient of tidal 
-% deflection for ice shelf grounding zones. A third option, |'unmask'|, does not apply 
+% deflection for ice shelf grounding zones (for CATS only). A third option, |'unmask'|, does not apply 
 % any masking, which may be preferred close to coasts, where, for example, a tide gauge 
 % may exist between land and ocean grid cells. 
 % 
@@ -519,7 +520,7 @@ bedmachine % plots a gray grounding line
 scalebarps('color','w')
 
 %%
-% Let's imagine you collected laser altimetry by flying an airplaine down
+% Let's imagine you collected laser altimetry by flying an airplane down
 % the central trunk of Rutford Ice Stream. (For this example, we'll neglect
 % the time it takes to fly the plane, and imagine you flew the whole flight
 % path instantaneously). 
@@ -539,7 +540,7 @@ plot(xi,yi,'r','linewidth',3)
 text(xi(1),yi(1),'Flight path','color','r','fontsize',14,'vert','top')
 
 %% 
-% Detiding your airborne laser altimetry along this flight line requres
+% Detiding your airborne laser altimetry along this flight line requires
 % some knowledge of how much the ice surface should move as a result of
 % tides. The default behavior of |tmd_predict| assumes the entire ice shelf
 % is in total hydrostatic equilibrium and moves up and down with the total
@@ -583,7 +584,7 @@ xlabel 'distance along profile (km)'
 % We've all been there. You've gassed up your dinghy, and you're about to
 % run some illegal substances from Miami Beach to Red Bay, Bahamas. You know 
 % the trip will take 24 hours, but you're not sure what kind of tides
-% you'll experience along the way. Well there's nothing to worry about,
+% you'll experience along the way. Well, there's nothing to worry about,
 % because we have TMD! 
 
 % 24 hours of data at 1 minute resolution: 
@@ -623,9 +624,9 @@ ylabel(cb,'tide height (m)')
 %
 % For this example, we're creating a grid in equally spaced
 % polar stereographic meters and then we convert the grid points to geographic
-% coordinates. You can just as easily solve in equally-space geo points,
-% but for for this particular application, polar stereographic makes a
-% little sense, because every grid cell will end up being the same size.
+% coordinates. You can just as easily solve in equally-spaced geo points,
+% but for this particular application, polar stereographic makes more 
+% sense, because every grid cell will end up being the same size.
 % Below I'm using the <https://github.com/chadagreene/arctic-mapping-tools Arctic Mapping Tools'>
 % |psn2ll| to convert the ps meters to lat,lon coordinates: 
 

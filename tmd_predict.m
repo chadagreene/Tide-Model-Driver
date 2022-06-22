@@ -12,7 +12,7 @@ function z = tmd_predict(filename,lat,lon,t,ptype,varargin)
 % 
 %% Description 
 % 
-% z = tmd_predict(filename,lat,lon,time) predicts tide heights a the
+% z = tmd_predict(filename,lat,lon,time) predicts tide heights at the
 % specified lat,lon and time, using the TMD3.0 compatible consolidated
 % NetCDF tide model data file. Location(s) lat,lon are decimal degrees, and
 % can be scalars, vectors, or MxN arrays. Input time can be datetime or
@@ -30,13 +30,13 @@ function z = tmd_predict(filename,lat,lon,t,ptype,varargin)
 %  
 % z = tmd_predict(filename,lat,lon,time,ptype,'constituents',conList) 
 % specifies tidal constituents as a cell array (e.g, {'m2','s2'}). If 
-% constituents are not specified, all constituents from the model are returned. 
+% constituents are not specified, all constituents from the model are used. 
 % 
 % z = tmd_predict(...,,'coasts',MaskingMethod) specifies how coastal regions are masked. 
 % Can be NaN, 'flexure', or 'unmask'. By default, MaskingMethod is NaN, meaning outputs 
 % are set to NaN wherever a nearest-neighbor interpolation of the ocean indicates land. 
 % The 'flexure' option scales tidal constituents by a predicted coefficient of tidal 
-% deflection for ice shelf grounding zones. A third option, 'unmask', does not apply 
+% deflection for ice shelf grounding zones (for CATS only). A third option, 'unmask', does not apply 
 % any masking, which may be preferred close to coasts, where, for example, a tide gauge 
 % may exist between land and ocean grid cells. 
 % 
