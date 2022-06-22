@@ -15,12 +15,12 @@
 %  
 % * *|filename|* TMD3.0 compatible tide model ending in .nc. 
 % * *|constituent|* string constituent (e.g., 'm2') 
-% * *|lati,loni|* geographic coordinates (can be any size)
+% * *|lati,loni|* geographic coordinates (can be any size, but must be equal size)
 % 
 % *Outputs:* 
 %
 % * *|umajor|* Major axis, the largest current for the constituent (m/s). Always positive. 
-% * *|uminior|* Minor axis, the smallest current (m/s). Negative uminor indicates clockwise flow.  
+% * *|uminor|* Minor axis, the smallest current (m/s). Negative uminor indicates clockwise flow.  
 % * *|uphase|* Reference point on the ellipse (degrees)
 % * *|uincl|* Inclination (degrees) 
 %

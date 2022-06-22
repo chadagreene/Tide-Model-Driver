@@ -4,11 +4,11 @@
 
 %% Method 1: Quick approximation 
 % The quick-and-dirty approach to calculating tidal range is simply to add
-% up the amplitudes of all of the constituents. For example, the
+% up the amplitudes of all the constituents. For example, the
 % |TPXO9_atlas_v5.nc| file contains 15 constituents that each oscillate as
 % sinusoids of different frequencies. If we ignore the patterns of constructive and
-% descrutive interference that occur when sinusoids of different frequencies are 
-% added together, we can say the peak-to-peak tidal range is 2 times the
+% destructive interference that occur when sinusoids of different frequencies are 
+% added together, we can say that the peak-to-peak tidal range is 2 times the
 % sum of the amplitudes of all of the constituents. 
 % 
 % Below, we load a global cube of tidal height amplitudes of all
@@ -33,9 +33,9 @@ earthimage('bottom','centerlon',180) % optional
 
 %% Minor constituents 
 % In the example above, we've ignored minor constituents, which can add
-% about 5 to 10% extra variability that isn't accounted for among the major
+% somewhere around 5% extra variability that isn't accounted for among the major
 % constituents, so if you're trying to estimate tidal range as I've shown above,
-% you might want to multiply |h_range| by 1.1 to account for minor
+% you might want to multiply |h_range| by 1.05 to account for minor
 % constituents, although that won't capture all of the variability
 % exactly. 
 
@@ -89,7 +89,8 @@ title 'Bay of Fundy tides in 2020'
 %%
 % Above, you see the pulsing of the fortnightly tides that dominate the
 % overall envelope, but it's worth noting that not all two-week intervals
-% look the same. The tides do not come close to their maximum or minimum values in
+% look the same, due to variability that exists at monthly and six-monthly 
+% timescales. The tides do not come close to their maximum or minimum values in
 % all of January or February. That's because the timing of the peaks of all
 % of the different sinusoidal constituents don't always coincide, so they
 % interfere destructively. Also note that the prediction from the
@@ -102,9 +103,17 @@ title 'Bay of Fundy tides in 2020'
 hi_range = max(hi)-min(hi)
 
 %% 
-% That's a meter less than we calculated by the simple sum of major
+% The value of 16.5 m is a meter less than we calculated by the simple sum of major
 % constituent amplitudes, because over the course of a year, all of the
 % peaks of all of the constituents never coincide all at once. 
+% 
+% On longer time scales, there is a lunar node tide modulation with a period 
+% of about 18.6 years that affects tidal predictions. Individual constituents 
+% can experience a 5-10% range in amplitude during this cycle, although tidal 
+% range is generally smaller depending on the balance between semidiurnal and 
+% diurnal constituents. The |tmd_predict| function does this correction for you. 
+% In the example here, this means that the range based on a year of data for 2020 
+% is not necessarily the highest range that the site ever sees.
 
 %% Method 2: Slow and inelegant 
 % Above, we saw how the simple sum of major constituent amplitudes provides
@@ -134,7 +143,7 @@ hi_range = max(hi)-min(hi)
 % predicts tides at 30 minute resolution, so it's even worse! However, 30
 % minutes is still sufficient to capture the overall shape of the diurnal
 % tides, so I only recommend changing the temporal resolution of the
-% |tidal_range| function to minutely if you want the solution to take 30
+% |tidal_range| function to one minute if you want the solution to take 30
 % times as long, for a marginal difference in tidal range value.
 % Nonetheless, if you'd like to adjust the duration or temporal resolution
 % of the |tidal_range| output, you may: 
@@ -149,11 +158,16 @@ hi_range = max(hi)-min(hi)
 %
 %% Method 3: Efficient, exact analytic solution 
 % I am certain that there's an analytic solution to this problem of adding
-% a bunch of sinusoids of various amplitudes and frequencies. (Because it's a simple 
+% a bunch of sinusoids of various amplitudes and frequencies set by well known 
+% astronomical forces. (Because it's a simple 
 % problem, right?) Such a solution would provide an exact and accurate value 
 % of the total tidal range. However, my brain is too simple to figure it
 % out on my own, so if you figure it out yourself, will ya let me know? 
+% Keep in mind that other processes such as storm surge and the change in 
+% sea level from varying atmospheric pressure can sum up to a meter or more 
+% of sea level change. So, in general, high precision in tidal height range
+% is rarely critical.
 
 %% Author Info 
-% This tutorial was written by Chad A. Greene, June 2022. 
+% This tutorial was written by Chad A. Greene and Laurie Padman, June 2022. 
 

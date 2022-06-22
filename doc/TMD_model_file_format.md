@@ -180,6 +180,8 @@ Variables:
                        flag_meanings = 'land ocean'
 ```
 
+The attributes above should be pretty straightforward, but I'll point out that the `model_type` can either be `'ocean'` or `'load'`. 
+
 ## Global models vs regional models 
 All model files are either *global* or *regional*. Global models, like the one above, are presented on a regular grid in geographic coordinates (degrees) and have 1D `lon` and `lat` variables. For global models, longitude is treated like the x dimension, and latitude is treated like the y dimension.
 
@@ -199,11 +201,10 @@ ans =
 ```
 
 Constituents can also be accessed as cell arrays using the
-[`tmd_data`](tmd_data_documentation.md) function: 
+[`tmd_conlist`](tmd_conlist_documentation.md) function: 
 
 ```matlab
->> [wct,lon,lat,cons] = tmd_data('TPXO9_atlas_v5.nc','wct');
->> cons
+>> cons = tmd_conlist('TPXO9_atlas_v5.nc')
 cons =
   1×15 cell array
   Columns 1 through 12

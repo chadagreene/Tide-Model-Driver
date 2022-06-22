@@ -10,6 +10,10 @@
 
 ncdisp('TPXO9_atlas_v5.nc')
 
+%% 
+% The attributes above should be pretty straightforward, but I'll point out
+% that the |model_type| can either be |'ocean'| or |'load'|. 
+
 %% Global models vs regional models 
 % All model files are either _global_ or _regional_. Global models, like the
 % one above, are presented on a regular grid in geographic coordinates (degrees) 
@@ -39,11 +43,9 @@ ncreadatt('TPXO9_atlas_v5.nc','constituents','constituent_order')
 
 %%
 % Constituents can also be accessed as cell arrays using the
-% <tmd_data_documentation.html |tmd_data|> function: 
+% <tmd_conlist_documentation.html |tmd_conlist|> function: 
 
-[wct,lon,lat,cons] = tmd_data('TPXO9_atlas_v5.nc','wct'); 
-
-cons
+cons = tmd_conlist('TPXO9_atlas_v5.nc')
 
 %% 
 % I realize this is a somewhat strange way to package the constituent

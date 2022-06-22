@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>tmd_ellipse documentation</title><meta name="generator" content="MATLAB 9.10"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2022-06-16"><meta name="DC.source" content="tmd_ellipse_documentation.m"><style type="text/css">
+      --><title>tmd_ellipse documentation</title><meta name="generator" content="MATLAB 9.10"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2022-06-22"><meta name="DC.source" content="tmd_ellipse_documentation.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -67,7 +67,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1><tt>tmd_ellipse</tt> documentation</h1><!--introduction--><p>tmd_ellipse gives tidal ellipse parameters at specified location(s).</p><p><a href="TMD_Contents.html">Back to Tide Model Driver Contents</a>.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Syntax</a></li><li><a href="#2">Description</a></li><li><a href="#3">Example</a></li><li><a href="#5">Explanation of the ellipse parameters</a></li><li><a href="#8">Are the ellipse parameters wrong?</a></li><li><a href="#9">References</a></li><li><a href="#10">Author Info</a></li></ul></div><h2 id="1">Syntax</h2><pre>[umajor,uminor,uphase,uincl] = tmd_ellipse(filename,constituent,lati,loni)</pre><h2 id="2">Description</h2><p><tt>[umajor,uminor,uphase,uincl] = tmd_ellipse(filename,constituent,lati,loni)</tt> gives the major and minor axes of tidal current velocities.</p><p><b>Inputs:</b></p><div><ul><li><b><tt>filename</tt></b> TMD3.0 compatible tide model ending in .nc.</li><li><b><tt>constituent</tt></b> string constituent (e.g., 'm2')</li><li><b><tt>lati,loni</tt></b> geographic coordinates (can be any size)</li></ul></div><p><b>Outputs:</b></p><div><ul><li><b><tt>umajor</tt></b> Major axis, the largest current for the constituent (m/s). Always positive.</li><li><b><tt>uminior</tt></b> Minor axis, the smallest current (m/s). Negative uminor indicates clockwise flow.</li><li><b><tt>uphase</tt></b> Reference point on the ellipse (degrees)</li><li><b><tt>uincl</tt></b> Inclination (degrees)</li></ul></div><h2 id="3">Example</h2><p>Get the tidal ellipse parameters for the o1 constituent:</p><pre class="codeinput">fn = <span class="string">'CATS2008_update_2022-06-11.nc'</span>;
+  </style></head><body><div class="content"><h1><tt>tmd_ellipse</tt> documentation</h1><!--introduction--><p>tmd_ellipse gives tidal ellipse parameters at specified location(s).</p><p><a href="TMD_Contents.html">Back to Tide Model Driver Contents</a>.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Syntax</a></li><li><a href="#2">Description</a></li><li><a href="#3">Example</a></li><li><a href="#5">Explanation of the ellipse parameters</a></li><li><a href="#8">Are the ellipse parameters wrong?</a></li><li><a href="#9">References</a></li><li><a href="#10">Author Info</a></li></ul></div><h2 id="1">Syntax</h2><pre>[umajor,uminor,uphase,uincl] = tmd_ellipse(filename,constituent,lati,loni)</pre><h2 id="2">Description</h2><p><tt>[umajor,uminor,uphase,uincl] = tmd_ellipse(filename,constituent,lati,loni)</tt> gives the major and minor axes of tidal current velocities.</p><p><b>Inputs:</b></p><div><ul><li><b><tt>filename</tt></b> TMD3.0 compatible tide model ending in .nc.</li><li><b><tt>constituent</tt></b> string constituent (e.g., 'm2')</li><li><b><tt>lati,loni</tt></b> geographic coordinates (can be any size, but must be equal size)</li></ul></div><p><b>Outputs:</b></p><div><ul><li><b><tt>umajor</tt></b> Major axis, the largest current for the constituent (m/s). Always positive.</li><li><b><tt>uminor</tt></b> Minor axis, the smallest current (m/s). Negative uminor indicates clockwise flow.</li><li><b><tt>uphase</tt></b> Reference point on the ellipse (degrees)</li><li><b><tt>uincl</tt></b> Inclination (degrees)</li></ul></div><h2 id="3">Example</h2><p>Get the tidal ellipse parameters for the o1 constituent:</p><pre class="codeinput">fn = <span class="string">'CATS2008_update_2022-06-11.nc'</span>;
 lat = -71.9102;
 lon =  172.6590;
 
@@ -135,12 +135,12 @@ plot(xr,yr,<span class="string">'r'</span>)
 %  
 % * *|filename|* TMD3.0 compatible tide model ending in .nc. 
 % * *|constituent|* string constituent (e.g., 'm2') 
-% * *|lati,loni|* geographic coordinates (can be any size)
+% * *|lati,loni|* geographic coordinates (can be any size, but must be equal size)
 % 
 % *Outputs:* 
 %
 % * *|umajor|* Major axis, the largest current for the constituent (m/s). Always positive. 
-% * *|uminior|* Minor axis, the smallest current (m/s). Negative uminor indicates clockwise flow.  
+% * *|uminor|* Minor axis, the smallest current (m/s). Negative uminor indicates clockwise flow.  
 % * *|uphase|* Reference point on the ellipse (degrees)
 % * *|uincl|* Inclination (degrees) 
 %

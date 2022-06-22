@@ -7,7 +7,7 @@ As an alternative to the gif function, you may prefer MATLAB's built-in `exportg
  
 Another example of creating a gif like this can be found [in the documentation](tmd_predict_documentation.md#example-time-series-of-maps) for the `tmd_predict` function. 
 
-*Note*: If the grid you're solving is particularly large and/or you have lots of timesteps, you may need to predict tides one map at a time. That will be slower than solving the entire cube at once, because loading and interpolating the tidal constituent data is takes a fair bit of time, but memory might become an issue for very large data cubes. 
+*Note*: If the grid you're solving is particularly large and/or you have lots of timesteps, you may need to predict tides one map at a time. That will be slower than solving the entire cube at once, because loading and interpolating the tidal constituent data takes a fair bit of time, but memory might become an issue for very large data cubes. 
 
 This script takes about 2 minutes to run on my laptop from 2019. 
 

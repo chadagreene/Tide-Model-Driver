@@ -1,15 +1,15 @@
 %% Description 
-% This script creates the animated TMD logo gif. It uses the earthimage, 
-% cmocean, shadem, and gif functions, which are all part of the Climate Data 
+% This script creates the animated TMD logo gif. It uses the |earthimage|, 
+% |cmocean|, |shadem|, and |gif| functions, which are all part of the Climate Data 
 % Toolbox for MATLAB. 
 % 
 % As an alternative to the gif function, you may prefer MATLAB's built-in
-% exportgraphics function (after R2022a) for gifs, or the VideoWriter
+% |exportgraphics| function (after R2022a) for gifs, or the |VideoWriter|
 % function for other video formats. 
 % 
 % Another example of creating a gif like this can be found in the
 % documentation for the tmd_predict function. One distinct difference
-% between this example and the tmd_predict example, is that here we only
+% between this example and the <tmd_predict_documentation.html |tmd_predict|> example, is that here we only
 % predict one map at a time, whereas the tmd_predict example creates a
 % cube, where the third dimension corresponds to time. Generally for small
 % regions, for a small number of timesteps, and for small model files (with
