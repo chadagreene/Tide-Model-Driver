@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Description</title><meta name="generator" content="MATLAB 9.10"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2022-06-22"><meta name="DC.source" content="tmd_logo_animation.m"><style type="text/css">
+      --><title>Description</title><meta name="generator" content="MATLAB 9.10"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2022-06-23"><meta name="DC.source" content="tmd_logo_animation.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -67,7 +67,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Description</h1><!--introduction--><p>This script creates the animated TMD logo gif. It uses the <tt>earthimage</tt>, <tt>cmocean</tt>, <tt>shadem</tt>, and <tt>gif</tt> functions, which are all part of the Climate Data Toolbox for MATLAB.</p><p>As an alternative to the gif function, you may prefer MATLAB's built-in <tt>exportgraphics</tt> function (after R2022a) for gifs, or the <tt>VideoWriter</tt> function for other video formats.</p><p>Another example of creating a gif like this can be found in the documentation for the tmd_predict function. One distinct difference between this example and the <a href="tmd_predict_documentation.html"><tt>tmd_predict</tt></a> example, is that here we only predict one map at a time, whereas the tmd_predict example creates a cube, where the third dimension corresponds to time. Generally for small regions, for a small number of timesteps, and for small model files (with few grid points and/or few constituents), the cube approach will be faster, because it only loads and interpolates the data once. In this case, we solve one frame at a time (which is slower, overall) because memory can become an issue for very large cubes.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Solve tides</a></li><li><a href="#2">Animate</a></li><li><a href="#3">Author Info</a></li></ul></div><h2 id="1">Solve tides</h2><p>Solving for the whole cube takes about 2 minutes to run on my laptop from 2019.</p><pre>% Model filename:
+  </style></head><body><div class="content"><h1>Description</h1><!--introduction--><p>This script creates the animated TMD logo gif. It uses the <tt>earthimage</tt>, <tt>cmocean</tt>, <tt>shadem</tt>, and <tt>gif</tt> functions, which are all part of the Climate Data Toolbox for MATLAB.</p><p>As an alternative to the gif function, you may prefer MATLAB's built-in <tt>exportgraphics</tt> function (after R2022a) for gifs, or the <tt>VideoWriter</tt> function for other video formats.</p><p>Another example of creating a gif like this can be found in the documentation for the tmd_predict function. One distinct difference between this example and the <a href="tmd_predict_documentation.html"><tt>tmd_predict</tt></a> example, is that here we only predict one map at a time, whereas the tmd_predict example creates a cube, where the third dimension corresponds to time. Generally for small regions, for a small number of timesteps, and for small model files (with few grid points and/or few constituents), the cube approach will be faster, because it only loads and interpolates the data once. In this case, we solve one frame at a time (which is slower, overall) because memory can become an issue for very large cubes.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Solve tides</a></li><li><a href="#2">Animate</a></li><li><a href="#4">Not seasick yet?</a></li><li><a href="#6">Author Info</a></li></ul></div><h2 id="1">Solve tides</h2><p>Solving for the whole cube takes about 2 minutes to run on my laptop from 2019.</p><pre>% Model filename:
 fn = 'TPXO9_atlas_v5.nc';</pre><pre>% Create 0.2 degree resolution grid:
 [Lat,Lon] = cdtgrid(0.2);</pre><pre>% Create an hourly time array for 25 hours:
 t = datetime('mar 29, 2017'):hours(1):datetime('mar 30, 2017');</pre><pre>% Get water column thickness for the grid:
@@ -90,7 +90,75 @@ gif('tmd_logo.gif','delaytime',1/8,'resolution',200)</pre><pre>% Loop through th
 for k = 2:length(t)
    hs.CData = Z(:,:,k);
    gif % writes this frame
-end</pre><h2 id="3">Author Info</h2><p>This script was written by Chad A. Greene, June 2022.</p><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2021a</a><br></p></div><!--
+end</pre><p><img vspace="5" hspace="5" src="../markdown_figures/tmd_logo.gif" alt=""> </p><h2 id="4">Not seasick yet?</h2><p>If the animation above doesn't make you want to lose your lunch, perhaps this one will. This example closely follows the one above, but in addition to tidal height, we'll also predict tidal transports.</p><p>Some notes:</p><div><ol><li>We'll solve transports on a 0.2 degree grid, but we'll only plot vectors on a 3 degree grid. This requires anti-aliasing.</li><li>Technically, we should solve tides on the native 1/30 degree grid, then lowpass filter to 6 degrees or a little more, then interpolate to a 3 degree grid. That would produce anti-aliased transports that meet the Nyquist criteria. Instead, we'll do this sort of hybrid approach, where we'll solve transports on a 0.2 degree grid, then lowpass filter to 6 degrees (using the <tt>filt2</tt> function in the Climate Data Toolbox) and interpolate. So we might end up with a little bit of noise, but let's not be pedants.</li><li>Matlab's <tt>text</tt> function doesn't allow bordered text, so below I create eight white text objects, each offset by some combination of 0.3 degrees in longitude or 0.15 degrees in latitude. The end result produces the appearance of outlined text.</li></ol></div><pre>% Model filename:
+fn = 'TPXO9_atlas_v5.nc';</pre><pre>% Create 0.2 degree resolution grid:
+[Lat,Lon] = cdtgrid(0.2);</pre><pre>% Create an hourly time array for 25 hours:
+t = datetime('mar 29, 2017'):hours(1):datetime('mar 30, 2017');</pre><pre>% Get water column thickness for the grid:
+wct = tmd_interp(fn,'wct',Lat,Lon);</pre><pre>% Predict tides:
+Z = tmd_predict(fn,Lat,Lon,t,'h');
+U = tmd_predict(fn,Lat,Lon,t,'U');
+V = tmd_predict(fn,Lat,Lon,t,'V');</pre><pre>figure('position',[10 10 560 280],'color','k')
+hs = surf(Lon,Lat,-wct,Z(:,:,1)); % the first "slice" of Z data
+hold on
+he = earthimage('bottom');
+shading interp
+view(2)
+axis image off
+cmocean balance
+caxis([-1 1]*2)
+shadem(-12) % tiny bit of hillshade
+hs.ZData = hs.ZData-min(hs.ZData(:))+1; % raises above earthimage
+set(gca,'position',[0 0 1 1])
+ax = axis; % gets axis limits</pre><pre>% Downsampled grid:
+skip = 15;
+Lonf = Lon(floor(skip/2):skip:end,floor(skip/2):skip:end);
+Latf = Lat(floor(skip/2):skip:end,floor(skip/2):skip:end);</pre><pre>% Land mask for the downsampled grid:
+land = ~tmd_interp(fn,'mask',Latf,Lonf);</pre><pre>% Anti-aliased (by lowpass filtering) U and V:
+tmpu = interp2(Lon,Lat,filt2(U(:,:,1),1,skip*2,'lp'),Lonf,Latf);
+tmpv = interp2(Lon,Lat,filt2(V(:,:,1),1,skip*2,'lp'),Lonf,Latf);</pre><pre>% Ensure land pixels are NaN:
+tmpu(land) = nan;</pre><pre>% Plot arrows (with a Z component to get above surface topography):
+q = quiver3(Lonf,Latf,9*ones(size(Lonf)),tmpu,tmpv,zeros(size(Lonf)),'k');
+q.LineWidth = 0.1;</pre><pre>% Plot background text:
+dl = 0.3;
+txtw(1) = text(dl,0,10,{'Tide Model Driver';'for MATLAB'},'horiz','center',...
+   'vert','middle','fontweight','bold',...
+   'fontangle','italic','fontsize',36,'color','w');
+ txtw(2) = text(-dl,0,10,{'Tide Model Driver';'for MATLAB'},'horiz','center',...
+   'vert','middle','fontweight','bold',...
+   'fontangle','italic','fontsize',36,'color','w');
+ txtw(3) = text(dl,dl/2,10,{'Tide Model Driver';'for MATLAB'},'horiz','center',...
+   'vert','middle','fontweight','bold',...
+   'fontangle','italic','fontsize',36,'color','w');
+ txtw(4) = text(dl,-dl/2,10,{'Tide Model Driver';'for MATLAB'},'horiz','center',...
+   'vert','middle','fontweight','bold',...
+   'fontangle','italic','fontsize',36,'color','w');
+ txtw(5) = text(-dl,dl/2,10,{'Tide Model Driver';'for MATLAB'},'horiz','center',...
+   'vert','middle','fontweight','bold',...
+   'fontangle','italic','fontsize',36,'color','w');
+ txtw(6) = text(-dl,-dl/2,10,{'Tide Model Driver';'for MATLAB'},'horiz','center',...
+   'vert','middle','fontweight','bold',...
+   'fontangle','italic','fontsize',36,'color','w');
+ txtw(7) = text(0,dl/2,10,{'Tide Model Driver';'for MATLAB'},'horiz','center',...
+   'vert','middle','fontweight','bold',...
+   'fontangle','italic','fontsize',36,'color','w');
+ txtw(8) = text(0,-dl/2,10,{'Tide Model Driver';'for MATLAB'},'horiz','center',...
+   'vert','middle','fontweight','bold',...
+   'fontangle','italic','fontsize',36,'color','w');</pre><pre>% Plot
+txt = text(0,0,10,{'Tide Model Driver';'for MATLAB'},'horiz','center',...
+   'vert','middle','fontweight','bold',...
+   'fontangle','italic','fontsize',36);</pre><pre>col = cmocean('phase',length(t));
+txt.Color=col(1,:);</pre><pre>axis(ax); % ensures axis limits match in every frame</pre><pre>% Write the first frame:
+gif('tmd_logo_v2.gif','delaytime',1/8,'resolution',200)</pre><pre>% Loop through the remaining frames
+for k = 2:length(t)</pre><pre>   % Update ocean color (height data):
+   hs.CData = Z(:,:,k);</pre><pre>   % Get anti-aliased U and V:
+   tmpu = interp2(Lon,Lat,filt2(U(:,:,k),1,skip*2,'lp'),Lonf,Latf);
+   tmpv = interp2(Lon,Lat,filt2(V(:,:,k),1,skip*2,'lp'),Lonf,Latf);
+   tmpu(land) = nan;</pre><pre>   % Update quiver arrows:
+   q.UData = tmpu;
+   q.VData = tmpv;</pre><pre>   txt.Color=col(k,:);
+   axis(ax) % ensures axis limits match in every frame
+   gif % writes this frame
+end</pre><p><img vspace="5" hspace="5" src="../markdown_figures/tmd_logo_v2.gif" alt=""> </p><h2 id="6">Author Info</h2><p>This script was written by Chad A. Greene, June 2022.</p><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2021a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Description 
 % This script creates the animated TMD logo gif. It uses the |earthimage|, 
@@ -158,7 +226,147 @@ end</pre><h2 id="3">Author Info</h2><p>This script was written by Chad A. Greene
 %     hs.CData = Z(:,:,k); 
 %     gif % writes this frame
 %  end
-
+%
+%% 
+% <<../markdown_figures/tmd_logo.gif>>
+% 
+%% Not seasick yet?
+% If the animation above doesn't make you want to lose your lunch, perhaps
+% this one will. This example closely follows the one above, but in addition 
+% to tidal height, we'll also predict tidal transports. 
+% 
+% Some notes: 
+% 
+% # We'll solve transports on a 0.2 degree grid, but we'll only plot
+% vectors on a 3 degree grid. This requires anti-aliasing. 
+% # Technically, we should solve tides on the native 1/30 degree grid, then
+% lowpass filter to 6 degrees or a little more, then interpolate to a 3
+% degree grid. That would produce anti-aliased transports that meet the
+% Nyquist criteria. Instead, we'll do this sort of hybrid approach, where
+% we'll solve transports on a 0.2 degree grid, then lowpass filter to 6
+% degrees (using the |filt2| function in the Climate Data Toolbox)
+% and interpolate. So we might end up with a little bit of noise,
+% but let's not be pedants.
+% # Matlab's |text| function doesn't allow bordered text, so below I create
+% eight white text objects, each offset by some combination of 0.3 degrees
+% in longitude or 0.15 degrees in latitude. The end result produces the
+% appearance of outlined text. 
+% 
+%  % Model filename: 
+%  fn = 'TPXO9_atlas_v5.nc'; 
+%  
+%  % Create 0.2 degree resolution grid: 
+%  [Lat,Lon] = cdtgrid(0.2); 
+%  
+%  % Create an hourly time array for 25 hours: 
+%  t = datetime('mar 29, 2017'):hours(1):datetime('mar 30, 2017'); 
+%  
+%  % Get water column thickness for the grid: 
+%  wct = tmd_interp(fn,'wct',Lat,Lon); 
+%  
+%  % Predict tides: 
+%  Z = tmd_predict(fn,Lat,Lon,t,'h'); 
+%  U = tmd_predict(fn,Lat,Lon,t,'U'); 
+%  V = tmd_predict(fn,Lat,Lon,t,'V'); 
+% 
+% 
+%  figure('position',[10 10 560 280],'color','k')
+%  hs = surf(Lon,Lat,-wct,Z(:,:,1)); % the first "slice" of Z data
+%  hold on
+%  he = earthimage('bottom');
+%  shading interp
+%  view(2)
+%  axis image off
+%  cmocean balance
+%  caxis([-1 1]*2)
+%  shadem(-12) % tiny bit of hillshade
+%  hs.ZData = hs.ZData-min(hs.ZData(:))+1; % raises above earthimage 
+%  set(gca,'position',[0 0 1 1])
+%  ax = axis; % gets axis limits 
+%  
+%  % Downsampled grid: 
+%  skip = 15; 
+%  Lonf = Lon(floor(skip/2):skip:end,floor(skip/2):skip:end); 
+%  Latf = Lat(floor(skip/2):skip:end,floor(skip/2):skip:end); 
+% 
+%  % Land mask for the downsampled grid: 
+%  land = ~tmd_interp(fn,'mask',Latf,Lonf); 
+% 
+%  % Anti-aliased (by lowpass filtering) U and V: 
+%  tmpu = interp2(Lon,Lat,filt2(U(:,:,1),1,skip*2,'lp'),Lonf,Latf); 
+%  tmpv = interp2(Lon,Lat,filt2(V(:,:,1),1,skip*2,'lp'),Lonf,Latf); 
+% 
+%  % Ensure land pixels are NaN: 
+%  tmpu(land) = nan; 
+% 
+%  % Plot arrows (with a Z component to get above surface topography): 
+%  q = quiver3(Lonf,Latf,9*ones(size(Lonf)),tmpu,tmpv,zeros(size(Lonf)),'k'); 
+%  q.LineWidth = 0.1; 
+% 
+%  % Plot background text: 
+%  dl = 0.3; 
+%  txtw(1) = text(dl,0,10,{'Tide Model Driver';'for MATLAB'},'horiz','center',...
+%     'vert','middle','fontweight','bold',...
+%     'fontangle','italic','fontsize',36,'color','w'); 
+%   txtw(2) = text(-dl,0,10,{'Tide Model Driver';'for MATLAB'},'horiz','center',...
+%     'vert','middle','fontweight','bold',...
+%     'fontangle','italic','fontsize',36,'color','w'); 
+%   txtw(3) = text(dl,dl/2,10,{'Tide Model Driver';'for MATLAB'},'horiz','center',...
+%     'vert','middle','fontweight','bold',...
+%     'fontangle','italic','fontsize',36,'color','w'); 
+%   txtw(4) = text(dl,-dl/2,10,{'Tide Model Driver';'for MATLAB'},'horiz','center',...
+%     'vert','middle','fontweight','bold',...
+%     'fontangle','italic','fontsize',36,'color','w'); 
+%   txtw(5) = text(-dl,dl/2,10,{'Tide Model Driver';'for MATLAB'},'horiz','center',...
+%     'vert','middle','fontweight','bold',...
+%     'fontangle','italic','fontsize',36,'color','w'); 
+%   txtw(6) = text(-dl,-dl/2,10,{'Tide Model Driver';'for MATLAB'},'horiz','center',...
+%     'vert','middle','fontweight','bold',...
+%     'fontangle','italic','fontsize',36,'color','w'); 
+%   txtw(7) = text(0,dl/2,10,{'Tide Model Driver';'for MATLAB'},'horiz','center',...
+%     'vert','middle','fontweight','bold',...
+%     'fontangle','italic','fontsize',36,'color','w'); 
+%   txtw(8) = text(0,-dl/2,10,{'Tide Model Driver';'for MATLAB'},'horiz','center',...
+%     'vert','middle','fontweight','bold',...
+%     'fontangle','italic','fontsize',36,'color','w'); 
+%  
+%  % Plot
+%  txt = text(0,0,10,{'Tide Model Driver';'for MATLAB'},'horiz','center',...
+%     'vert','middle','fontweight','bold',...
+%     'fontangle','italic','fontsize',36); 
+%  
+%  col = cmocean('phase',length(t)); 
+%  txt.Color=col(1,:); 
+% 
+%  axis(ax); % ensures axis limits match in every frame 
+% 
+%  % Write the first frame: 
+%  gif('tmd_logo_v2.gif','delaytime',1/8,'resolution',200)
+%  
+%  % Loop through the remaining frames
+%  for k = 2:length(t) 
+%     
+%     % Update ocean color (height data): 
+%     hs.CData = Z(:,:,k); 
+%     
+%     % Get anti-aliased U and V: 
+%     tmpu = interp2(Lon,Lat,filt2(U(:,:,k),1,skip*2,'lp'),Lonf,Latf); 
+%     tmpv = interp2(Lon,Lat,filt2(V(:,:,k),1,skip*2,'lp'),Lonf,Latf); 
+%     tmpu(land) = nan; 
+% 
+%     % Update quiver arrows: 
+%     q.UData = tmpu; 
+%     q.VData = tmpv; 
+%     
+%     txt.Color=col(k,:); 
+%     axis(ax) % ensures axis limits match in every frame
+%     gif % writes this frame
+%  end
+% 
+%% 
+% 
+% <<../markdown_figures/tmd_logo_v2.gif>>
+%
 %% Author Info
 % This script was written by Chad A. Greene, June 2022. 
 ##### SOURCE END #####
