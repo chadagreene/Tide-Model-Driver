@@ -9,7 +9,7 @@ To start predicting tides, just add TMD to MATLAB and download your favorite tid
 2. [Get tide model data.](doc/tide_model_data.md)
 
 # TMD Functions
-For most applications, **`tmd_predict` is the only function you will need to call directly**, although you may occasionally want `tmd_interp` to retrieve bathymetry, `tmd_ellipse` to get tidal current characteristics, or `tmd_conlist` for a quick list of tidal constituents in a given model. Complete documentation is provided for the functions whose names are hyperlinked below, and simple text documentation can be found in the headers of all functions. 
+For most applications, _**`tmd_predict` is the only function you will need to call directly**_, although you may occasionally want `tmd_interp` to retrieve bathymetry, `tmd_ellipse` to get tidal current characteristics, or `tmd_conlist` for a quick list of tidal constituents in a given model. Complete documentation is provided for the functions whose names are hyperlinked below, and simple text documentation can be found in the headers of all functions. 
 
 #### Main functions:
 * [`tmd_predict`](doc/tmd_predict_documentation.md) predicts tidal elevation, transport, or current velocities for given location(s) and time(s). 
@@ -53,11 +53,13 @@ Be sure to check out the documentation for each of the **Main functions**. There
 * [TMD Model file format](doc/TMD_model_file_format.md)
 * [Tide Model Intercomparison](doc/tide_model_intercomparison.md)
 * [How to: Analyze ADCP current data](doc/tutorial_currents.md)
+* [How to: How to separate climatological phenomena from gravitational tides
+](doc/tutorial_EOT.md)
 * [How to: Calculate tidal range](doc/tutorial_tidal_range.md)
 * [How to: Animate tidal motion](doc/tmd_logo_animation.md)
 
 # What's new in TMD 3.0?
-TMD3.0 is a rewrite of the [Tide Model Driver for MATLAB v2.5](https://github.com/EarthAndSpaceResearch/TMD_Matlab_Toolbox_v2.5). The goal of this update was to create a clean, efficient set of functions that are well documented, easy to use, easy to debug. We also wanted to reduce the size, complexity, and overall hassle of dealing with multi-file or binary tide model data files. The biggest changes in this update to TMD3.0 are as follows: 
+TMD3.0 is a rewrite of the [Tide Model Driver for MATLAB v2.5](https://github.com/EarthAndSpaceResearch/TMD_Matlab_Toolbox_v2.5). The goal of this update was to create a clean, efficient set of functions that are well documented, easy to use, and easy to debug. We also wanted to reduce the size, complexity, and overall hassle of dealing with multi-file or binary tide model data files. The biggest changes in this update to TMD3.0 are as follows: 
 
 * Introduced a new, [consolidated NetCDF model data format](doc/TMD_model_file_format.md).  
 * All functions rewritten for improved performance (*much faster* and lower memory usage than TMD2.5). 

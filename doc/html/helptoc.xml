@@ -28,6 +28,7 @@
             <tocitem target="TMD_model_file_format.html">TMD model file format</tocitem>
             <tocitem target="tide_model_intercomparison.html">Tide Model Intercomparison</tocitem>
             <tocitem target="tutorial_currents.html">How to: Analyze ADCP current data</tocitem>
+            <tocitem target="tutorial_EOT.html">How to: Separate climate from tides</tocitem>
             <tocitem target="tutorial_tidal_range.html">How to: Calculate tidal range</tocitem>
             <tocitem target="tmd_logo_animation.html">How to: Animate tidal motion</tocitem>
         </tocitem>

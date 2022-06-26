@@ -1,0 +1,461 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>How to separate climatological phenomena from gravitational tides</title><meta name="generator" content="MATLAB 9.10"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2022-06-26"><meta name="DC.source" content="tutorial_EOT.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>How to separate climatological phenomena from gravitational tides</h1><!--introduction--><p>Tide model datasets are created by fitting sinusoids to satellite measurements of sea surface height variability. Every tidal constituent oscillates at a well known frequency, so with enough data and the known frequencies of oscillation, it's possible to invert for the amplitude and phase offset of every tidal constituent at any given location. That's all well and good, but some natural phenomena occur at the same frequency as tidal oscillation without being driven strictly by gravitational forcing. For example, a river outflow may locally increase sea level every spring, so any tidal inversion at the one-year frequency may be driven more by mountain snowmelt than by the tiny effects of nonuniform changes in the Sun's declination and distance.</p><p>This page shows how climatological variability can creep into tide models, and offers some advice on what you can do about it.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">EOT20 Global Model</a></li><li><a href="#2">Load EOT20 data</a></li><li><a href="#3">Plot M2 constituent</a></li><li><a href="#4">Plot the Sa Constituent</a></li><li><a href="#6">Compare all constituent amplitudes</a></li><li><a href="#9">Removing Sa from predictions</a></li><li><a href="#14">Author Info</a></li></ul></div><h2 id="1">EOT20 Global Model</h2><p>The EOT20 global tide model is described in an <a href="https://doi.org/10.5194/essd-13-3869-2021,">2021 ESSD paper by Hart-Davis et al., 2021</a>. In it, the authors write:</p><p><i>The SSA and Sa tides are included in the EOT20 model data, but users should be aware that these tides include the full signal at these periods, i.e. gravitational as well as meteorological tides. Thus, caution should be taken when interpreting the results of the tidal correction when these two tides are included as they will likely remove the seasonal signals seen in the altimeter data.</i></p><p>In this tutorial, we'll explore the EOT20 model to find out what Hart-Davis et al. mean about the Sa tidal constituent.</p><h2 id="2">Load EOT20 data</h2><p>Begin by loading the EOT20 amplitude and phase. We'll also load the ocean mask, because we'll want it when we plot the data.</p><pre class="codeinput">[hAm,lon,lat,cons] = tmd_data(<span class="string">'EOT20_ocean.nc'</span>,<span class="string">'hAm'</span>);
+hPh = tmd_data(<span class="string">'EOT20_ocean.nc'</span>,<span class="string">'hPh'</span>);
+ocean = tmd_data(<span class="string">'EOT20_ocean.nc'</span>,<span class="string">'mask'</span>);
+</pre><h2 id="3">Plot M2 constituent</h2><p>Before we jump into the Sa constituent, let's get our bearings straight by looking at the much more significant M2 constituent.</p><p>Below, we get the index of the M2 constituent, then plot its amplitude and phase on a global map. We'll use the <i>amp</i> colormap from the <tt>cmocean</tt> function in the <a href="https://github.com/chadagreene/CDT">Climate Data Toolbox for Matlab</a> (Greene et al., 2019). The colormap below is scaled by 7 times the median value of constituent amplitude, and this value is chosen somewhat arbitrarily because it makes for a nice comparison with other constituents later on in this tutorial.</p><pre class="codeinput"><span class="comment">% Get the index of the M2 constituent:</span>
+k = strcmpi(cons,<span class="string">'M2'</span>);
+
+figure
+h = imagesc(lon,lat,hAm(:,:,k));
+h.AlphaData = ocean; <span class="comment">% makes land transparent</span>
+axis <span class="string">xy</span> <span class="string">image</span> <span class="string">off</span>
+hold <span class="string">on</span>
+
+<span class="comment">% Plot phase contours:</span>
+tmp=rad2deg(hPh(:,:,k));
+tmp(~ocean) = nan;
+[~,hC] = contour(lon,lat,tmp,-165:30:165,<span class="string">'k'</span>);
+hC.LineWidth = 0.1;
+hC.Color = .5*[1 1 1];
+
+cmocean <span class="string">amp</span> <span class="comment">% optional colormap</span>
+caxis([0 7*median(hAm(:,:,k),<span class="string">'all'</span>,<span class="string">'omitnan'</span>)])
+title(cons{k})
+cb = colorbar;
+ylabel(cb,<span class="string">'constituent amplitude (m)'</span>)
+</pre><img vspace="5" hspace="5" src="tutorial_EOT_01.png" alt=""> <h2 id="4">Plot the Sa Constituent</h2><p>The map above shows exactly what we'd expect for a well-bahaved, gravitationally driven tidal constituent. The M2 constituent has long wavelengths and varies smoothly.</p><p>Now let's make the same kind of map for the Sa constituent. I'm dropping the contour lines here, becuase they get too messy to make any sense of on a global scale:</p><pre class="codeinput"><span class="comment">% Get the index of the Sa constituent:</span>
+k = strcmpi(cons,<span class="string">'Sa'</span>);
+
+figure
+h = imagesc(lon,lat,hAm(:,:,k));
+h.AlphaData = ocean;
+axis <span class="string">xy</span> <span class="string">image</span> <span class="string">off</span>
+hold <span class="string">on</span>
+cmocean <span class="string">amp</span>
+caxis([0 7*median(hAm(:,:,k),<span class="string">'all'</span>,<span class="string">'omitnan'</span>)])
+title(cons{k})
+cb = colorbar;
+ylabel(cb,<span class="string">'constituent amplitude (m)'</span>)
+</pre><img vspace="5" hspace="5" src="tutorial_EOT_02.png" alt=""> <p>In the map above, the first thing I notice is the familiar pattern in the equatorial Pacific, which is <a href="https://doi.org/10.1126/sciadv.1500560">driven by wind stress on annual timescales</a>. I also see what appear to be eddies and global currents, which are unlikely to be a direct result of the perihelion-aphelion effect at the heart of the Sa constituent.</p><p>All amplitudes are zero beyond 66&deg;S and 66&deg;N because the FES2014b model that fills EOT20 at high latitudes does not include the Sa constituent. Where EOT20 does have data for the Sa constituent close to Antarctica, the spatial pattern and the timing, with a maximum in spring, suggest a possible influence from sea ice in the altimetry.</p><p>By inspection, we can see that the majority of the variability in the map above is probably driven by climatological effects rather than gravitational effects. Depending on how you're using the tide model, that may be a good thing, or you may not want it, but it's good to be aware of which constituents are influenced by climatological effects.</p><h2 id="6">Compare all constituent amplitudes</h2><p>How do the amplitude patterns of all 17 constituents in EOT20 compare? Let's take a look. And to see how vary by frequency, we'll plot them in order of constituent period.</p><p>Below, I'm using <tt>subsubplot</tt>, <tt>cmocean</tt> and <tt>ntitle</tt> from the Climate Data Toolbox for MATALAB.</p><pre class="codeinput"><span class="comment">% Get tidal frequencies:</span>
+[~,~,~,omega] = tmd_constit(cons);
+
+<span class="comment">% Convert frequencies (Hz) into period (days):</span>
+T_days = 2*pi./(omega*60*60*24);
+
+<span class="comment">% Sort constituents by period:</span>
+[T_days,ind] = sort(T_days);
+hAm = hAm(:,:,ind);
+cons = cons(ind);
+
+figure(<span class="string">'pos'</span>,[10 10 940 880])
+<span class="keyword">for</span> k = 1:17
+   subsubplot(6,3,k)
+   h = imagesc(lon,lat,hAm(:,:,k));
+   h.AlphaData = ocean;
+   axis <span class="string">xy</span> <span class="string">image</span> <span class="string">off</span>
+   hold <span class="string">on</span>
+   cmocean <span class="string">amp</span>
+   caxis([0 7*median(hAm(:,:,k),<span class="string">'all'</span>,<span class="string">'omitnan'</span>)])
+   ntitle([cons{k},<span class="string">' T='</span>,num2str(T_days(k),<span class="string">'%.2f'</span>),<span class="string">' days'</span>],<span class="keyword">...</span>
+      <span class="string">'color'</span>,rgb(<span class="string">'dark blue'</span>))
+<span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="tutorial_EOT_03.png" alt=""> <p>In the maps above, Sa stands out for its potential influence from climatological effects.</p><p>Before we go too much farther, I'll point out that the comparison above might present a skewed understanding of how much each constituent actually matters, because the color axis of each map was scaled relative to its overall distribution of values. A more direct comparison would place all constituents on a common color axis, like this, where we set <tt>caxis([0 1])</tt> for all constituents:</p><pre class="codeinput">figure(<span class="string">'pos'</span>,[10 10 940 880])
+<span class="keyword">for</span> k = 1:17
+   subsubplot(6,3,k)
+   h = imagesc(lon,lat,hAm(:,:,k));
+   h.AlphaData = ocean;
+   axis <span class="string">xy</span> <span class="string">image</span> <span class="string">off</span>
+   hold <span class="string">on</span>
+   cmocean <span class="string">amp</span>
+   caxis([0 1])
+   ntitle([cons{k},<span class="string">' T='</span>,num2str(T_days(k),<span class="string">'%.2f'</span>),<span class="string">' days'</span>],<span class="keyword">...</span>
+      <span class="string">'color'</span>,rgb(<span class="string">'dark blue'</span>))
+<span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="tutorial_EOT_04.png" alt=""> <p>Above, you see that the overwhelming majority of the energy exists at the M2 frequency. There's a decent amount of energy at a few other frequencies like S2, K1, and O1, but most constituents have only a tiny influence compared to M2.</p><p>If you look closely at Sa, you'll see that it does contain some streaks of color, and depending on your application, you may want to include Sa, or you may want to exclude it. For example, if you own a stretch of beachfront property in Hawaii and you want the most accurate sea surface height prediction possible before your next l&#363;&#699;au, you probably want to include the Sa constituent in your prediction. On the other hand, if you want to remove gravitationally driven tides from gauge measurements to study the residuals for changes in seasonal climate patterns you probably want to exclude Sa from your predictions.</p><h2 id="9">Removing Sa from predictions</h2><p>If you'd like to make tide predictions, but you want to exclude certain constituents, just tell the <a href="tmd_predict_documentation.html"><tt>tmd_predict</tt></a> function which constituents you want to include.</p><p>By default, <tt>tmd_predict</tt> uses all constituents in a model also infers minor constituents that aren't in the model. If you specify which constituents you want to solve for, <tt>tmd_predict</tt> then assumes you only want a solution for those constituents, without influence from minor constituents. So if you specify which constituents you want to solve for, but you still want minor constituents to be inferred, be sure to specify <tt>'InferMinor',true</tt>, as shown below.</p><p>This example uses some tide gauge measurements near Nuuk, Greenland to see how well EOT20 performs when including or excluding the Sa constituent. Start by loading the tide gauge observations:</p><pre class="codeinput"><span class="comment">% Load example tide gauge data (found in the doc/example_data folder.)</span>
+fn = <span class="string">'h820_nuuk.nc'</span>;
+lat = ncread(fn,<span class="string">'lat'</span>);
+lon = ncread(fn,<span class="string">'lon'</span>);
+t = ncread(fn,<span class="string">'time'</span>)+datenum(1800,1,1,0,0,0); <span class="comment">% units = 'days since 1800-01-01 00:00:00'</span>
+sl = ncread(fn,<span class="string">'sea_level'</span>)/1000;
+</pre><p>Use the <a href="tmd_conlist_documentation.html"><tt>tmd_conlist</tt></a> function to get a list of constituents in the EOT20 model. Then create a list of constituents excluding Sa:</p><pre class="codeinput"><span class="comment">% Get a list of all constituents in EOT20:</span>
+cons = tmd_conlist(<span class="string">'EOT20_ocean.nc'</span>);
+
+<span class="comment">% Remove Sa from the list:</span>
+cons_exclude = cons(~strcmpi(cons,<span class="string">'Sa'</span>));
+</pre><p>Predict tides three different ways:</p><pre class="codeinput"><span class="comment">% Solve tides using all major constituents and infer minor:</span>
+z_default = tmd_predict(<span class="string">'EOT20_ocean.nc'</span>,lat,lon,t,<span class="string">'h'</span>);
+
+<span class="comment">% Solve only for 16 model constituents (Sa excluded):</span>
+z_cons = tmd_predict(<span class="string">'EOT20_ocean.nc'</span>,lat,lon,t,<span class="string">'h'</span>,<span class="string">'constituents'</span>,cons_exclude);
+
+<span class="comment">% Solve for 16 model constituents and infer minor:</span>
+z_cons_min = tmd_predict(<span class="string">'EOT20_ocean.nc'</span>,lat,lon,t,<span class="string">'h'</span>,<span class="keyword">...</span>
+   <span class="string">'constituents'</span>,cons_exclude,<span class="string">'InferMinor'</span>,true);
+
+figure
+plot(t,sl-mean(sl,<span class="string">'omitnan'</span>),<span class="string">'linewidth'</span>,1,<span class="string">'color'</span>,<span class="string">'k'</span>)
+box <span class="string">off</span>
+axis <span class="string">tight</span>
+xlim([datenum(<span class="string">'11 sept 2018'</span>) datenum(<span class="string">'15 sept 2018'</span>)])
+datetick(<span class="string">'x'</span>,<span class="string">'keeplimits'</span>)
+ylabel <span class="string">'tide height (m)'</span>
+hold <span class="string">on</span>
+plot(t,z_default,<span class="string">'linewidth'</span>,1)
+plot(t,z_cons,<span class="string">'linewidth'</span>,1)
+plot(t,z_cons_min,<span class="string">'linewidth'</span>,1)
+legend(<span class="string">'observations'</span>,<span class="string">'default prediction'</span>,<span class="string">'16 cons only'</span>,<span class="string">'16 cons + minor'</span>)
+</pre><img vspace="5" hspace="5" src="tutorial_EOT_05.png" alt=""> <p>The plot above shows that whether or not we include the Sa constituent, and whether or not we infer minor constituents at this location, the predictions are all pretty similar, and they all capture the main behavior of the observations.</p><p>One way to measure the performance of a tide prediction is to look at the residuals of the observations minus the predictions. Here's what I mean:</p><pre class="codeinput">std([sl sl-z_default sl-z_cons sl-z_cons_min],[],<span class="string">'omitnan'</span>)
+</pre><pre class="codeoutput">ans =
+          1.08          0.15          0.17          0.16
+</pre><p>Above, we see that the raw observations have a standard deviation of about 1.08 m. If we subtract the full tide prediction with all major constituents solved explicitly and minor constituents inferred, the residuals are about 15 cm. If we don't use the Sa constituent and we don't infer minor constituents, performance is slightly worse, with a standard deviation of 17 cm. If we exclude Sa but still infer minor constituents, the standard deviation is 16 cm.</p><p>The residuals at the Nuuk tide gauge tell us exactly what we expect: That the EOT20 model with all constituents does a better job of matching observations than if Sa is excluded, and inferring minor constituents improves performance. It's no surprise that including Sa produces a better fit to observations, because the Sa parameters were tuned to fit observations.</p><p>Depending on what kind of work you're doing, you may wish to include or exclude constituents like Sa. Including Sa will likely do a better job of matching observations, but may include some climatological phenomena that you might prefer to leave out of a pure tidal prediction.</p><h2 id="14">Author Info</h2><p>This page was written by Chad A. Greene, June 2022.</p><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2021a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% How to separate climatological phenomena from gravitational tides
+% Tide model datasets are created by fitting sinusoids to satellite measurements of 
+% sea surface height variability. Every tidal constituent oscillates at a well
+% known frequency, so with enough data and the known frequencies of oscillation, it's possible to invert for the
+% amplitude and phase offset of every tidal constituent at any given location. That's all well and
+% good, but some natural phenomena occur at the same frequency as tidal
+% oscillation without being driven strictly by gravitational forcing. For
+% example, a river outflow may locally increase sea level every spring, so
+% any tidal inversion at the one-year frequency may be driven more by
+% mountain snowmelt than by the tiny effects of nonuniform changes in the 
+% Sun's declination and distance.
+%
+% This page shows how climatological variability can creep into tide
+% models, and offers some advice on what you can do about it. 
+
+%% EOT20 Global Model
+% The EOT20 global tide model is described in an <https://doi.org/10.5194/essd-13-3869-2021, 2021
+% ESSD paper by Hart-Davis et al., 2021>. In it, the authors write: 
+% 
+% _The SSA and Sa tides are included in the EOT20 model data, but users
+% should be aware that these tides include the full signal at these periods, 
+% i.e. gravitational as well as meteorological tides. Thus, caution should be 
+% taken when interpreting the results of the tidal correction when these two 
+% tides are included as they will likely remove the seasonal signals seen in 
+% the altimeter data._
+% 
+% In this tutorial, we'll explore the EOT20 model to find out what Hart-Davis et al. mean 
+% about the Sa tidal constituent. 
+% 
+%% Load EOT20 data 
+% Begin by loading the EOT20 amplitude and phase. We'll also load the ocean
+% mask, because we'll want it when we plot the data. 
+
+[hAm,lon,lat,cons] = tmd_data('EOT20_ocean.nc','hAm'); 
+hPh = tmd_data('EOT20_ocean.nc','hPh'); 
+ocean = tmd_data('EOT20_ocean.nc','mask'); 
+
+%% Plot M2 constituent 
+% Before we jump into the Sa constituent, let's get our bearings straight by
+% looking at the much more significant M2 constituent. 
+% 
+% Below, we get the index of the M2 constituent, then plot its amplitude
+% and phase on a global map. We'll use the _amp_ colormap from the
+% |cmocean| function in the <https://github.com/chadagreene/CDT Climate Data 
+% Toolbox for Matlab> (Greene et al., 2019). The colormap below is scaled
+% by 7 times the median value of constituent amplitude, and this value is
+% chosen somewhat arbitrarily because it makes for a nice comparison with
+% other constituents later on in this tutorial. 
+
+% Get the index of the M2 constituent: 
+k = strcmpi(cons,'M2');
+
+figure
+h = imagesc(lon,lat,hAm(:,:,k)); 
+h.AlphaData = ocean; % makes land transparent
+axis xy image off 
+hold on
+
+% Plot phase contours: 
+tmp=rad2deg(hPh(:,:,k)); 
+tmp(~ocean) = nan; 
+[~,hC] = contour(lon,lat,tmp,-165:30:165,'k');
+hC.LineWidth = 0.1; 
+hC.Color = .5*[1 1 1];
+
+cmocean amp % optional colormap
+caxis([0 7*median(hAm(:,:,k),'all','omitnan')])
+title(cons{k})
+cb = colorbar; 
+ylabel(cb,'constituent amplitude (m)') 
+
+%% Plot the Sa Constituent 
+% The map above shows exactly what we'd expect for a well-bahaved,
+% gravitationally driven tidal constituent. The M2 constituent has long
+% wavelengths and varies smoothly. 
+% 
+% Now let's make the same kind of map for the Sa constituent. I'm dropping
+% the contour lines here, becuase they get too messy to make any sense of
+% on a global scale: 
+
+% Get the index of the Sa constituent: 
+k = strcmpi(cons,'Sa');
+
+figure
+h = imagesc(lon,lat,hAm(:,:,k)); 
+h.AlphaData = ocean; 
+axis xy image off 
+hold on
+cmocean amp 
+caxis([0 7*median(hAm(:,:,k),'all','omitnan')])
+title(cons{k})
+cb = colorbar; 
+ylabel(cb,'constituent amplitude (m)') 
+
+%%
+% In the map above, the first thing I notice is the familiar pattern in the
+% equatorial Pacific, which is <https://doi.org/10.1126/sciadv.1500560 
+% driven by wind stress on annual timescales>. I also see what appear to be 
+% eddies and global currents, which are unlikely to be a direct result of 
+% the perihelion-aphelion effect at the heart of the Sa constituent. 
+% 
+% All amplitudes are zero beyond 66°S and 66°N because the FES2014b model that
+% fills EOT20 at high latitudes does not include the Sa constituent. Where
+% EOT20 does have data for the Sa constituent close to Antarctica, the
+% spatial pattern and the timing, with a maximum in spring, suggest a
+% possible influence from sea ice in the altimetry. 
+% 
+% By inspection, we can see that the majority of the variability in the map
+% above is probably driven by climatological effects rather than gravitational
+% effects. Depending on how you're using the tide model, that may be a good
+% thing, or you may not want it, but it's good to be aware of which
+% constituents are influenced by climatological effects. 
+% 
+%% Compare all constituent amplitudes 
+% How do the amplitude patterns of all 17 constituents in EOT20 compare? 
+% Let's take a look. And to see how vary by frequency, we'll plot them in
+% order of constituent period. 
+% 
+% Below, I'm using |subsubplot|, |cmocean| and |ntitle| from the Climate
+% Data Toolbox for MATALAB.
+
+% Get tidal frequencies: 
+[~,~,~,omega] = tmd_constit(cons);
+
+% Convert frequencies (Hz) into period (days): 
+T_days = 2*pi./(omega*60*60*24); 
+
+% Sort constituents by period: 
+[T_days,ind] = sort(T_days); 
+hAm = hAm(:,:,ind); 
+cons = cons(ind); 
+
+figure('pos',[10 10 940 880])
+for k = 1:17
+   subsubplot(6,3,k)
+   h = imagesc(lon,lat,hAm(:,:,k)); 
+   h.AlphaData = ocean; 
+   axis xy image off 
+   hold on
+   cmocean amp 
+   caxis([0 7*median(hAm(:,:,k),'all','omitnan')])
+   ntitle([cons{k},' T=',num2str(T_days(k),'%.2f'),' days'],...
+      'color',rgb('dark blue'))
+end
+
+%% 
+% In the maps above, Sa stands out for its potential influence from
+% climatological effects. 
+% 
+% Before we go too much farther, I'll point out that the comparison above might
+% present a skewed understanding of how much each constituent actually matters, 
+% because the color axis of each map was scaled relative to its overall distribution
+% of values. A more direct comparison would place all constituents on a common 
+% color axis, like this, where we set |caxis([0 1])| for all constituents: 
+
+figure('pos',[10 10 940 880])
+for k = 1:17
+   subsubplot(6,3,k)
+   h = imagesc(lon,lat,hAm(:,:,k)); 
+   h.AlphaData = ocean; 
+   axis xy image off 
+   hold on
+   cmocean amp 
+   caxis([0 1])
+   ntitle([cons{k},' T=',num2str(T_days(k),'%.2f'),' days'],...
+      'color',rgb('dark blue'))
+end
+
+%%
+% Above, you see that the overwhelming majority of the energy exists at the
+% M2 frequency. There's a decent amount of energy at a few other
+% frequencies like S2, K1, and O1, but most constituents have only a tiny
+% influence compared to M2. 
+% 
+% If you look closely at Sa, you'll see that it does contain some streaks
+% of color, and depending on your application, you may want to include Sa,
+% or you may want to exclude it. For example, if you own a stretch of beachfront 
+% property in Hawaii and you want the most accurate sea surface height
+% prediction possible before your next lūʻau, you probably want to include
+% the Sa constituent in your prediction. On the other hand, if you want to
+% remove gravitationally driven tides from gauge measurements to study the
+% residuals for changes in seasonal climate patterns you probably want to
+% exclude Sa from your predictions. 
+% 
+%% Removing Sa from predictions
+% If you'd like to make tide predictions, but you want to exclude certain
+% constituents, just tell the <tmd_predict_documentation.html |tmd_predict|> 
+% function which constituents you want to include. 
+% 
+% By default, |tmd_predict| uses all constituents in a model also infers
+% minor constituents that aren't in the model. If you specify which
+% constituents you want to solve for, |tmd_predict| then assumes you only
+% want a solution for those constituents, without influence from minor
+% constituents. So if you specify which constituents you want to solve for,
+% but you still want minor constituents to be inferred, be sure to specify 
+% |'InferMinor',true|, as shown below. 
+% 
+% This example uses some tide gauge measurements near Nuuk, Greenland to
+% see how well EOT20 performs when including or excluding the Sa
+% constituent. Start by loading the tide gauge observations: 
+
+% Load example tide gauge data (found in the doc/example_data folder.)
+fn = 'h820_nuuk.nc'; 
+lat = ncread(fn,'lat');
+lon = ncread(fn,'lon');
+t = ncread(fn,'time')+datenum(1800,1,1,0,0,0); % units = 'days since 1800-01-01 00:00:00' 
+sl = ncread(fn,'sea_level')/1000; 
+
+%% 
+% Use the <tmd_conlist_documentation.html |tmd_conlist|> function to get a
+% list of constituents in the EOT20 model. Then create a list of
+% constituents excluding Sa:
+
+% Get a list of all constituents in EOT20: 
+cons = tmd_conlist('EOT20_ocean.nc'); 
+
+% Remove Sa from the list: 
+cons_exclude = cons(~strcmpi(cons,'Sa')); 
+
+%% 
+% Predict tides three different ways: 
+
+% Solve tides using all major constituents and infer minor: 
+z_default = tmd_predict('EOT20_ocean.nc',lat,lon,t,'h'); 
+
+% Solve only for 16 model constituents (Sa excluded): 
+z_cons = tmd_predict('EOT20_ocean.nc',lat,lon,t,'h','constituents',cons_exclude); 
+
+% Solve for 16 model constituents and infer minor: 
+z_cons_min = tmd_predict('EOT20_ocean.nc',lat,lon,t,'h',...
+   'constituents',cons_exclude,'InferMinor',true); 
+
+figure
+plot(t,sl-mean(sl,'omitnan'),'linewidth',1,'color','k')
+box off 
+axis tight
+xlim([datenum('11 sept 2018') datenum('15 sept 2018')])
+datetick('x','keeplimits') 
+ylabel 'tide height (m)' 
+hold on
+plot(t,z_default,'linewidth',1)
+plot(t,z_cons,'linewidth',1)
+plot(t,z_cons_min,'linewidth',1)
+legend('observations','default prediction','16 cons only','16 cons + minor')
+
+%% 
+% The plot above shows that whether or not we include the Sa constituent,
+% and whether or not we infer minor constituents at this location, the
+% predictions are all pretty similar, and they all capture the main
+% behavior of the observations. 
+% 
+% One way to measure the performance of a tide prediction is to look at the
+% residuals of the observations minus the predictions. Here's what I mean: 
+
+std([sl sl-z_default sl-z_cons sl-z_cons_min],[],'omitnan')
+
+%% 
+% Above, we see that the raw observations have a standard deviation of about
+% 1.08 m. If we subtract the full tide prediction with all major constituents 
+% solved explicitly and minor constituents inferred, the residuals are
+% about 15 cm. If we don't use the Sa constituent and we don't infer minor
+% constituents, performance is slightly worse, with a standard deviation of
+% 17 cm. If we exclude Sa but still infer minor constituents, the standard
+% deviation is 16 cm. 
+% 
+% The residuals at the Nuuk tide gauge tell us exactly what we expect: That
+% the EOT20 model with all constituents does a better job of matching
+% observations than if Sa is excluded, and inferring minor constituents
+% improves performance. It's no surprise that including Sa produces a
+% better fit to observations, because the Sa parameters were tuned to fit
+% observations. 
+% 
+% Depending on what kind of work you're doing, you may wish to include or
+% exclude constituents like Sa. Including Sa will likely do a better job of
+% matching observations, but may include some climatological phenomena that
+% you might prefer to leave out of a pure tidal prediction. 
+% 
+%% Author Info 
+% This page was written by Chad A. Greene, June 2022. 
+
+##### SOURCE END #####
+--></body></html>

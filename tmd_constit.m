@@ -4,11 +4,11 @@ function [ispec,amp,ph,omega,alpha] = tmd_constit(constituents)
 % 
 %% Syntax
 % 
-%  [ispec,amp,ph,omega,alpha] = constit(constituents)
+%  [ispec,amp,ph,omega,alpha] = tmd_constit(constituents)
 % 
 %% Description 
 % 
-% [ispec,amp,ph,omega,alpha] = constit(constituents) returns constants for tidal 
+% [ispec,amp,ph,omega,alpha] = tmd_constit(constituents) returns constants for tidal 
 % constituents, specified by a string (e.g., 'm2') or a cell array of
 % strings (e.g., {'m2','s2'}). 
 % 
@@ -69,7 +69,7 @@ c_data = { 'm2';  's2';  'k1';  'o1';
            'm4'; 'ms4'; 'mn4';  'm6';
            'm8'; 'mk3';  's6';'2sm2';
          '2mk3';  's1'; '2q1';  'm3';
-         '  sa'};
+           'sa'};
  
 % ispec: species type (spherical harmonic dependence of quadropole potential)
 ispec_data = [2;2;1;1; 

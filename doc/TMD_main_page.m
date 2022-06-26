@@ -50,6 +50,7 @@
 % * <TMD_model_file_format.html TMD Model file format> 
 % * <tide_model_intercomparison.html Tide Model Intercomparison>
 % * <tutorial_currents.html How to: Analyze ADCP current data>
+% * <tutorial_EOT.html How to: Separate climatological phenomena from gravitational tides>
 % * <tutorial_tidal_range.html How to: Calculate tidal range>
 % * <tmd_logo_animation.html How to: Animate Tide Data>
 
