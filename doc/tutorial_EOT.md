@@ -8,7 +8,7 @@ This page shows how climatological variability can creep into tide models, and o
 ## EOT20 Global Model
 The EOT20 global tide model is described in an [ESSD paper by Hart-Davis et al., 2021](https://doi.org/10.5194/essd-13-3869-2021). In it, the authors write: 
 
-> *The SSa and Sa tides are included in the EOT20 model data, but users should be aware that these tides include the full signal at these periods, i.e. gravitational as well as meteorological tides. Thus, caution should be taken when interpreting the results of the tidal correction when these two tides are included as they will likely remove the seasonal signals seen in the altimeter data.*
+> *The Ssa and Sa tides are included in the EOT20 model data, but users should be aware that these tides include the full signal at these periods, i.e. gravitational as well as meteorological tides. Thus, caution should be taken when interpreting the results of the tidal correction when these two tides are included as they will likely remove the seasonal signals seen in the altimeter data.*
 
 In this tutorial, we'll explore the EOT20 model to find out what Hart-Davis et al. mean about the Sa tidal constituent. 
 
@@ -154,7 +154,7 @@ sl = ncread(fn,'sea_level')/1000;
 ```
 
 ### Create a list of constituents you *want*:
-Use the [`tmd_conlist`](tmd_conlist.md) function to get a list of constituents in the EOT20 model. Then create a list of constituents excluding Sa:
+Use the [`tmd_conlist`](tmd_conlist_documentation.md) function to get a list of constituents in the EOT20 model. Then create a list of constituents excluding Sa:
 
 ```matlab
 % Get a list of all constituents in EOT20: 
