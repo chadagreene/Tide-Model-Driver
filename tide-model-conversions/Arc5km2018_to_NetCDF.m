@@ -19,7 +19,7 @@ filename_u = '/Users/cgreene/Documents/data/tides/Arc5km2018/UV_Arc5km2018';
 
 res = 5; % (km) input grid resolution 
 
-con_string = 'm2 s2 n2 k2 k1 o1 p1 q1 m4 mn4 ms4'; % constituents in original model order, obtained by rd_con('h_Arc5km2018') 
+con_string = 'm2 s2 n2 k2 k1 o1 p1 q1 m4 mn4 ms4 2n2'; % constituents in original model order, obtained by rd_con('h_Arc5km2018') 
 
 %% Load data
 
@@ -28,7 +28,7 @@ con_string = 'm2 s2 n2 k2 k1 o1 p1 q1 m4 mn4 ms4'; % constituents in original mo
 
 % Reorient and reduce data size:
 mask = uint8(flipud(mask')); 
-wct = uint16(flipud(wct')); 
+wct = flipud(wct'); 
 
 % Create spatial arrays: 
 x = (ll_lims(1)+res/2):res:(ll_lims(2)-res/2); 
@@ -56,15 +56,16 @@ oldaz = angle(h(:,:,1));
 
 [X,Y] = meshgrid(x,y); 
 [Lon,Lat] = xy_ll_Arc5km2018(X,Y,'B');
-error 'wait, we better figure out what the proj4 string is for this garbage projection.'
 
-figure
-subplot(1,2,1)
-pcolorpsn(Lat,Lon,oldaz); 
-axis tight off
-bedmachine('gl','color',rgb('gray'),'greenland')
-cmocean phase 
-ax(1) = gca; 
+if false
+   figure
+   subplot(1,2,1)
+   pcolorpsn(Lat,Lon,oldaz); 
+   axis tight off
+   bedmachine('gl','color',rgb('gray'),'greenland')
+   cmocean phase 
+   ax(1) = gca; 
+end
 
 %% Fill NaNs
 
@@ -84,21 +85,46 @@ for k = 1:Ncons
    k
 end
 
-subplot(1,2,2)
-pcolorpsn(Lat,Lon,angle(h(:,:,1))); 
-axis tight off
-bedmachine('gl','color',rgb('gray'),'greenland')
-cmocean phase 
-ax(2) = gca; 
-linkaxes(ax,'xy'); 
+if false
+   subplot(1,2,2)
+   pcolorpsn(Lat,Lon,angle(h(:,:,1))); 
+   axis tight off
+   bedmachine('gl','color',rgb('gray'),'greenland')
+   cmocean phase 
+   ax(2) = gca; 
+   linkaxes(ax,'xy'); 
+end
 
-%% Fix half-cell offset in transport variables 
+%% Interpolate to ps grid and Fix half-cell offset in transport variables 
 
+% Create a grid in polar stereographic coordinates: 
+xps = -2850:res:2495; 
+yps  = 2640:-res:-2855; 
+% xps = -2645:res:2855; 
+% yps = 2495:-res:-2850; 
+[Xps,Yps] = meshgrid(xps,yps); 
+[Latps,Lonps] = tmd_ps2ll(Xps,Yps,70,0,'N'); 
+
+% Get the Arc5km grid coordinates of the ps grid: 
+[Xi,Yi] = xy_ll_Arc5km2018(Lonps,Latps,'F'); 
+
+% Interpolate to new grid
 for k = 1:Ncons
-   U(:,:,k) = interp2(x-res/2,y,U(:,:,k),X,Y); 
-   V(:,:,k) = interp2(x,y-res/2,V(:,:,k),X,Y); 
+   htmp(:,:,k) = interp2(x,y,h(:,:,k),Xi,Yi); 
+   Utmp(:,:,k) = interp2(x-res/2,y,U(:,:,k),Xi,Yi); % half pixel offset for transport variables  
+   Vtmp(:,:,k) = interp2(x,y-res/2,V(:,:,k),Xi,Yi); 
    k
 end
+
+mask = interp2(x,y,mask,Xi,Yi,'nearest');
+wct = uint16(interp2(x,y,wct,Xi,Yi)); 
+wct(isnan(abs(htmp(:,:,1)))) = 65535; 
+
+% Overwrite old h, U, and V with new, interpolated values: 
+h = htmp; 
+U = Utmp; 
+V = Vtmp; 
+clear htmp Utmp Vtmp 
 
 %%
 
@@ -131,8 +157,8 @@ scale_UV= 32767/max([mxur mxui mxvr mxvi])
 
 [ispec,amp,ph,omega,alpha] = tmd_constit(strsplit(con_string));
 
-proj4 = '+proj=stere +lat_0=90 +lat_ts=70 +lon_0=-45 +x_0=0 +y_0=0 +datum=WGS84 +units=km +no_defs +type=crs';
-return
+proj4 = '+proj=stere +lat_0=90 +lat_ts=70 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=km +no_defs +type=crs';
+
 %% Write the netcdf 
 
 % 1. Create netCDF file handle and Attributes
@@ -140,8 +166,8 @@ mode = netcdf.getConstant('NETCDF4');
 mode = bitor(mode,netcdf.getConstant('CLASSIC_MODEL'));
 ncid=netcdf.create(newfilename,mode);
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Conventions','CF-1.7');
-netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Title','Arc2kmTM_v1');
-netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Description','The Arctic 2 km (kilometer) Tide Model (Arc2kmTM) is a barotropic ocean tide model on a 2x2 km polar stereographic grid, developed using the Regional Ocean Modeling System (ROMS). Arc2kmTM consists of spatial grids of complex amplitude coefficients for sea surface height and depth-integrated currents (“volume transports”) for 8 principal tidal constituents: 4 semidiurnal (M2, S2, K2, N2) and 4 diurnal (K1, O1, P1, Q1).');
+netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Title','Arc5km2018');
+netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Description','The Arctic Ocean Tidal Inverse Model developed in 2018 (Arc5km2018) is a barotropic tide model on a 5 km polar stereographic grid. It is an update to the original Arctic Ocean Tidal Inverse Model (AOTIM5) model developed in 2004, described by Padman and Erofeeva (2004) (https://doi.org/10.1029/2003GL019003).');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Author','Susan L. Howard & Laurie Padman');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'creation_date',datestr(now,'yyyy-mm-dd'));
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'NetCDF_conversion','Chad A. Greene');
@@ -156,7 +182,7 @@ mapping_var_id= netcdf.defVar(ncid,'mapping','NC_CHAR',[]);
 netcdf.putAtt(ncid,mapping_var_id,'grid_mapping_name', 'polar_stereographic');
 netcdf.putAtt(ncid,mapping_var_id,'latitude_of_projection_origin',90);
 netcdf.putAtt(ncid,mapping_var_id,'standard_parallel',70);
-netcdf.putAtt(ncid,mapping_var_id,'straight_vertical_longitude_from_pole',-45);
+netcdf.putAtt(ncid,mapping_var_id,'straight_vertical_longitude_from_pole',0);
 netcdf.putAtt(ncid,mapping_var_id,'false_easting',0);
 netcdf.putAtt(ncid,mapping_var_id,'false_northing',0); 
 netcdf.putAtt(ncid,mapping_var_id,'spatial_proj4',proj4); 
@@ -268,6 +294,7 @@ netcdf.putAtt(ncid,wct_var_id,'long_name','water column thickness');
 netcdf.putAtt(ncid,wct_var_id,'standard_name','wct');
 netcdf.putAtt(ncid,wct_var_id,'units',    'meters');
 netcdf.putAtt(ncid,wct_var_id,'grid_mapping', 'polar_stereographic');
+netcdf.putAtt(ncid,wct_var_id,'_FillValue',65535);
 
 % Define mask
 mask_var_id = netcdf.defVar(ncid,'mask','NC_BYTE',[x_id y_id]);

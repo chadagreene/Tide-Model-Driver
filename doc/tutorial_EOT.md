@@ -77,7 +77,7 @@ ylabel(cb,'constituent amplitude (m)')
 
 In the map above, the first thing I notice is the familiar pattern in the equatorial Pacific, which is [driven by wind stress on annual timescales](https://doi.org/10.1126/sciadv.1500560). I also see what appear to be eddies and global currents, which are unlikely to be a direct result of the perihelion-aphelion effect at the heart of the Sa constituent. 
 
-All amplitudes are zero beyond 66°S and 66°N because the FES2014b model that fills EOT20 at high latitudes does not include the Sa constituent. Where EOT20 does have data for the Sa constituent close to Antarctica, the spatial pattern and the timing, with a maximum in spring, suggest a possible influence from sea ice in the altimetry. 
+All amplitudes are nearly zero beyond 66°S and 66°N because the FES2014b model that fills EOT20 at high latitudes includes only the (tiny) ocean component of the Sa constituent, whereas EOT20 fits tidal parameters to all observed variability. Where EOT20 does have data for the Sa constituent close to Antarctica, the spatial pattern and the timing, with a maximum in spring, suggest a possible influence from sea ice in the altimetry. 
 
 By inspection, we can see that the majority of the variability in the map above is probably driven by climatological effects rather than gravitational effects. Depending on how you're using the tide model, that may be a good thing, or you may not want it, but it's good to be aware of which constituents are influenced by climatological effects. 
 

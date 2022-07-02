@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>How to separate climatological phenomena from gravitational tides</title><meta name="generator" content="MATLAB 9.10"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2022-06-26"><meta name="DC.source" content="tutorial_EOT.m"><style type="text/css">
+      --><title>How to separate climatological phenomena from gravitational tides</title><meta name="generator" content="MATLAB 9.10"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2022-07-02"><meta name="DC.source" content="tutorial_EOT.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -104,7 +104,7 @@ caxis([0 7*median(hAm(:,:,k),<span class="string">'all'</span>,<span class="stri
 title(cons{k})
 cb = colorbar;
 ylabel(cb,<span class="string">'constituent amplitude (m)'</span>)
-</pre><img vspace="5" hspace="5" src="tutorial_EOT_02.png" alt=""> <p>In the map above, the first thing I notice is the familiar pattern in the equatorial Pacific, which is <a href="https://doi.org/10.1126/sciadv.1500560">driven by wind stress on annual timescales</a>. I also see what appear to be eddies and global currents, which are unlikely to be a direct result of the perihelion-aphelion effect at the heart of the Sa constituent.</p><p>All amplitudes are zero beyond 66&deg;S and 66&deg;N because the FES2014b model that fills EOT20 at high latitudes does not include the Sa constituent. Where EOT20 does have data for the Sa constituent close to Antarctica, the spatial pattern and the timing, with a maximum in spring, suggest a possible influence from sea ice in the altimetry.</p><p>By inspection, we can see that the majority of the variability in the map above is probably driven by climatological effects rather than gravitational effects. Depending on how you're using the tide model, that may be a good thing, or you may not want it, but it's good to be aware of which constituents are influenced by climatological effects.</p><h2 id="6">Compare all constituent amplitudes</h2><p>How do the amplitude patterns of all 17 constituents in EOT20 compare? Let's take a look. And to see how vary by frequency, we'll plot them in order of constituent period.</p><p>Below, I'm using <tt>subsubplot</tt>, <tt>cmocean</tt> and <tt>ntitle</tt> from the Climate Data Toolbox for MATALAB.</p><pre class="codeinput"><span class="comment">% Get tidal frequencies:</span>
+</pre><img vspace="5" hspace="5" src="tutorial_EOT_02.png" alt=""> <p>In the map above, the first thing I notice is the familiar pattern in the equatorial Pacific, which is <a href="https://doi.org/10.1126/sciadv.1500560">driven by wind stress on annual timescales</a>. I also see what appear to be eddies and global currents, which are unlikely to be a direct result of the perihelion-aphelion effect at the heart of the Sa constituent.</p><p>All amplitudes are zero beyond 66&deg;S and 66&deg;N because the FES2014b model that fills EOT20 at high latitudes includes only the (tiny) ocean component of the Sa constituent, whereas EOT20 fits tidal parameters to all observed variability. Where EOT20 does have data for the Sa constituent close to Antarctica, the spatial pattern and the timing, with a maximum in spring, suggest a possible influence from sea ice in the altimetry.</p><p>By inspection, we can see that the majority of the variability in the map above is probably driven by climatological effects rather than gravitational effects. Depending on how you're using the tide model, that may be a good thing, or you may not want it, but it's good to be aware of which constituents are influenced by climatological effects.</p><h2 id="6">Compare all constituent amplitudes</h2><p>How do the amplitude patterns of all 17 constituents in EOT20 compare? Let's take a look. And to see how vary by frequency, we'll plot them in order of constituent period.</p><p>Below, I'm using <tt>subsubplot</tt>, <tt>cmocean</tt> and <tt>ntitle</tt> from the Climate Data Toolbox for MATALAB.</p><pre class="codeinput"><span class="comment">% Get tidal frequencies:</span>
 [~,~,~,omega] = tmd_constit(cons);
 
 <span class="comment">% Convert frequencies (Hz) into period (days):</span>
@@ -279,7 +279,9 @@ ylabel(cb,'constituent amplitude (m)')
 % the perihelion-aphelion effect at the heart of the Sa constituent. 
 % 
 % All amplitudes are zero beyond 66°S and 66°N because the FES2014b model that
-% fills EOT20 at high latitudes does not include the Sa constituent. Where
+% fills EOT20 at high latitudes includes only the (tiny) ocean component of 
+% the Sa constituent, whereas EOT20 fits tidal parameters to all observed 
+% variability. Where
 % EOT20 does have data for the Sa constituent close to Antarctica, the
 % spatial pattern and the timing, with a maximum in spring, suggest a
 % possible influence from sea ice in the altimetry. 

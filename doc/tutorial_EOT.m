@@ -100,7 +100,9 @@ ylabel(cb,'constituent amplitude (m)')
 % the perihelion-aphelion effect at the heart of the Sa constituent. 
 % 
 % All amplitudes are zero beyond 66°S and 66°N because the FES2014b model that
-% fills EOT20 at high latitudes does not include the Sa constituent. Where
+% fills EOT20 at high latitudes includes only the (tiny) ocean component of 
+% the Sa constituent, whereas EOT20 fits tidal parameters to all observed 
+% variability. Where
 % EOT20 does have data for the Sa constituent close to Antarctica, the
 % spatial pattern and the timing, with a maximum in spring, suggest a
 % possible influence from sea ice in the altimetry. 
