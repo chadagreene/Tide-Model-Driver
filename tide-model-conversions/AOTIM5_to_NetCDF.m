@@ -1,25 +1,25 @@
-% This file reads the old binary Arc5km2018 tide model and converts it to NetCDF. 
+% This file reads the old binary AOTIM5 tide model and converts it to NetCDF. 
 % 
 % This script calls some legacy functions from TMD2.5 to load the old data.
 % 
 % Written by Chad A. Greene, NASA/JPL, May 2022. 
 
 addpath(genpath('/Users/cgreene/Documents/MATLAB/TMD3.00_alpha'))
-addpath(genpath('/Users/cgreene/Documents/data/tides/Arc5km2018'))
+addpath(genpath('/Users/cgreene/Documents/data/tides/AOTIM5'))
 
 %% Enter initial file info 
 
 % Output file: 
-newfilename = ['/Users/cgreene/Documents/data/tides/Arc5km2018.nc']; 
+newfilename = ['/Users/cgreene/Documents/data/tides/AOTIM5.nc']; 
 
 % Input files: 
-filename_grd = '/Users/cgreene/Documents/data/tides/Arc5km2018/grid_Arc5km2018'; 
-filename_h = '/Users/cgreene/Documents/data/tides/Arc5km2018/h_Arc5km2018'; 
-filename_u = '/Users/cgreene/Documents/data/tides/Arc5km2018/UV_Arc5km2018'; 
+filename_grd = '/Users/cgreene/Documents/data/tides/AOTIM5/grid_Arc5km'; 
+filename_h = '/Users/cgreene/Documents/data/tides/AOTIM5/h_Arc5km.oce'; 
+filename_u = '/Users/cgreene/Documents/data/tides/AOTIM5/UV_Arc5km'; 
 
 res = 5; % (km) input grid resolution 
 
-con_string = 'm2 s2 n2 k2 k1 o1 p1 q1 m4 mn4 ms4 2n2'; % constituents in original model order, obtained by rd_con('h_Arc5km2018') 
+con_string = 'm2 s2 n2 k2 k1 o1 p1 q1'; % constituents in original model order, obtained by rd_con('h_Arc5km.oce') 
 
 %% Load data
 
@@ -193,15 +193,15 @@ mode = netcdf.getConstant('NETCDF4');
 mode = bitor(mode,netcdf.getConstant('CLASSIC_MODEL'));
 ncid=netcdf.create(newfilename,mode);
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Conventions','CF-1.7');
-netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Title','Arc5km2018');
-netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Description','The Arctic Ocean Tidal Inverse Model developed in 2018 (Arc5km2018) is a barotropic tide model on a 5 km polar stereographic grid. It is an update to the original Arctic Ocean Tidal Inverse Model (AOTIM5) model developed in 2004, described by Padman and Erofeeva (2004) (https://doi.org/10.1029/2003GL019003).');
-netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Author','Susan L. Howard & Laurie Padman');
+netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Title','AOTIM5');
+netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Description','Arctic Ocean Inverse Tide Model, on 5 km grid, developed in 2004. ');
+netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Author','Padman L , Erofeeva S , and Howard S.');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'creation_date',datestr(now,'yyyy-mm-dd'));
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'NetCDF_conversion','Chad A. Greene');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'tmd_version',3.0);
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'model_type','ocean');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'license','MIT License');
-netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Data_citation','Erofeeva S and Egbert G. 2020. Arc5km2018: Arctic Ocean Inverse Tide Model on a 5 kilometer grid, 2018 doi:10.18739/A21R6N14K')
+netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Data_citation','Padman L , Erofeeva S , and Howard S. 2020. AOTIM5: Arctic Ocean Inverse Tide Model, on 5 kilometer grid, developed in 2004. doi:10.18739/A2S17SS80')
 
 % 2. Define dimensions
 % Define mapping variable
