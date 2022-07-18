@@ -17,7 +17,7 @@ Barotropic ocean models contain complex tidal coefficients for water height and 
 	* **Data Citation:** Egbert, G. D., and Erofeeva, S. Y. (2002). Efficient inverse modeling of barotropic ocean tides. Journal of Atmospheric and Oceanic Technology 19(2), 183-204.
 	
 * [**`EOT20_ocean.nc`**](https://www.chadagreene.com/tide_data/EOT20_ocean.nc) [23 MB] by Hart-Davis et al. EOT20 is the latest in a series of global ocean tide models developed by *Hart-Davis et al*. at DGFI-TUM. EOT20 is created using residual tidal analysis of multi-mission altimetry data from 1992-2019. Eleven satellite altimetry missions are used and the FES2014b tide model used as the reference model for the residual tidal analysis. The model extends throughout the global ocean, with EOT20 ranging from 66°S to 66°N with FES2014b being used to fill in the higher latitudes.
-	* **Variables:** height only.
+	* **Variables:** Complex height only.
 	* **Resolution:** 1/8 degree.
 	* **Constituents:** 17: 2n2 j1 k1 k2 m2 m4 mf mm n2 o1 p1 q1 s1 s2 sa ssa t2.
 	* **Restrictions:** Users must cite Hart-Davis et al., 2021. 
@@ -90,7 +90,7 @@ Load tides refer to the deformation of the Earth's crust that occurs in response
 These load tide model data files are compatible with TMD3.0: 
 
 * [**`EOT20_load.nc`**](https://www.chadagreene.com/tide_data/EOT20_load.nc) [20 MB] by Hart-Davis et al. EOT20 is the latest in a series of global ocean tide models developed by *Hart-Davis et al*. at DGFI-TUM. EOT20 is created using residual tidal analysis of multi-mission altimetry data from the period of 1992 to 2019. Eleven satellite altimetry missions are used and the FES2014b tide model used as the reference model for the residual tidal analysis. The model extends throughout the global ocean, with EOT20 ranging from 66°S to 66°N with FES2014b being used to fill in the higher latitudes.
-	* **Variables:** height only.
+	* **Variables:** Complex height only.
 	* **Resolution:** 1/8 degree.
 	* **Constituents:** 17: 2n2 j1 k1 k2 m2 m4 mf mm n2 o1 p1 q1 s1 s2 sa ssa t2.
 	* **Restrictions:** Users must cite Hart-Davis et al., 2021. 
