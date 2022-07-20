@@ -1,0 +1,74 @@
+
+@article{carrillo:2005,
+  title={{Detiding ADCP data in a highly variable shelf sea: the Celtic Sea}},
+  author={Carrillo, L and Souza, AJ and Hill, AE and Brown, J and Fernand, L and Candela, J},
+  journal={Journal of Atmospheric and Oceanic Technology},
+  volume={22},
+  number={1},
+  pages={84--97},
+  year={2005}
+}
+
+@article{loder:1980,
+  title={{Topographic rectification of tidal currents on the sides of Georges Bank}},
+  author={Loder, John W},
+  journal={Journal of Physical Oceanography},
+  volume={10},
+  number={9},
+  pages={1399--1416},
+  year={1980}
+}
+
+@article{munk:1998,
+  title={{Abyssal recipes II: Energetics of tidal and wind mixing}},
+  author={Munk, Walter and Wunsch, Carl},
+  journal={Deep Sea Research Part I: Oceanographic Research Papers},
+  volume={45},
+  number={12},
+  pages={1977--2010},
+  year={1998},
+  publisher={Elsevier}
+}
+
+@article{padman:2004,
+  title={{A barotropic inverse tidal model for the Arctic Ocean}},
+  author={Padman, L and Erofeeva, S},
+  journal={Geophysical Research Letters},
+  volume={31},
+  number={2},
+  year={2004},
+  publisher={Wiley Online Library}
+}
+
+@article{padman:2018,
+  title={{Ocean tide influences on the Antarctic and Greenland ice sheets}},
+  author={Padman, Laurie and Siegfried, Matthew R and Fricker, Helen A},
+  journal={Reviews of Geophysics},
+  volume={56},
+  number={1},
+  pages={142--184},
+  year={2018},
+  publisher={Wiley Online Library}
+}
+
+@article{smith:2000,
+  title={{Ocean tides from T/P, ERS-1, and GEOSAT altimetry}},
+  author={Smith, AJE and Ambrosius, BAC and Wakker, KF},
+  journal={Journal of Geodesy},
+  volume={74},
+  number={5},
+  pages={399--413},
+  year={2000},
+  publisher={Springer}
+}
+
+@article{stammer:2014,
+  title={Accuracy assessment of global barotropic ocean tide models},
+  author={Stammer, Detlef and Ray, RD and Andersen, Ole Baltazar and Arbic, BK and Bosch, W and Carr{\`e}re, L and Cheng, Yongcun and Chinn, DS and Dushaw, BD and Egbert, GD and others},
+  journal={Reviews of Geophysics},
+  volume={52},
+  number={3},
+  pages={243--282},
+  year={2014},
+  publisher={Wiley Online Library}
+}

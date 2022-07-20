@@ -39,48 +39,9 @@ bibliography: paper.bib
 
 # Summary
 
-The Tide Model Driver for MATLAB version 3.0 (TMD3.0) predicts tidal heights or tidal current transports by summing the coefficients of tidal constituents at specified times and locations. The underlying equations for the Tide Model Driver were originally written in Fortran, and were translated into MATLAB nearly two decades ago. This update uses the same underlying equations, but the package has been restructured for computational efficiency and ease of use. For TMD3.0, we introduce a new, consolidated NetCDF tide model data format that is compact, user friendly, and can be used for any barotropic ocean or load tide model. 
+Astronomically-forced tides influence ocean surface height and currents on timescales of minutes to years. Tides contribute to ocean mixing [@munk:1998] and mean flows [@loder:1980], ice sheet and sea ice dynamics, and melting of ice shelves and marine terminating glaciers [@padman:2018]. Tidal signals must be accurately removed when calculating long-term trends in ocean surface height from tidally aliased satellite altimetry measurements [@smith:2000], and the tidal component of ocean circulation must be removed for analyses of ship-based current measurements [@carillo:2005]. Several models have been made publicly available to predict tides on global [@stammer:2014] or regional [e.g., @padman:2004] scales, but each model contains only information about the complex coefficients of tidal constituents, and requires software to calculate tidal predictions at arbitrary locations and times. 
 
-
-# Mathematics
-
-Single dollars ($) are required for inline mathematics e.g. $f(x) = e^{\pi/x}$
-
-Double dollars make self-standing equations:
-
-$$\Theta(x) = \left\{\begin{array}{l}
-0\textrm{ if } x < 0\cr
-1\textrm{ else}
-\end{array}\right.$$
-
-You can also use plain \LaTeX for equations
-\begin{equation}\label{eq:fourier}
-\hat f(\omega) = \int_{-\infty}^{\infty} f(x) e^{i\omega x} dx
-\end{equation}
-and refer to \autoref{eq:fourier} from text.
-
-# Citations
-
-Citations to entries in paper.bib should be in
-[rMarkdown](http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html)
-format.
-
-If you want to cite a software repository URL (e.g. something on GitHub without a preferred
-citation) then you can do it with the example BibTeX entry below for @fidgit.
-
-For a quick reference, the following citation commands can be used:
-- `@author:2001`  ->  "Author et al. (2001)"
-- `[@author:2001]` -> "(Author et al., 2001)"
-- `[@author1:2001; @author2:2001]` -> "(Author1 et al., 2001; Author2 et al., 2002)"
-
-# Figures
-
-Figures can be included like this:
-![Caption for example figure.\label{fig:example}](figure.png)
-and referenced from text using \autoref{fig:example}.
-
-Figure sizes can be customized by adding an optional second parameter:
-![Caption for example figure.](figure.png){ width=20% }
+We present the Tide Model Driver for MATLAB version 3.0 (TMD3.0), which represents decades of development by the tide community. The underlying equations for TMD were originally written in Fortran by Richard Ray, and were converted into MATLAB functions by Oregon State University and Earth and Space Research in 2005. The MATLAB version of TMD developed a global user base well before the advent of GitHub or modern documentation standards, but no major updates have been implemented since its inception. The updated toolbox presented here has been restructured for computational efficiency and ease of use, but relies on the same mathematical equations that have been employed since its earliest implementation. The documentation has been greatly expanded to include clear descriptions of syntax along with many thoroughly explained, replicable examples that use real-world ocean data provided with the software. For TMD3.0, we also introduce a new, consolidated NetCDF tide model data format that is compact, user friendly, and can be used for any barotropic ocean or load tide model. TMD3.0 is issued as a free, open-source software package that is available to all. 
 
 # Acknowledgements
 
