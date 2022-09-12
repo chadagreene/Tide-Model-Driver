@@ -27,12 +27,12 @@ Barotropic ocean models contain complex tidal coefficients for water height and 
 	* **Literature Reference:** Hart-Davis, M., Piccioni, G., Dettmering, D., Schwatke, C., Passaro,M., and Seitz, F.  (2021). EOT20: a global ocean tide model from multi-mission satellite altimetry. Earth System Science Data, 13(8), 3869-3884. [doi:10.5194/essd-13-3869-2021](https://doi.org/10.5194/essd-13-3869-2021).
 
 ### Regional Ocean Models 
-* [**`CATS2008_update_2022-06-11.nc`**](https://www.chadagreene.com/tide_data/CATS2008_update_2022-06-11.nc) [355 MB] Circum-Antarctic Tidal Simulation by Lana Erofeeva, Chad Greene, Susan Howard, and Laurie Padman. Updates from the original CATS2008 are described [here](cats2008_updates.md). 
+* [**`CATS2008_v2022.nc`**](https://www.chadagreene.com/tide_data/CATS2008_v2022.nc) [355 MB] Circum-Antarctic Tidal Simulation by Lana Erofeeva, Chad Greene, Susan Howard, and Laurie Padman. Updates from the original CATS2008 are described [here](cats2008_updates.md). 
 	* **Variables:** Complex height & transport coefficients.
 	* **Resolution:** 2 km.
 	* **Constituents:** 10: m2 s2 n2 k2 k1 o1 p1 q1 mf mm.
 	* **Restrictions:** This work is licensed under the Creative Commons Attribution 4.0 International License. 
-	* **Data Access:** [Download here](https://www.chadagreene.com/tide_data/CATS2008_update_2022-06-11.nc) [355 MB].
+	* **Data Access:** [Download here](https://www.chadagreene.com/tide_data/CATS2008_v2022.nc) [355 MB].
 	* **Website:** .
 	* **Data Citation:** .
 	

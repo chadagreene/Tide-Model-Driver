@@ -5,11 +5,13 @@
 % This script calls some legacy functions from TMD2.5 to load the old data.
 % 
 % Written by Chad A. Greene, NASA/JPL, February 2022. 
+%
+% This script takes about 8 minutes to run on my 2019 era laptop. 
 
 %% Enter initial file info 
 
 % Output file: 
-newfilename = ['/Users/cgreene/Documents/data/tides/CATS2008_update_',datestr(now,'yyyy-mm-dd'),'.nc']; 
+newfilename = ['/Users/cgreene/Documents/data/tides/CATS2008_v2022.nc']; 
 
 % Input files: 
 filename_grd = '/Users/cgreene/Documents/data/tides/CATS2008/grid_CATS2008'; 
@@ -216,8 +218,8 @@ netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'creation_date',datestr(now,'
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'NetCDF_conversion','Chad A. Greene');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'tmd_version',3.0);
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'model_type','ocean');
-netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'license','MIT License');
-netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Data_citation',['Howard, S. L., Erofeeva, S., & Padman, L. (2019) "CATS2008: Circum-Antarctic Tidal Simulation version 2008" u.S. Antarctic Program (USAP) Data Center. doi: https://doi.org/10.15784/601235.'])
+netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'license','Creative Commons Attribution 4.0 International License');
+netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Data_citation',['Howard, S. L., Erofeeva, S., & Padman, L. (2019) "CATS2008: Circum-Antarctic Tidal Simulation version 2008" u.S. Antarctic Program (USAP) Data Center. DOI information can be found at https://arcticdata.io/.'])
 
 % 2. Define dimensions
 % Define mapping variable
@@ -233,27 +235,27 @@ netcdf.putAtt(ncid,mapping_var_id,'spatial_proj4',proj4);
 % Define x: 
 x_id     = netcdf.defDim(ncid,'x',length(x));
 x_var_id = netcdf.defVar(ncid,'x','NC_FLOAT',x_id);
-netcdf.putAtt(ncid,x_var_id,'long_name',    'Cartesian x-coordinate, grid cell center');
 netcdf.putAtt(ncid,x_var_id,'standard_name','projection_x_coordinate');
+netcdf.putAtt(ncid,x_var_id,'long_name',    'Cartesian x-coordinate, grid cell center');
 netcdf.putAtt(ncid,x_var_id,'units',        'kilometer');
 
 % Define y: 
 y_id     = netcdf.defDim(ncid,'y',length(y));
 y_var_id = netcdf.defVar(ncid,'y','NC_FLOAT',y_id);
-netcdf.putAtt(ncid,y_var_id,'long_name',    'Cartesian y-coordinate, grid cell center');
 netcdf.putAtt(ncid,y_var_id,'standard_name','projection_y_coordinate');
+netcdf.putAtt(ncid,y_var_id,'long_name',    'Cartesian y-coordinate, grid cell center');
 netcdf.putAtt(ncid,y_var_id,'units',        'kilometer');
 
 % Define lat
 lat_var_id = netcdf.defVar(ncid,'lat','NC_DOUBLE',[x_id y_id]);
-netcdf.putAtt(ncid,lat_var_id,'long_name',    'grid cell center latitude');
 netcdf.putAtt(ncid,lat_var_id,'standard_name','latitude');
+netcdf.putAtt(ncid,lat_var_id,'long_name',    'grid cell center latitude');
 netcdf.putAtt(ncid,lat_var_id,'units',        'degree');
 
 % Define lon
 lon_var_id = netcdf.defVar(ncid,'lon','NC_DOUBLE',[x_id y_id]);
-netcdf.putAtt(ncid,lon_var_id,'long_name',    'grid cell center longitude');
 netcdf.putAtt(ncid,lon_var_id,'standard_name','longitude');
+netcdf.putAtt(ncid,lon_var_id,'long_name',    'grid cell center longitude');
 netcdf.putAtt(ncid,lon_var_id,'units',        'degree');
 
 % Define constituents
@@ -285,63 +287,63 @@ netcdf.putAtt(ncid,alp_var_id,'long_name','loading love number');
 
 % Define hRe
 hRe_var_id = netcdf.defVar(ncid,'hRe','NC_SHORT',[x_id y_id cons_id]);
+netcdf.putAtt(ncid,hRe_var_id,'standard_name','height_coefficient');
 netcdf.putAtt(ncid,hRe_var_id,'long_name',    'real component of height constituent');
-netcdf.putAtt(ncid,hRe_var_id,'standard_name','height_constituent');
 netcdf.putAtt(ncid,hRe_var_id,'grid_mapping', 'polar_stereographic');
 netcdf.putAtt(ncid,hRe_var_id,'units',        'm');
 netcdf.putAtt(ncid,hRe_var_id,'scale_factor',  1/scale_h);
 
 % Define hIm
 hIm_var_id = netcdf.defVar(ncid,'hIm','NC_SHORT',[x_id y_id cons_id]);
+netcdf.putAtt(ncid,hIm_var_id,'standard_name','height_coefficient');
 netcdf.putAtt(ncid,hIm_var_id,'long_name',    'imaginary component of height constituent');
-netcdf.putAtt(ncid,hIm_var_id,'standard_name','height_constituent');
 netcdf.putAtt(ncid,hIm_var_id,'grid_mapping', 'polar_stereographic');
 netcdf.putAtt(ncid,hIm_var_id,'units',        'm');
 netcdf.putAtt(ncid,hIm_var_id,'scale_factor',  1/scale_h);
 
 % Define uRe
 uRe_var_id = netcdf.defVar(ncid,'URe','NC_SHORT',[x_id y_id cons_id]);
-netcdf.putAtt(ncid,uRe_var_id,'long_name',    'real component of U transport constituent. This is the zonal flow component in geographic coordinates.');
-netcdf.putAtt(ncid,uRe_var_id,'standard_name','height_constituent');
+netcdf.putAtt(ncid,uRe_var_id,'standard_name','transport_coefficient');
+netcdf.putAtt(ncid,uRe_var_id,'long_name',    'real component of U transport constituent. This is the zonal (east-west) flow component in geographic coordinates.');
 netcdf.putAtt(ncid,uRe_var_id,'grid_mapping', 'polar_stereographic');
 netcdf.putAtt(ncid,uRe_var_id,'units',        'm^2/s');
 netcdf.putAtt(ncid,uRe_var_id,'scale_factor',  1/scale_UV);
 
 % Define uIm
 uIm_var_id = netcdf.defVar(ncid,'UIm','NC_SHORT',[x_id y_id cons_id]);
-netcdf.putAtt(ncid,uIm_var_id,'long_name',    'imaginary component of U transport constituent. This is the zonal flow component in geographic coordinates.');
-netcdf.putAtt(ncid,uIm_var_id,'standard_name','height_constituent');
+netcdf.putAtt(ncid,uIm_var_id,'standard_name','transport_coefficient');
+netcdf.putAtt(ncid,uIm_var_id,'long_name',    'imaginary component of U transport constituent. This is the zonal (east-west) flow component in geographic coordinates.');
 netcdf.putAtt(ncid,uIm_var_id,'grid_mapping', 'polar_stereographic');
 netcdf.putAtt(ncid,uIm_var_id,'units',        'm^2/s');
 netcdf.putAtt(ncid,uIm_var_id,'scale_factor',  1/scale_UV);
 
 % Define vRe
 vRe_var_id = netcdf.defVar(ncid,'VRe','NC_SHORT',[x_id y_id cons_id]);
-netcdf.putAtt(ncid,vRe_var_id,'long_name',    'real component of V transport constituent. This is the meridional flow component in geographic coordinates.');
-netcdf.putAtt(ncid,vRe_var_id,'standard_name','height_constituent');
+netcdf.putAtt(ncid,vRe_var_id,'standard_name','transport_coefficient');
+netcdf.putAtt(ncid,vRe_var_id,'long_name',    'real component of V transport constituent. This is the meridional (north-south) flow component in geographic coordinates.');
 netcdf.putAtt(ncid,vRe_var_id,'grid_mapping', 'polar_stereographic');
 netcdf.putAtt(ncid,vRe_var_id,'units',        'm^2/s');
 netcdf.putAtt(ncid,vRe_var_id,'scale_factor',  1/scale_UV);
 
 % Define vIm
 vIm_var_id = netcdf.defVar(ncid,'VIm','NC_SHORT',[x_id y_id cons_id]);
-netcdf.putAtt(ncid,vIm_var_id,'long_name',    'imaginary component of V transport constituent. This is the meridional flow component in geographic coordinates.');
-netcdf.putAtt(ncid,vIm_var_id,'standard_name','height_constituent');
+netcdf.putAtt(ncid,vIm_var_id,'standard_name','transport_coefficient');
+netcdf.putAtt(ncid,vIm_var_id,'long_name',    'imaginary component of V transport constituent. This is the meridional (north-south) flow component in geographic coordinates.');
 netcdf.putAtt(ncid,vIm_var_id,'grid_mapping', 'polar_stereographic');
 netcdf.putAtt(ncid,vIm_var_id,'units',        'm^2/s');
 netcdf.putAtt(ncid,vIm_var_id,'scale_factor',  1/scale_UV);
 
 % Define wct: 
 wct_var_id = netcdf.defVar(ncid,'wct','NC_SHORT',[x_id y_id]);
-netcdf.putAtt(ncid,wct_var_id,'long_name','water column thickness');
 netcdf.putAtt(ncid,wct_var_id,'standard_name','wct');
+netcdf.putAtt(ncid,wct_var_id,'long_name','water column thickness');
 netcdf.putAtt(ncid,wct_var_id,'units',    'meters');
 netcdf.putAtt(ncid,wct_var_id,'grid_mapping', 'polar_stereographic');
 
 % Define mask
 mask_var_id = netcdf.defVar(ncid,'mask','NC_BYTE',[x_id y_id]);
-netcdf.putAtt(ncid,mask_var_id,'long_name',    'ocean mask');
 netcdf.putAtt(ncid,mask_var_id,'standard_name','ocean_mask');
+netcdf.putAtt(ncid,mask_var_id,'long_name',    'ocean mask');
 netcdf.putAtt(ncid,mask_var_id,'grid_mapping', 'polar_stereographic');
 netcdf.putAtt(ncid,mask_var_id,'valid_range',  [0 1]);
 netcdf.putAtt(ncid,mask_var_id,'flag_values',  [0 1]);
@@ -349,17 +351,9 @@ netcdf.putAtt(ncid,mask_var_id,'flag_meanings','land ocean');
 
 % Define flexure
 flexure_var_id = netcdf.defVar(ncid,'flexure','NC_BYTE',[x_id y_id]);
-netcdf.putAtt(ncid,flexure_var_id,'long_name',    'Forward-modeled coefficient of tidal flexure assuming linear elastic response applied to BedMachine v2 geometry with rho_sw=1027 kg/m3, poisson=0.4, E=4.8 GPa. Can exceed 100% (by a few percent) near the hydrostatic line.');
 netcdf.putAtt(ncid,flexure_var_id,'standard_name','ice_flexure_percent');
+netcdf.putAtt(ncid,flexure_var_id,'long_name',    'Forward-modeled coefficient of tidal flexure assuming linear elastic response applied to BedMachine v2 geometry with rho_sw=1027 kg/m3, poisson=0.4, E=4.8 GPa. Can exceed 100% (by a few percent) near the hydrostatic line.');
 netcdf.putAtt(ncid,flexure_var_id,'grid_mapping', 'polar_stereographic');
-% 
-% % define h_range
-% R_var_id = netcdf.defVar(ncid,'h_range','NC_SHORT',[x_id y_id]);
-% netcdf.putAtt(ncid,R_var_id,'long_name',    'Peak-to-peak tidal range.');
-% netcdf.putAtt(ncid,R_var_id,'standard_name','tidal range');
-% netcdf.putAtt(ncid,R_var_id,'grid_mapping', 'polar_stereographic');
-% netcdf.putAtt(ncid,R_var_id,'units', 'm');
-% netcdf.putAtt(ncid,R_var_id,'scale_factor',1/1000);
 
 % Compress and stop variable definition
 netcdf.defVarDeflate(ncid,lat_var_id,true,true,9);

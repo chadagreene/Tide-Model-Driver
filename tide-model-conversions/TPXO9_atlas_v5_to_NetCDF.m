@@ -126,6 +126,7 @@ netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Description','Global tide mo
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Author','Egbert, Gary D., and Svetlana Y. Erofeeva.');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'creation_date',datestr(now,'yyyy-mm-dd'));
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'tmd_version',3.0);
+netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'NetCDF_conversion','Chad A. Greene');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'model_type','ocean');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'license','ask');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Data_citation','Egbert, Gary D., and Svetlana Y. Erofeeva. "Efficient inverse modeling of barotropic ocean tides." Journal of Atmospheric and Oceanic Technology 19.2 (2002): 183-204.')
@@ -140,15 +141,15 @@ netcdf.putAtt(ncid,mapping_var_id,'spatial_proj4',proj4);
 % Define lon: 
 lon_id     = netcdf.defDim(ncid,'lon',length(lon));
 lon_var_id = netcdf.defVar(ncid,'lon','NC_FLOAT',lon_id);
-netcdf.putAtt(ncid,lon_var_id,'long_name',    'grid cell center longitude (first and last columns are repeats, to enable seamless interpolation)');
 netcdf.putAtt(ncid,lon_var_id,'standard_name','longitude');
+netcdf.putAtt(ncid,lon_var_id,'long_name',    'grid cell center longitude (first and last columns are repeats, to enable seamless interpolation)');
 netcdf.putAtt(ncid,lon_var_id,'units',        'degrees');
 
 % Define y: 
 lat_id     = netcdf.defDim(ncid,'lat',length(lat));
 lat_var_id = netcdf.defVar(ncid,'lat','NC_FLOAT',lat_id);
-netcdf.putAtt(ncid,lat_var_id,'long_name',    'grid cell center latitude');
 netcdf.putAtt(ncid,lat_var_id,'standard_name','latitude');
+netcdf.putAtt(ncid,lat_var_id,'long_name',    'grid cell center latitude');
 netcdf.putAtt(ncid,lat_var_id,'units',        'degrees');
 
 % Define constituents
@@ -180,16 +181,16 @@ netcdf.putAtt(ncid,alp_var_id,'long_name','loading love number');
 
 % Define hRe
 hRe_var_id = netcdf.defVar(ncid,'hRe','NC_SHORT',[lon_id lat_id cons_id]);
+netcdf.putAtt(ncid,hRe_var_id,'standard_name','height_coefficient');
 netcdf.putAtt(ncid,hRe_var_id,'long_name',    'real component of height constituent');
-netcdf.putAtt(ncid,hRe_var_id,'standard_name','height_constituent');
 netcdf.putAtt(ncid,hRe_var_id,'grid_mapping', 'polar_stereographic');
 netcdf.putAtt(ncid,hRe_var_id,'units',        'm');
 netcdf.putAtt(ncid,hRe_var_id,'scale_factor',  1/scale_h);
 
 % Define hIm
 hIm_var_id = netcdf.defVar(ncid,'hIm','NC_SHORT',[lon_id lat_id cons_id]);
+netcdf.putAtt(ncid,hIm_var_id,'standard_name','height_coefficient');
 netcdf.putAtt(ncid,hIm_var_id,'long_name',    'imaginary component of height constituent');
-netcdf.putAtt(ncid,hIm_var_id,'standard_name','height_constituent');
 netcdf.putAtt(ncid,hIm_var_id,'grid_mapping', 'polar_stereographic');
 netcdf.putAtt(ncid,hIm_var_id,'units',        'm');
 netcdf.putAtt(ncid,hIm_var_id,'scale_factor',  1/scale_h);
@@ -197,32 +198,32 @@ netcdf.putAtt(ncid,hIm_var_id,'scale_factor',  1/scale_h);
 if uv
    % Define uRe
    uRe_var_id = netcdf.defVar(ncid,'URe','NC_SHORT',[lon_id lat_id cons_id]);
-   netcdf.putAtt(ncid,uRe_var_id,'long_name',    'real component of U transport constituent.');
-   netcdf.putAtt(ncid,uRe_var_id,'standard_name','height_constituent');
+   netcdf.putAtt(ncid,uRe_var_id,'standard_name','transport_coefficient');
+   netcdf.putAtt(ncid,uRe_var_id,'long_name',    'real component of U transport constituent. This is the zonal (east-west) flow component in geographic coordinates.');
    netcdf.putAtt(ncid,uRe_var_id,'grid_mapping', 'polar_stereographic');
    netcdf.putAtt(ncid,uRe_var_id,'units',        'm^2/s');
    netcdf.putAtt(ncid,uRe_var_id,'scale_factor',  1/scale_UV);
 
    % Define uIm
    uIm_var_id = netcdf.defVar(ncid,'UIm','NC_SHORT',[lon_id lat_id cons_id]);
-   netcdf.putAtt(ncid,uIm_var_id,'long_name',    'imaginary component of U transport constituent.');
-   netcdf.putAtt(ncid,uIm_var_id,'standard_name','height_constituent');
+   netcdf.putAtt(ncid,uIm_var_id,'standard_name','transport_coefficient');
+   netcdf.putAtt(ncid,uIm_var_id,'long_name',    'imaginary component of U transport constituent. This is the zonal (east-west) flow component in geographic coordinates.');
    netcdf.putAtt(ncid,uIm_var_id,'grid_mapping', 'polar_stereographic');
    netcdf.putAtt(ncid,uIm_var_id,'units',        'm^2/s');
    netcdf.putAtt(ncid,uIm_var_id,'scale_factor',  1/scale_UV);
 
    % Define vRe
    vRe_var_id = netcdf.defVar(ncid,'VRe','NC_SHORT',[lon_id lat_id cons_id]);
-   netcdf.putAtt(ncid,vRe_var_id,'long_name',    'real component of V transport constituent.');
-   netcdf.putAtt(ncid,vRe_var_id,'standard_name','height_constituent');
+   netcdf.putAtt(ncid,vRe_var_id,'standard_name','transport_coefficient');
+   netcdf.putAtt(ncid,vRe_var_id,'long_name',    'real component of V transport constituent. This is the meridional (north-south) flow component in geographic coordinates.');
    netcdf.putAtt(ncid,vRe_var_id,'grid_mapping', 'polar_stereographic');
    netcdf.putAtt(ncid,vRe_var_id,'units',        'm^2/s');
    netcdf.putAtt(ncid,vRe_var_id,'scale_factor',  1/scale_UV);
 
    % Define vIm
    vIm_var_id = netcdf.defVar(ncid,'VIm','NC_SHORT',[lon_id lat_id cons_id]);
-   netcdf.putAtt(ncid,vIm_var_id,'long_name',    'imaginary component of V transport constituent.');
-   netcdf.putAtt(ncid,vIm_var_id,'standard_name','height_constituent');
+   netcdf.putAtt(ncid,vIm_var_id,'standard_name','transport_coefficient');
+   netcdf.putAtt(ncid,vIm_var_id,'long_name',    'imaginary component of V transport constituent. This is the meridional (north-south) flow component in geographic coordinates.');
    netcdf.putAtt(ncid,vIm_var_id,'grid_mapping', 'polar_stereographic');
    netcdf.putAtt(ncid,vIm_var_id,'units',        'm^2/s');
    netcdf.putAtt(ncid,vIm_var_id,'scale_factor',  1/scale_UV);
@@ -230,15 +231,15 @@ end
 
 % Define wct: 
 wct_var_id = netcdf.defVar(ncid,'wct','NC_SHORT',[lon_id lat_id]);
-netcdf.putAtt(ncid,wct_var_id,'long_name','water column thickness');
 netcdf.putAtt(ncid,wct_var_id,'standard_name','wct');
+netcdf.putAtt(ncid,wct_var_id,'long_name','water column thickness');
 netcdf.putAtt(ncid,wct_var_id,'units',    'meters');
 netcdf.putAtt(ncid,wct_var_id,'grid_mapping', 'polar_stereographic');
 
 % Define mask
 mask_var_id = netcdf.defVar(ncid,'mask','NC_BYTE',[lon_id lat_id]);
-netcdf.putAtt(ncid,mask_var_id,'long_name',    'ocean mask');
 netcdf.putAtt(ncid,mask_var_id,'standard_name','ocean_mask');
+netcdf.putAtt(ncid,mask_var_id,'long_name',    'ocean mask');
 netcdf.putAtt(ncid,mask_var_id,'grid_mapping', 'polar_stereographic');
 netcdf.putAtt(ncid,mask_var_id,'valid_range',  [0 1]);
 netcdf.putAtt(ncid,mask_var_id,'flag_values',  [0 1]);

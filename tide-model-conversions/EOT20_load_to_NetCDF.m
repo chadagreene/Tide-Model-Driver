@@ -1,6 +1,8 @@
 
 % 
 % Written by Chad A. Greene, NASA/JPL, June 2022. 
+%
+% This script takes about 3 minutes to run on my 2019-era laptop. 
 
 %% Enter initial file info 
 
@@ -92,6 +94,7 @@ netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'Author','Hart-Davis Michael 
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'creation_date',datestr(now,'yyyy-mm-dd'));
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'tmd_version',3.0);
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'model_type','load');
+netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'NetCDF_conversion','Chad A. Greene');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'license','None');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'data_version','1.0.0');
 netcdf.putAtt(ncid,netcdf.getConstant('NC_GLOBAL'),'contact','michael.hart-davis@tum.de');
@@ -108,15 +111,15 @@ netcdf.putAtt(ncid,mapping_var_id,'spatial_proj4',proj4);
 % Define lon: 
 lon_id     = netcdf.defDim(ncid,'lon',length(lon));
 lon_var_id = netcdf.defVar(ncid,'lon','NC_FLOAT',lon_id);
-netcdf.putAtt(ncid,lon_var_id,'long_name',    'grid cell center longitude (first and last columns are repeats, to enable seamless interpolation)');
 netcdf.putAtt(ncid,lon_var_id,'standard_name','longitude');
+netcdf.putAtt(ncid,lon_var_id,'long_name',    'grid cell center longitude (first and last columns are repeats, to enable seamless interpolation)');
 netcdf.putAtt(ncid,lon_var_id,'units',        'degrees');
 
 % Define y: 
 lat_id     = netcdf.defDim(ncid,'lat',length(lat));
 lat_var_id = netcdf.defVar(ncid,'lat','NC_FLOAT',lat_id);
-netcdf.putAtt(ncid,lat_var_id,'long_name',    'grid cell center latitude');
 netcdf.putAtt(ncid,lat_var_id,'standard_name','latitude');
+netcdf.putAtt(ncid,lat_var_id,'long_name',    'grid cell center latitude');
 netcdf.putAtt(ncid,lat_var_id,'units',        'degrees');
 
 % Define constituents
@@ -148,22 +151,22 @@ netcdf.putAtt(ncid,alp_var_id,'long_name','loading love number');
 
 % Define hRe
 hRe_var_id = netcdf.defVar(ncid,'hRe','NC_SHORT',[lon_id lat_id cons_id]);
+netcdf.putAtt(ncid,hRe_var_id,'standard_name','height_coefficient');
 netcdf.putAtt(ncid,hRe_var_id,'long_name',    'real component of height constituent');
-netcdf.putAtt(ncid,hRe_var_id,'standard_name','height_constituent');
 netcdf.putAtt(ncid,hRe_var_id,'units',        'm');
 netcdf.putAtt(ncid,hRe_var_id,'scale_factor',  1/scale_h);
 
 % Define hIm
 hIm_var_id = netcdf.defVar(ncid,'hIm','NC_SHORT',[lon_id lat_id cons_id]);
+netcdf.putAtt(ncid,hIm_var_id,'standard_name','height_coefficient');
 netcdf.putAtt(ncid,hIm_var_id,'long_name',    'imaginary component of height constituent');
-netcdf.putAtt(ncid,hIm_var_id,'standard_name','height_constituent');
 netcdf.putAtt(ncid,hIm_var_id,'units',        'm');
 netcdf.putAtt(ncid,hIm_var_id,'scale_factor',  1/scale_h);
 
 % Define mask
 mask_var_id = netcdf.defVar(ncid,'mask','NC_BYTE',[lon_id lat_id]);
-netcdf.putAtt(ncid,mask_var_id,'long_name',    'ocean mask');
 netcdf.putAtt(ncid,mask_var_id,'standard_name','ocean_mask');
+netcdf.putAtt(ncid,mask_var_id,'long_name',    'ocean mask');
 netcdf.putAtt(ncid,mask_var_id,'valid_range',  [0 1]);
 netcdf.putAtt(ncid,mask_var_id,'flag_values',  [0 1]);
 netcdf.putAtt(ncid,mask_var_id,'flag_meanings','land ocean');

@@ -16,14 +16,14 @@ sl = ncread(fn,'sea_level')/1000;
 
 % Predict tides at the tide gauge location: 
 sl_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'h');
-sl_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'h');
+sl_cats = tmd_predict('CATS2008_v2022.nc',lat,lon,t,'h');
 
 % Also predict tidal currents: 
 % Predict tides at the tide gauge location: 
 u_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'u');
-u_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'u');
+u_cats = tmd_predict('CATS2008_v2022.nc',lat,lon,t,'u');
 v_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'v');
-v_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'v');
+v_cats = tmd_predict('CATS2008_v2022.nc',lat,lon,t,'v');
 
 % Plot observed and predicted tides: 
 figure
@@ -69,7 +69,7 @@ Above, the heights look good, but the velocities don't agree. That's likely due 
 
 ```matlab
 wct_tpxo = tmd_interp('TPXO9_atlas_v5.nc','wct',lat,lon);
-wct_cats = tmd_interp('CATS2008_update_2022-06-11.nc','wct',lat,lon);
+wct_cats = tmd_interp('CATS2008_v2022.nc','wct',lat,lon);
 
 >> [wct_tpxo wct_cats]
 ans =
@@ -88,11 +88,11 @@ sl = ncread(fn,'sea_level')/1000;
 
 % Predict tides at the tide gauge location: 
 sl_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'h');
-sl_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'h');
+sl_cats = tmd_predict('CATS2008_v2022.nc',lat,lon,t,'h');
 u_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'u');
-u_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'u');
+u_cats = tmd_predict('CATS2008_v2022.nc',lat,lon,t,'u');
 v_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'v');
-v_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'v');
+v_cats = tmd_predict('CATS2008_v2022.nc',lat,lon,t,'v');
 
 % Plot observed and predicted tides: 
 figure
@@ -138,7 +138,7 @@ Above, the heights look good, but the velocities don't agree. That's likely due 
 
 ```matlab
 wct_tpxo = tmd_interp('TPXO9_atlas_v5.nc','wct',lat,lon);
-wct_cats = tmd_interp('CATS2008_update_2022-06-11.nc','wct',lat,lon);
+wct_cats = tmd_interp('CATS2008_v2022.nc','wct',lat,lon);
 
 >> [wct_tpxo wct_cats]
 ans =
@@ -159,11 +159,11 @@ v = mean(ncread('ADCP_S112.nc','v'),'omitnan');
 
 % Predict tides at the tide gauge location: 
 sl_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'h');
-sl_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'h');
+sl_cats = tmd_predict('CATS2008_v2022.nc',lat,lon,t,'h');
 u_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'u');
-u_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'u');
+u_cats = tmd_predict('CATS2008_v2022.nc',lat,lon,t,'u');
 v_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'v');
-v_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'v');
+v_cats = tmd_predict('CATS2008_v2022.nc',lat,lon,t,'v');
 
 % Plot observed and predicted tides: 
 figure
@@ -271,4 +271,4 @@ datetick('x','keeplimits')
 <img src="markdown_figures/tide_model_intercomparison_04_hires.png" width="500"/>
 
 ## Author Info
-This intercomparison was written by [Chad A. Greene](https://www.chadagreene.com) in June 2022. 
+This intercomparison was written by [Chad A. Greene](https://www.chadagreene.com) in June 2022. CATS2008_v2022.nc
