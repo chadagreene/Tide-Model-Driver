@@ -11,7 +11,7 @@ In 2022, the Tide Model Driver for MATLAB v2.5 was rewritten and released as Tid
 
 The MATLAB script used to convert the old CATS2008 binary files into the new, updated, consolidated NetCDF format is called `CATS_to_NetCDF.m`, and can be found in the `tide-model-conversions` folder of this GitHub repository. 
 
-<img src="../tide-model-conversions/CATS2008_updated_wct_diff.png" width="500"/>
+<p align="center"><img src="../tide-model-conversions/CATS2008_updated_wct_diff.png" width="500"/></p>
 
 # Author Info
 TMD3.0, the updates to CATS2008, and this documentation page were written by [Chad A. Greene](https://www.chadagreene.com), June 2022. 

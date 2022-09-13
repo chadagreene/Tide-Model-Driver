@@ -302,7 +302,8 @@ to set the transparency of the previous image:
 [mask,lon,lat] = tmd_data('TPXO9_atlas_v5.nc','mask'); 
 h.AlphaData = mask; 
 ```
-<img src="markdown_figures/TMD_model_file_format_02_hires.png" width="500"/>
+
+<p align="center"><img src="markdown_figures/TMD_model_file_format_02_hires.png" width="500"/></p>
 
 ## Amplitude, phase, alpha, and omega 
 In each TMD3.0 compatible model file, you will find variables called

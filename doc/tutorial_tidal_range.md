@@ -25,7 +25,8 @@ cb = colorbar;
 ylabel(cb,'peak-to-peak tidal range (m)')
 earthimage('bottom','centerlon',180) % optional 
 ```
-<img src="markdown_figures/tutorial_tidal_range_01_hires.png" width="500"/>
+
+<p align="center"><img src="markdown_figures/tutorial_tidal_range_01_hires.png" width="500"/></p>
 
 ### Minor constituents 
 In the example above, we've ignored minor constituents, which can add somewhere around 5% extra variability that isn't accounted for among the major constituents, so if you're trying to estimate tidal range as I've shown above, you might want to multiply `h_range` by 1.05 to account for minor constituents, although that won't capture all of the variability exactly. 
@@ -45,7 +46,8 @@ axis([288.17 303.02 42.44 49.86])
 title 'Bay of Fundy'
 caxis([0 16])
 ```
-<img src="markdown_figures/tutorial_tidal_range_02_hires.png" width="500"/>
+
+<p align="center"><img src="markdown_figures/tutorial_tidal_range_02_hires.png" width="500"/></p>
 
 Using the `h_range` grid we calculated above, we can interpolate to get the full tidal range in the Bay of Fundy: 
 
@@ -70,7 +72,8 @@ box off
 axis tight
 title 'Bay of Fundy tides in 2020'
 ```
-<img src="markdown_figures/tutorial_tidal_range_03_hires.png" width="500"/>
+
+<p align="center"><img src="markdown_figures/tutorial_tidal_range_03_hires.png" width="500"/></p>
 
 Above, you see the pulsing of the fortnightly tides that dominate the overall envelope, but it's worth noting that not all two-week intervals look the same, due to variability that exists at monthly and six-monthly timescales. The tides do not come close to their maximum or minimum values in all of January or February. That's because the timing of the peaks of all of the different sinusoidal constituents don't always coincide, so they interfere destructively. Also note that the prediction from the `tmd_predict` function infers an extra dozen or so minor constituents that aren't explicitly included in the TPXO9 model. 
 

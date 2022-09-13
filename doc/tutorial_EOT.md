@@ -50,7 +50,7 @@ cb = colorbar;
 ylabel(cb,'constituent amplitude (m)') 
 ```
 
-<img src="markdown_figures/tutorial_EOT_01_hires.png" width="500"/>
+<p align="center"><img src="markdown_figures/tutorial_EOT_01_hires.png" width="500"/></p>
 
 The map above shows exactly what we'd expect for a well-bahaved, gravitationally driven tidal constituent. The M2 constituent has long wavelengths and varies smoothly. 
 
@@ -73,7 +73,8 @@ title(cons{k})
 cb = colorbar; 
 ylabel(cb,'constituent amplitude (m)') 
 ```
-<img src="markdown_figures/tutorial_EOT_02_hires.png" width="500"/>
+
+<p align="center"><img src="markdown_figures/tutorial_EOT_02_hires.png" width="500"/></p>
 
 In the map above, the first thing I notice is the familiar pattern in the equatorial Pacific, which is [driven by wind stress on annual timescales](https://doi.org/10.1126/sciadv.1500560). I also see what appear to be eddies and global currents, which are unlikely to be a direct result of the perihelion-aphelion effect at the heart of the Sa constituent. 
 
@@ -191,7 +192,7 @@ plot(t,z_cons_min,'linewidth',1)
 legend('observations','default prediction','16 cons only','16 cons + minor')
 ```
 
-<img src="markdown_figures/tutorial_EOT_05_hires.png" width="500"/>
+<p align="center"><img src="markdown_figures/tutorial_EOT_05_hires.png" width="500"/></p>
 
 The plot above shows that whether or not we include the Sa constituent, and whether or not we infer minor constituents at this location, the predictions are all pretty similar, and they all capture the main behavior of the observations. 
 

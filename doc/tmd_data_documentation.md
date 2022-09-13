@@ -107,7 +107,8 @@ cb = colorbar;
 ylabel(cb,'water column thickness (m)') 
 cmocean deep % optional colormap 
 ```
-<img src="markdown_figures/tmd_data_documentation_01_hires.png" width="500"/>
+
+<p align="center"><img src="markdown_figures/tmd_data_documentation_01_hires.png" width="500"/></p>
 
 ## Example: Geographic coordinates from a regional model
 You see above that the regional CATS model was generated in a nonstandard projection. If you don't want to work in the CATS model coordinates, you can unproject them yourself with `tmd_ps2ll` or you can include the `'geo'` flag to get the geographic coordinates when you call `tmd_data`.
@@ -126,7 +127,8 @@ cmocean deep % optional colormap
 axis tight off
 graticuleps % geographic grid lines 
 ```
-<img src="markdown_figures/tmd_data_documentation_02_hires.png" width="500"/>
+
+<p align="center"><img src="markdown_figures/tmd_data_documentation_02_hires.png" width="500"/></p>
 
 ## Example: Constituent amplitude and phase
 Here's how you may load and plot the amplitude and phase of the s2 constituent from a model file: 
@@ -150,7 +152,8 @@ xlabel 'easting (km)'
 ylabel 'northing (km)' 
 caxis([0 1.2])
 ```
-<img src="markdown_figures/tmd_data_documentation_03_hires.png" width="500"/>
+
+<p align="center"><img src="markdown_figures/tmd_data_documentation_03_hires.png" width="500"/></p>
 
 ## Example: A global model
 Working with global models is very similar to working with regional models. The only real difference is we let lon=x and lat=y. Here's an example: 
@@ -173,7 +176,8 @@ ylabel('latitude')
 caxis([0 2])
 cmocean amp % optional colormap
 ```
-<img src="markdown_figures/tmd_data_documentation_04_hires.png" width="500"/>
+
+<p align="center"><img src="markdown_figures/tmd_data_documentation_04_hires.png" width="500"/></p>
 
 ## Example: Load a small area of data 
 Let's say you want to use a global tide model, but you're only interested in the ocean around India. In such cases, you may not want to load the entire global dataset, so load the data surrounding your region of interest by specifiying the bounds as an Nx2 array, defining any number N data points whose x (or longitude for a global model) values are the first column, and y values (or latitude for a global model) are the second column. 
@@ -208,7 +212,8 @@ ylabel 'latitude'
 cmocean deep % optional colormap
 shadem(-13) % a tiny bit of hillshade
 ```
-<img src="markdown_figures/tmd_data_documentation_05_hires.png" width="500"/>
+
+<p align="center"><img src="markdown_figures/tmd_data_documentation_05_hires.png" width="500"/></p>
 
 ## Author Info 
 The `tmd_data` function and its documentation were written by Chad A.

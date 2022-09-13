@@ -33,7 +33,7 @@ hold on
 p(2)=plot(t,sl_tpxo,'linewidth',1);
 p(3)=plot(t,sl_cats,'linewidth',1);
 ylabel 'tide height (m)'
-legend('observations','TPXO9_atlas_v5','CATS2008_update_2022-06-11',...
+legend('observations','TPXO9_atlas_v5','CATS2008_v2022',...
    'interpreter','none','location','best')
 legend boxoff
 box off
@@ -62,7 +62,8 @@ axis tight
 xlim([725709.92     725724.55])
 datetick('x','keeplimits')
 ```
-<img src="markdown_figures/tide_model_intercomparison_01_hires.png" width="500"/>
+
+<p align="center"><img src="markdown_figures/tide_model_intercomparison_01_hires.png" width="500"/></p>
 
 
 Above, the heights look good, but the velocities don't agree. That's likely due to differences in water column thickness (transports are divided by wct to get column-averaged velocity):
@@ -102,7 +103,7 @@ hold on
 p(2)=plot(t,sl_tpxo,'linewidth',1);
 p(3)=plot(t,sl_cats,'linewidth',1);
 ylabel 'tide height (m)'
-legend('observations','TPXO9_atlas_v5','CATS2008_update_2022-06-11',...
+legend('observations','TPXO9_atlas_v5','CATS2008_v2022',...
    'interpreter','none','location','best')
 legend boxoff
 box off
@@ -131,8 +132,8 @@ axis tight
 xlim([733711.67     733729.88])
 datetick('x','keeplimits')
 ```
-<img src="markdown_figures/tide_model_intercomparison_02_hires.png" width="500"/>
 
+<p align="center"><img src="markdown_figures/tide_model_intercomparison_02_hires.png" width="500"/></p>
 
 Above, the heights look good, but the velocities don't agree. That's likely due to differences in water column thickness (transports are divided by wct to get column-averaged velocity):
 
@@ -173,7 +174,7 @@ hold on
 p(2)=plot(t,sl_tpxo,'linewidth',1);
 p(3)=plot(t,sl_cats,'linewidth',1);
 ylabel 'tide height (m)'
-legend('observations','TPXO9_atlas_v5','CATS2008_update_2022-06-11',...
+legend('observations','TPXO9_atlas_v5','CATS2008_v2022',...
    'interpreter','none','location','best')
 legend boxoff
 box off
@@ -204,7 +205,7 @@ axis tight
 xlim([735007.70     735033.06])
 datetick('x','keeplimits')
 ```
-<img src="markdown_figures/tide_model_intercomparison_03_hires.png" width="500"/>
+<p align="center"><img src="markdown_figures/tide_model_intercomparison_03_hires.png" width="500"/></p>
 
 ## Tide height observations near Nuuk, Greenland 
 Note, the Nuuk tide gauge is too close to shore for the Arc2km model, so we have to "unmask" the solution there. 
@@ -268,7 +269,7 @@ axis tight
 xlim([736976.01     736981.12])
 datetick('x','keeplimits')
 ```
-<img src="markdown_figures/tide_model_intercomparison_04_hires.png" width="500"/>
+<p align="center"><img src="markdown_figures/tide_model_intercomparison_04_hires.png" width="500"/></p>
 
 ## Author Info
 This intercomparison was written by [Chad A. Greene](https://www.chadagreene.com) in June 2022. CATS2008_v2022.nc

@@ -17,14 +17,14 @@ sl = ncread(fn,'sea_level')/1000;
 
 % Predict tides at the tide gauge location: 
 sl_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'h');
-sl_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'h');
+sl_cats = tmd_predict('CATS2008_v2022.nc',lat,lon,t,'h');
 
 % Also predict tidal currents: 
 % Predict tides at the tide gauge location: 
 u_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'u');
-u_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'u');
+u_cats = tmd_predict('CATS2008_v2022.nc',lat,lon,t,'u');
 v_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'v');
-v_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'v');
+v_cats = tmd_predict('CATS2008_v2022.nc',lat,lon,t,'v');
 
 % Plot observed and predicted tides: 
 figure
@@ -34,7 +34,7 @@ hold on
 p(2)=plot(t,sl_tpxo,'linewidth',1);
 p(3)=plot(t,sl_cats,'linewidth',1);
 ylabel 'tide height (m)'
-legend('observations','TPXO9_atlas_v5','CATS2008_update_2022-06-11',...
+legend('observations','TPXO9_atlas_v5','CATS2008_2022',...
    'interpreter','none','location','best')
 legend boxoff
 box off
@@ -69,7 +69,7 @@ datetick('x','keeplimits')
 % divided by wct to get column-averaged velocity):
 
 wct_tpxo = tmd_interp('TPXO9_atlas_v5.nc','wct',lat,lon);
-wct_cats = tmd_interp('CATS2008_update_2022-06-11.nc','wct',lat,lon);
+wct_cats = tmd_interp('CATS2008_v2022.nc','wct',lat,lon);
 
 [wct_tpxo wct_cats]
 
@@ -84,11 +84,11 @@ sl = ncread(fn,'sea_level')/1000;
 
 % Predict tides at the tide gauge location: 
 sl_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'h');
-sl_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'h');
+sl_cats = tmd_predict('CATS2008_v2022.nc',lat,lon,t,'h');
 u_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'u');
-u_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'u');
+u_cats = tmd_predict('CATS2008_v2022.nc',lat,lon,t,'u');
 v_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'v');
-v_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'v');
+v_cats = tmd_predict('CATS2008_v2022.nc',lat,lon,t,'v');
 
 % Plot observed and predicted tides: 
 figure
@@ -98,7 +98,7 @@ hold on
 p(2)=plot(t,sl_tpxo,'linewidth',1);
 p(3)=plot(t,sl_cats,'linewidth',1);
 ylabel 'tide height (m)'
-legend('observations','TPXO9_atlas_v5','CATS2008_update_2022-06-11',...
+legend('observations','TPXO9_atlas_v5','CATS2008_v2022',...
    'interpreter','none','location','best')
 legend boxoff
 box off
@@ -133,7 +133,7 @@ datetick('x','keeplimits')
 % divided by wct to get column-averaged velocity):
 
 wct_tpxo = tmd_interp('TPXO9_atlas_v5.nc','wct',lat,lon);
-wct_cats = tmd_interp('CATS2008_update_2022-06-11.nc','wct',lat,lon);
+wct_cats = tmd_interp('CATS2008_v2022.nc','wct',lat,lon);
 
 [wct_tpxo wct_cats]
 
@@ -148,11 +148,11 @@ v = mean(ncread('ADCP_S112.nc','v'),'omitnan');
 
 % Predict tides at the tide gauge location: 
 sl_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'h');
-sl_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'h');
+sl_cats = tmd_predict('CATS2008_v2022.nc',lat,lon,t,'h');
 u_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'u');
-u_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'u');
+u_cats = tmd_predict('CATS2008_v2022.nc',lat,lon,t,'u');
 v_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'v');
-v_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'v');
+v_cats = tmd_predict('CATS2008_v2022.nc',lat,lon,t,'v');
 
 % Plot observed and predicted tides: 
 figure
@@ -162,7 +162,7 @@ hold on
 p(2)=plot(t,sl_tpxo,'linewidth',1);
 p(3)=plot(t,sl_cats,'linewidth',1);
 ylabel 'tide height (m)'
-legend('observations','TPXO9_atlas_v5','CATS2008_update_2022-06-11',...
+legend('observations','TPXO9_atlas_v5','CATS2008_v2022',...
    'interpreter','none','location','best')
 legend boxoff
 box off

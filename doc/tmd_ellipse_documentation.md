@@ -83,7 +83,7 @@ xlabel 'eastward velocity (m/s)'
 ylabel 'northward velocity (m/s)' 
 ```
 
-<img src="markdown_figures/tmd_ellipse_documentation_01_hires.png" width="500"/>
+<p align="center"><img src="markdown_figures/tmd_ellipse_documentation_01_hires.png" width="500"/></p>
 
 Above, we see that at hour 0, o1 current velocity was to the northeast. The negative value of `umin` already told us it's a clockwise ellipse, and as expected, the current sweeps through an elliptical path over the course of the day, ending up back at the starting place just under 26 hours later. 
  
@@ -103,7 +103,7 @@ y = umin*sin(foo);
 plot(xr,yr,'r')
 ```
 
-<img src="markdown_figures/tmd_ellipse_documentation_02_hires.png" width="500"/>
+<p align="center"><img src="markdown_figures/tmd_ellipse_documentation_02_hires.png" width="500"/></p>
 
 ### Are the ellipse parameters wrong? 
 Here's a question I do not know the answer to: Why doesn't the red ellipse line up perfectly with the predicted hourly currents? The `umaj` and `umin` parameters are slightly smaller than necessary to meet the hourly predictions. Have I plotted the red ellipse incorrectly, is there a mistake in the `tmd_ellipse` code, or is there some fundamental concept I'm misunderstanding here? If you know the answer and this section of the doc is still on GitHub, please reach out and explain it to me. 

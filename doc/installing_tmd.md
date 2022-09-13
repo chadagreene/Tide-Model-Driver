@@ -6,7 +6,7 @@ Installing TMD3.0 is pretty straightforward. There are a few ways you can do it,
 ## Option 1: From the MATLAB Add-Ons Menu
 If you're signed in with a MathWorks account, just click **Add-Ons** &rarr; **Get Add-Ons** from the MATLAB Home menu. Here's what it looks like: 
 
-<img src="markdown_figures/AddOnsMenu.png" width="300"/>
+<p align="center"><img src="markdown_figures/AddOnsMenu.png" width="300"/></p>
 
 After clicking **Get Add-Ons**, search for "Tide Model Driver", then click **Add to MATLAB**. That's it. You should be good to go. 
 

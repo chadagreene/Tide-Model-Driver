@@ -2,6 +2,8 @@
 % This script calls some legacy functions from TMD2.5 to load the old data.
 % 
 % Written by Chad A. Greene, NASA/JPL, February 2022. 
+% 
+% This script takes about 3.5 hours to complete on my 2019-era laptop! 
 
 %% Enter initial file info 
 

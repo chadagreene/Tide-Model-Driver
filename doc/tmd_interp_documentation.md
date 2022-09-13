@@ -83,7 +83,8 @@ cb = colorbar;
 ylabel(cb,'water column thickness (m)')
 cmocean deep % optional colormap
 ```
-<img src="markdown_figures/tmd_interp_documentation_01_hires.png" width="500"/>
+
+<p align="center"><img src="markdown_figures/tmd_interp_documentation_01_hires.png" width="500"/></p>
 
 ## Example: Regional Model
 The `tmd_interp` function works exactly the same for regional models as it does for global models. Just enter the geographic coordinates, and it'll give you the data you request. 
@@ -105,7 +106,8 @@ cb = colorbar;
 ylabel(cb,'CATS - TPXO water column thickness (m)')
 cmocean balance % optional colormap
 ```
-<img src="markdown_figures/tmd_interp_documentation_02_hires.png" width="500"/>
+
+<p align="center"><img src="markdown_figures/tmd_interp_documentation_02_hires.png" width="500"/></p>
 
 The curving areas of missing data at the top of the figure above indicate
 regions outside the CATS2008 model domain. In CATS model space, that's a
@@ -178,7 +180,8 @@ subplot(2,1,2)
 bedmachine_profile(lati,loni,'horiz',di)
 xlim([380 max(di)])
 ```
-<img src="markdown_figures/tmd_interp_documentation_03_hires.png" width="500"/>
+
+<p align="center"><img src="markdown_figures/tmd_interp_documentation_03_hires.png" width="500"/></p>
 
 Above, you see that by default `tmd_interp` returns the full amplitude along 
 the floating ice shelf, and NaN where the ice is grounded.

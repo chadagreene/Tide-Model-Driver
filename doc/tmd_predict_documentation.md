@@ -59,7 +59,8 @@ legend('observations','TPXO9_atlas_v5','Gr1kmTm','interpreter','none')
 xlim([datenum('mar 26, 2017') datenum('april 3, 2017')])
 datetick('x','keeplimits')
 ```
-<img src="markdown_figures/tmd_predict_documentation_01_hires.png" width="500"/>
+
+<p align="center"><img src="markdown_figures/tmd_predict_documentation_01_hires.png" width="500"/></p>
 
 In the figure above, we see that both the global and regional models match the observations pretty well, but neither is perfect. One way to assess tide model performance is to measure the distribution of the residuals  after detiding an observation dataset. Here's what that might look like: 
 
@@ -113,7 +114,8 @@ ylabel latitude
 title(datestr(t))
 cmocean balance % optional colormap
 ```
-<img src="markdown_figures/tmd_predict_documentation_02_hires.png" width="500"/>
+
+<p align="center"><img src="markdown_figures/tmd_predict_documentation_02_hires.png" width="500"/></p>
 
 Now add tidal currents. Again, it will take about 5 seconds for each component. Below, I'm using [Climate Data Toolbox](https://github.com/chadagreene/CDT) functions `quiversc` and `earthimage`. The `quiversc` function is convenient because it performs anti-aliased downsampling of the dense u,v grid. 
 
@@ -130,7 +132,8 @@ axis(ax) % resets limits after quiver might've adjusted them
 he = earthimage; % optional, part of Climate Data Toolbox
 uistack(he,'bottom') % places earth image under ocean data. 
 ```
-<img src="markdown_figures/tmd_predict_documentation_03_hires.png" width="500"/>
+
+<p align="center"><img src="markdown_figures/tmd_predict_documentation_03_hires.png" width="500"/></p>
 
 ## Example: NaNs near the coast 
 In some cases, you may be interested in a tide gauge close to the coast that gets NaN'd out by default because it lies between land and ocean pixels. Consider this tide gauge near Syowa Station, Antarctica: 
@@ -150,7 +153,8 @@ axis tight
 ylabel 'tide gauge measurement (m)')
 title 'Syowa station tide gauge'
 ```
-<img src="markdown_figures/tmd_predict_documentation_04_hires.png" width="500"/>
+
+<p align="center"><img src="markdown_figures/tmd_predict_documentation_04_hires.png" width="500"/></p>
 
 For 26 years, the tide gauge at Syowa station has logged hourly tides, with only a few interruptions. Clearly, tidal variability exists here, but what does the CATS model think? 
 
@@ -177,7 +181,8 @@ plot(t,sl-sl_tpxo,'linewidth',1)
 xlim([datetime('apr 9, 1998') datetime('apr 21, 1998')]) % zooms for clarity
 legend('observations','detided by cats','detided by tpxo','locaton','best')
 ```
-<img src="markdown_figures/tmd_predict_documentation_05_hires.png" width="500"/>
+
+<p align="center"><img src="markdown_figures/tmd_predict_documentation_05_hires.png" width="500"/></p>
 
 ## Example: Ice shelf flexure 
 This example assumes you have [Antarctic Mapping Tools](https://github.com/chadagreene/Antarctic-Mapping-Tools) with the [MODIS MOA](https://github.com/chadagreene/MODIS-MOA) and [BedMachine](https://github.com/chadagreene/BedMachine/) plugins. Sorry about all of the dependencies, but I think it's important for context. 
@@ -205,7 +210,8 @@ ylabel(cb,'ice shelf flexure coefficient')
 bedmachine plots a gray grounding line 
 scalebarps('color','w')
 ```
-<img src="markdown_figures/tmd_predict_documentation_06_hires.png" width="500"/>
+
+<p align="center"><img src="markdown_figures/tmd_predict_documentation_06_hires.png" width="500"/></p>
 
 Let's imagine you collected laser altimetry by flying an airplane down the central trunk of Rutford Ice Stream. (For this example, we'll neglect the time it takes to fly the plane, and imagine you flew the whole flight path instantaneously). 
 
@@ -225,7 +231,7 @@ plot(xi,yi,'r','linewidth',3)
 text(xi(1),yi(1),'Flight path','color','r','fontsize',14,'vert','top')
 ```
 
-<img src="markdown_figures/tmd_predict_documentation_07_hires.png" width="500"/>
+<p align="center"><img src="markdown_figures/tmd_predict_documentation_07_hires.png" width="500"/></p>
 
 Detiding your airborne laser altimetry along this flight line requires some knowledge of how much the ice surface should move as a result of tides. The default behavior of `tmd_predict` assumes the entire ice shelf is in total hydrostatic equilibrium and moves up and down with the total deflection of the tides, while grounded ice is NaN'd out. You can `'unmask'` the solution to get some information landward of the ocean pixels, or you can try to estimate ice `'flexure'` from a forward model. 
 
@@ -262,7 +268,7 @@ axis tight
 xlabel 'distance along profile (km)'
 ```
 
-<img src="markdown_figures/tmd_predict_documentation_08_hires.png" width="500"/>
+<p align="center"><img src="markdown_figures/tmd_predict_documentation_08_hires.png" width="500"/></p>
 
 ## Example: Drift Track
 We've all been there. You've gassed up your dinghy, and you're about to run some illegal substances from Miami Beach to Red Bay, Bahamas. You know the trip will take 24 hours, but you're not sure what kind of tides you'll experience along the way. Well, there's nothing to worry about, because we have TMD! 
@@ -288,7 +294,7 @@ cb = colorbar;
 ylabel(cb,'tide height (m)')
 ```
 
-<img src="markdown_figures/tmd_predict_documentation_09_hires.png" width="500"/>
+<p align="center"><img src="markdown_figures/tmd_predict_documentation_09_hires.png" width="500"/></p>
 
 The blue on each end of the trip means you'll depart and arrive at low-ish tide, and the two red sections means you'll experience two high tides along the way. 
 
@@ -356,7 +362,8 @@ for k = 2:25
    gif
 end
 ```
-<img src="html/arctic_tides.gif" width="500"/>
+
+<p align="center"><img src="html/arctic_tides.gif" width="500"/></p>
 
 ## Author Info 
 The `tmd_predict` function and its documentation were written by Chad A. Greene, June 2022. 
