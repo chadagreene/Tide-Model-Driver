@@ -1,6 +1,8 @@
 [&larr; Back to TMD3.0 Main Page](../README.md)
 
 # Tutorial: Tidal Currents
+Tidal currents are the [flow of water that's induced by spatial gradients in tide heights](https://youtu.be/nUB7IflBBrc). It's like the electrical current that flows between the terminals of a charged battery whose the + and - sides are at different voltage potential. TMD is desgined to predict the barotropic (column-averaged) water velocities induced by tides, although in reality, tidal current speeds can vary signficantly with depth. Keep that in mind when interpreting current measurements that are collected at a single depth in the water column.  
+
 This tutorial covers how to detide and interpret ADCP (current) measurements near Getz Ice Shelf, Antarctica. Here we use the CATS tide model, but you can just as easily use any other TMD3.0 compatible if you wish.
  
 ## Explore the measurements 

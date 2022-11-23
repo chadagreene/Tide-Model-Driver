@@ -278,7 +278,7 @@ caxis([0 2])
 cb = colorbar; 
 ylabel(cb,'m2 constituent amplitude (m)') 
 ```
-<img src="markdown_figures/TMD_model_file_format_01_hires.png" width="500"/>
+<p align="center"><img src="markdown_figures/TMD_model_file_format_01_hires.png" width="500"/></p>
 
 *Why on Earth would we say there's a finite, nonzero tidal amplitude in
 the middle of China, or any other landmass?* Well, the reason's quite simple: 
