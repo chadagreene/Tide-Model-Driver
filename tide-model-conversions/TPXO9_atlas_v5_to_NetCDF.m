@@ -21,8 +21,12 @@ uv = true;
 [lon,lat] = XY(ll_lims,size(wct,1),size(wct,2));
 lat = fliplr(lat); 
 
+[~,masku,maskv] = Muv(mask);
+
 % Reorient and reduce data size:
 mask = uint8(flipud(mask')); 
+masku = uint8(flipud(masku')); 
+maskv = uint8(flipud(maskv')); 
 wct = uint16(flipud(wct')); 
 
 % Number of constituents: 
@@ -55,6 +59,8 @@ lon = [lon(end)-360, lon, lon(1)+360];
 h = cat(2,h(:,end,:),h,h(:,1,:));
 wct = cat(2,wct(:,end),wct,wct(:,1));
 mask = cat(2,mask(:,end),mask,mask(:,1));
+masku = cat(2,masku(:,end),masku,masku(:,1));
+maskv = cat(2,maskv(:,end),maskv,maskv(:,1));
 
 if uv 
    U = cat(2,U(:,end,:),U,U(:,1,:));
@@ -98,6 +104,10 @@ proj4 = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs';
 % 
 % This section of code might take 40 minutes or so to run.
 
+% Fix u and v masks where all data are zero amplitude: 
+masku(all(abs(U)==0,3)) = 0; 
+maskv(all(abs(V)==0,3)) = 0; 
+
 for k = 1:Ncons
    tmp = h(:,:,k); 
    tmp = complex(regionfill(real(tmp),mask==0),regionfill(imag(tmp),mask==0));
@@ -105,11 +115,11 @@ for k = 1:Ncons
    
    if uv
       tmp = U(:,:,k); 
-      tmp = complex(regionfill(real(tmp),mask==0),regionfill(imag(tmp),mask==0));
+      tmp = complex(regionfill(real(tmp),masku==0),regionfill(imag(tmp),masku==0));
       U(:,:,k) = tmp; 
 
       tmp = V(:,:,k); 
-      tmp = complex(regionfill(real(tmp),mask==0),regionfill(imag(tmp),mask==0));
+      tmp = complex(regionfill(real(tmp),maskv==0),regionfill(imag(tmp),maskv==0));
       V(:,:,k) = tmp; 
    end
    
@@ -147,7 +157,7 @@ netcdf.putAtt(ncid,lon_var_id,'standard_name','longitude');
 netcdf.putAtt(ncid,lon_var_id,'long_name',    'grid cell center longitude (first and last columns are repeats, to enable seamless interpolation)');
 netcdf.putAtt(ncid,lon_var_id,'units',        'degrees');
 
-% Define y: 
+% Define lat: 
 lat_id     = netcdf.defDim(ncid,'lat',length(lat));
 lat_var_id = netcdf.defVar(ncid,'lat','NC_FLOAT',lat_id);
 netcdf.putAtt(ncid,lat_var_id,'standard_name','latitude');
@@ -247,19 +257,19 @@ netcdf.putAtt(ncid,mask_var_id,'valid_range',  [0 1]);
 netcdf.putAtt(ncid,mask_var_id,'flag_values',  [0 1]);
 netcdf.putAtt(ncid,mask_var_id,'flag_meanings','land ocean');
 
-% Compress and stop variable definition
-netcdf.defVarDeflate(ncid,lat_var_id,true,true,9);
-netcdf.defVarDeflate(ncid,lon_var_id,true,true,9);
-netcdf.defVarDeflate(ncid,hRe_var_id,true,true,9);
-netcdf.defVarDeflate(ncid,hIm_var_id,true,true,9);
-if uv
-   netcdf.defVarDeflate(ncid,uRe_var_id,true,true,9);
-   netcdf.defVarDeflate(ncid,uIm_var_id,true,true,9);
-   netcdf.defVarDeflate(ncid,vRe_var_id,true,true,9);
-   netcdf.defVarDeflate(ncid,vIm_var_id,true,true,9);
-end
-netcdf.defVarDeflate(ncid,wct_var_id,true,true,9);
-netcdf.defVarDeflate(ncid,mask_var_id,true,true,9);
+% % Compress and stop variable definition
+% netcdf.defVarDeflate(ncid,lat_var_id,true,true,9);
+% netcdf.defVarDeflate(ncid,lon_var_id,true,true,9);
+% netcdf.defVarDeflate(ncid,hRe_var_id,true,true,9);
+% netcdf.defVarDeflate(ncid,hIm_var_id,true,true,9);
+% if uv
+%    netcdf.defVarDeflate(ncid,uRe_var_id,true,true,9);
+%    netcdf.defVarDeflate(ncid,uIm_var_id,true,true,9);
+%    netcdf.defVarDeflate(ncid,vRe_var_id,true,true,9);
+%    netcdf.defVarDeflate(ncid,vIm_var_id,true,true,9);
+% end
+% netcdf.defVarDeflate(ncid,wct_var_id,true,true,9);
+% netcdf.defVarDeflate(ncid,mask_var_id,true,true,9);
 netcdf.endDef(ncid);
 
 %3. Place data

@@ -41,7 +41,7 @@ Start by loading the tide gauge data, then predict tides at that location using 
 fn = 'h820_nuuk.nc';
 lat = ncread(fn,'lat');
 lon = ncread(fn,'lon');
-t = ncread(fn,'time')+datenum(1800,1,1,0,0,0); units = 'days since 1800-01-01 00:00:00' 
+t = ncread(fn,'time')+datenum(1800,1,1,0,0,0); % units = 'days since 1800-01-01 00:00:00' 
 sl = ncread(fn,'sea_level')/1000; 
 
 % Predict tides at the tide gauge location: 

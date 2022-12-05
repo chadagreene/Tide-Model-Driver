@@ -28,8 +28,12 @@ con_string = 'm2 s2 n2 k2 k1 o1 p1 q1'; % constituents in original model order, 
 % Read the grid file: 
 [ll_lims,wct,mask,~,~] = grd_in(filename_grd); 
 
+[~,masku,maskv] = Muv(mask);
+
 % Reorient and reduce data size:
 mask = uint8(flipud(mask')); 
+masku = uint8(flipud(masku')); 
+maskv = uint8(flipud(maskv')); 
 wct = flipud(wct'); 
 
 % Create spatial arrays: 
@@ -69,7 +73,7 @@ if false
    ax(1) = gca; 
 end
 
-%% Fill NaNs
+%% Fill NaNs 
 
 for k = 1:Ncons
    tmp = h(:,:,k); 
@@ -77,11 +81,11 @@ for k = 1:Ncons
    h(:,:,k) = tmp; 
    
    tmp = U(:,:,k); 
-   tmp = complex(regionfill(real(tmp),isnan(tmp)),regionfill(imag(tmp),isnan(tmp)));
+   tmp = complex(regionfill(real(tmp),masku==0),regionfill(imag(tmp),masku==0));
    U(:,:,k) = tmp; 
    
    tmp = V(:,:,k); 
-   tmp = complex(regionfill(real(tmp),isnan(tmp)),regionfill(imag(tmp),isnan(tmp)));
+   tmp = complex(regionfill(real(tmp),maskv==0),regionfill(imag(tmp),maskv==0));
    V(:,:,k) = tmp; 
    
    k
@@ -231,13 +235,13 @@ netcdf.putAtt(ncid,y_var_id,'long_name',    'Cartesian y-coordinate, grid cell c
 netcdf.putAtt(ncid,y_var_id,'units',        'kilometer');
 
 % Define lat
-lat_var_id = netcdf.defVar(ncid,'lat','NC_DOUBLE',[x_id y_id]);
+lat_var_id = netcdf.defVar(ncid,'lat','NC_FLOAT',[x_id y_id]);
 netcdf.putAtt(ncid,lat_var_id,'long_name',    'grid cell center latitude');
 netcdf.putAtt(ncid,lat_var_id,'standard_name','latitude');
 netcdf.putAtt(ncid,lat_var_id,'units',        'degree');
 
 % Define lon
-lon_var_id = netcdf.defVar(ncid,'lon','NC_DOUBLE',[x_id y_id]);
+lon_var_id = netcdf.defVar(ncid,'lon','NC_FLOAT',[x_id y_id]);
 netcdf.putAtt(ncid,lon_var_id,'standard_name','longitude');
 netcdf.putAtt(ncid,lon_var_id,'long_name',    'grid cell center longitude');
 netcdf.putAtt(ncid,lon_var_id,'units',        'degree');
@@ -340,17 +344,17 @@ netcdf.putAtt(ncid,mask_var_id,'valid_range',  [0 1 2]);
 netcdf.putAtt(ncid,mask_var_id,'flag_values',  [0 1 2]);
 netcdf.putAtt(ncid,mask_var_id,'flag_meanings','0=land, 1=ocean, 2=out-of-domain');
 
-% Compress and stop variable definition
-netcdf.defVarDeflate(ncid,lat_var_id,true,true,9);
-netcdf.defVarDeflate(ncid,lon_var_id,true,true,9);
-netcdf.defVarDeflate(ncid,hRe_var_id,true,true,9);
-netcdf.defVarDeflate(ncid,hIm_var_id,true,true,9);
-netcdf.defVarDeflate(ncid,uRe_var_id,true,true,9);
-netcdf.defVarDeflate(ncid,uIm_var_id,true,true,9);
-netcdf.defVarDeflate(ncid,vRe_var_id,true,true,9);
-netcdf.defVarDeflate(ncid,vIm_var_id,true,true,9);
-netcdf.defVarDeflate(ncid,wct_var_id,true,true,9);
-netcdf.defVarDeflate(ncid,mask_var_id,true,true,9);
+% % Compress and stop variable definition
+% netcdf.defVarDeflate(ncid,lat_var_id,true,true,9);
+% netcdf.defVarDeflate(ncid,lon_var_id,true,true,9);
+% netcdf.defVarDeflate(ncid,hRe_var_id,true,true,9);
+% netcdf.defVarDeflate(ncid,hIm_var_id,true,true,9);
+% netcdf.defVarDeflate(ncid,uRe_var_id,true,true,9);
+% netcdf.defVarDeflate(ncid,uIm_var_id,true,true,9);
+% netcdf.defVarDeflate(ncid,vRe_var_id,true,true,9);
+% netcdf.defVarDeflate(ncid,vIm_var_id,true,true,9);
+% netcdf.defVarDeflate(ncid,wct_var_id,true,true,9);
+% netcdf.defVarDeflate(ncid,mask_var_id,true,true,9);
 netcdf.endDef(ncid);
 
 %3. Place data

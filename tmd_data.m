@@ -238,6 +238,12 @@ end
 if ismember(variable,{'uRe','uIm','u','uAm','vRe','vIm','v','vAm'})
    wct = double(permute(ncread(filename,'wct',[ci(1) ri(1)],[numel(ci) numel(ri)]),[2 1]));
    Z = Z./max(wct,10); % divide transports by at least 10 m wct to prevent insanely high velocities.
+
+   % % ALTERNATE APPROACH: Ensure velocities don't get insanely high by dividing transports by at least 10 m, and here's where we *could* NaN out land for currents. 
+   % mask = double(permute(ncread(filename,'mask',[ci(1) ri(1)],[numel(ci) numel(ri)]),[2 1])); 
+   % wct(wct<10) = 10; 
+   % wct(~mask) = nan; 
+   % Z = Z./wct; 
 end
 
 if geo 

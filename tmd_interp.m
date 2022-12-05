@@ -177,17 +177,16 @@ end
 %% Convert complex numbers if requested 
 
 switch lower(variable) 
-%    case {'ham','uam','vam'} 
-%       zi = abs(zi); 
+   case {'ham','uam','vam'} 
+      zi = abs(zi); 
    case {'hph','uph','vph'} 
       zi = angle(zi); 
    otherwise 
       % I think all the other cases are already taken care of. 
-
 end
 
 %% Mask out land areas 
- 
+
 if ~ismember(variable,{'mask','flexure','wct'})
    switch lower(MaskingMethod)
       case 'nan' % default 
