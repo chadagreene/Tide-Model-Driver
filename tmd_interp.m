@@ -105,9 +105,13 @@ switch proj4
    
    case '+proj=stere +lat_0=90 +lat_ts=70 +lon_0=-45 +x_0=0 +y_0=0 +datum=WGS84 +units=km +no_defs +type=crs'
       [xi,yi] = tmd_ll2ps(lati,loni,70,-45,'N'); 
+      xi(lati<0) = nan; % Fixes wrong-hemisphere issue. 
+      yi(lati<0) = nan; 
       
    case '+proj=stere +lat_0=-90 +lat_ts=-71 +lon_0=-70 +x_0=0 +y_0=0 +datum=WGS84 +units=km +no_defs +type=crs'
       [xi,yi] = tmd_ll2ps(lati,loni,-71,-70,'S'); 
+      xi(lati>0) = nan; % Fixes wrong-hemisphere issue. 
+      yi(lati>0) = nan; 
       
    case '+proj=stere +lat_0=90 +lat_ts=70 +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=km +no_defs +type=crs'
       [xi,yi] = tmd_ll2ps(lati,loni,70,0,'N'); 

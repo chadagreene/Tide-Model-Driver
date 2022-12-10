@@ -174,6 +174,9 @@ if conSubset
    Z = NaN(numel(ri),numel(ci),NCons);
 end
 
+% In case there's no data: 
+assert(numel(ci)>0,'No tide data available in the region of interest.') 
+
 for k = 1:NCons 
    
    if conSubset

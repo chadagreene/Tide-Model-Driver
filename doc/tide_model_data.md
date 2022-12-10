@@ -24,7 +24,7 @@ Barotropic ocean models contain complex tidal coefficients for water height and 
 	* **Data Access:** [Download here](https://www.chadagreene.com/tide_data/EOT20_ocean.nc) [23 MB].
 	* **Website:** [SEANOE data page](https://doi.org/10.17882/79489).
 	* **Data Citation:** Hart-Davis, M., Piccioni, G., Dettmering, D., Schwatke, C., Passaro, M., and Seitz, F. (2021). EOT20 - A global Empirical Ocean Tide model from multi-mission satellite altimetry. SEANOE.  [doi:10.17882/79489](https://doi.org/10.17882/79489).
-	* **Literature Reference:** Hart-Davis, M., Piccioni, G., Dettmering, D., Schwatke, C., Passaro,M., and Seitz, F.  (2021). EOT20: a global ocean tide model from multi-mission satellite altimetry. Earth System Science Data, 13(8), 3869-3884. [doi:10.5194/essd-13-3869-2021](https://doi.org/10.5194/essd-13-3869-2021).
+	* **Literature Reference:** Hart-Davis, M., Piccioni, G., Dettmering, D., Schwatke, C., Passaro,M., and Seitz, F.  (2021). EOT20: a global ocean tide model from multi-mission satellite altimetry. *Earth System Science Data*, 13(8), 3869-3884. [doi:10.5194/essd-13-3869-2021](https://doi.org/10.5194/essd-13-3869-2021).
 
 ### Regional Ocean Models 
 * **`CATS2008_v2022.nc`** Circum-Antarctic Tidal Simulation by Lana Erofeeva, Chad Greene, Susan Howard, and Laurie Padman. Updates from the original CATS2008 are described [here](cats2008_updates.md). 
@@ -49,7 +49,7 @@ Barotropic ocean models contain complex tidal coefficients for water height and 
 	* **Variables:** Complex height & transport coefficients.
 	* **Resolution:** 2 km.
 	* **Constituents:** 8: m2 s2 k1 o1 n2 p1 k2 q1.
-	* **Restrictions:** This work is licensed under the Creative Commons Attribution 4.0 International License.. 
+	* **Restrictions:** This work is licensed under the Creative Commons Attribution 4.0 International License.
 	* **Data Access:** [Download here](https://www.chadagreene.com/tide_data/Arc2kmTM_v1.nc.zip) [323 MB].
 	* **Website:**  [https://arcticdata.io/catalog/portals/ArcticTides]( https://arcticdata.io/catalog/portals/ArcticTides).
 	* **Data Citation:** Howard, S. L., and Padman, L. (2021). Arc2kmTM: Arctic 2 kilometer Tide Model, 2021. Arctic Data Center. [doi:10.18739/A2D21RK6K](https://doi.org/10.18739/A2D21RK6K).
@@ -58,7 +58,7 @@ Barotropic ocean models contain complex tidal coefficients for water height and 
 	* **Variables:** Complex height & transport coefficients.
 	* **Resolution:** 5 km.
 	* **Constituents:** 12: m2 s2 n2 k2 k1 o1 p1 q1 m4 mn4 ms4 2n2.
-	* **Restrictions:** This work is licensed under the Creative Commons Attribution 4.0 International License.. 
+	* **Restrictions:** This work is licensed under the Creative Commons Attribution 4.0 International License. 
 	* **Data Access:** [Download here](https://www.chadagreene.com/tide_data/Arc5km2018.nc.zip) [40 MB].
 	* **Website:**  [https://arcticdata.io/catalog/portals/ArcticTides]( https://arcticdata.io/catalog/portals/ArcticTides).
 	* **Data Citation:** Erofeeva, S. and Egbert, G. 2020. Arc5km2018: Arctic Ocean Inverse Tide Model on a 5 kilometer grid, 2018. Arctic Data Center. [doi:10.18739/A21R6N14K](https://doi.org/10.18739/A21R6N14K).
@@ -67,7 +67,7 @@ Barotropic ocean models contain complex tidal coefficients for water height and 
 	* **Variables:** Complex height & transport coefficients.
 	* **Resolution:** 5 km.
 	* **Constituents:** 8: m2 s2 n2 k2 k1 o1 p1 q1.
-	* **Restrictions:** This work is licensed under the Creative Commons Attribution 4.0 International License.. 
+	* **Restrictions:** This work is licensed under the Creative Commons Attribution 4.0 International License.
 	* **Data Access:** [Download here](https://www.chadagreene.com/tide_data/AOTIM5.nc.zip) [41 MB].
 	* **Website:**  [https://arcticdata.io/catalog/portals/ArcticTides]( https://arcticdata.io/catalog/portals/ArcticTides).
 	* **Data Citation:** Padman, L., Erofeeva, S., and Howard, S. (2020). AOTIM5: Arctic Ocean Inverse Tide Model, on 5 kilometer grid, developed in 2004. [doi:10.18739/A2S17SS80](https://doi.org/10.18739/A2S17SS80).
@@ -97,7 +97,7 @@ These load tide model data files are compatible with TMD3.0:
 	* **Data Access:** [Download here](https://www.chadagreene.com/tide_data/EOT20_load.nc) [20 MB].
 	* **Website:** [SEANOE data page](https://doi.org/10.17882/79489).
 	* **Data Citation:** Hart-Davis, M., Piccioni, G., Dettmering, D., Schwatke, C., Passaro, M., and Seitz, F. (2021). EOT20 - A global Empirical Ocean Tide model from multi-mission satellite altimetry. SEANOE.  [doi:10.17882/79489](https://doi.org/10.17882/79489).
-	* **Literature Reference:** Hart-Davis, M., Piccioni, G., Dettmering, D., Schwatke, C., Passaro,M., and Seitz, F.  (2021). EOT20: a global ocean tide model from multi-mission satellite altimetry. Earth System Science Data, 13(8), 3869-3884. [doi:10.5194/essd-13-3869-2021](https://doi.org/10.5194/essd-13-3869-2021).
+	* **Literature Reference:** Hart-Davis, M., Piccioni, G., Dettmering, D., Schwatke, C., Passaro,M., and Seitz, F.  (2021). EOT20: a global ocean tide model from multi-mission satellite altimetry. *Earth System Science Data*, 13(8), 3869-3884. [doi:10.5194/essd-13-3869-2021](https://doi.org/10.5194/essd-13-3869-2021).
 	
 # Tide Model Intercomparison
 For a quick intercomparison of tide model performance, check out [this intercomparison](tide_model_intercomparison.md) page. Only a few models are compared on that page, but it provides a template for how you may explore model performance on your own. 

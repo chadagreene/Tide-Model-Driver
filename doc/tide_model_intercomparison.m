@@ -210,10 +210,10 @@ sl_Gr1km = tmd_predict('Gr1kmTM_v1.nc',lat,lon,t,'h');
 sl_Arc2km = tmd_predict('Arc2kmTM_v1.nc',lat,lon,t,'h','coasts','unmask');
 u_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'u');
 u_Gr1km = tmd_predict('Gr1kmTM_v1.nc',lat,lon,t,'u');
-u_Arc2km = tmd_predict('Arc2kmTM_v1.nc',lat,lon,t,'u','coasts','unmask');
+u_Arc2km = tmd_predict('Arc2kmTM_v1.nc',lat,lon,t,'u')
 v_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'v');
 v_Gr1km = tmd_predict('Gr1kmTM_v1.nc',lat,lon,t,'v');
-v_Arc2km = tmd_predict('Arc2kmTM_v1.nc',lat,lon,t,'v','coasts','unmask');
+v_Arc2km = tmd_predict('Arc2kmTM_v1.nc',lat,lon,t,'v');
 
 % Plot observed and predicted tides: 
 figure

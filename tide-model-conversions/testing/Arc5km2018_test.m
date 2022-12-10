@@ -88,7 +88,7 @@ tic
 sl_old = tmd_tide_pred('Model_Arc5km2018',datenum(t),lat,lon,'z'); 
 old_time = toc 
 tic
-sl_new = tmd_predict('Arc5km2018.nc',lat,lon,t,'h','coast','unmask');
+sl_new = tmd_predict('Gr1kmTM_v1.nc',lat,lon,t,'h','coast','unmask');
 new_time = toc
 
 % Plot

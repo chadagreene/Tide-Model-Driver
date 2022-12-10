@@ -292,6 +292,8 @@ produces smoother, more physical interpolation close to the coast and is
 a reasonable approximation where the underlying tide model cannot offer a
 solution. 
 
+Note that we only fill the landmasses for tidal heights (h, not U or V), because tidal height predictions should be reasonable in a narrow, tidal inland creek that the mask identifies as land, whereas inland transport values would depend on geometry that was not represented in the model. 
+
 The [`tmd_interp`](tmd_interp_documentation.md) function sets land areas 
 to NaN by default (but offers an option to "unmask"). For your tidal needs, 
 you may wish to mask out land areas using the `mask` variable, which is

@@ -74,7 +74,7 @@ datetick('x','mmm-yyyy')
 % at the mooring location: 
 
 % (My) file path to the model file: 
-fn = 'CATS2008_update_2022-06-11.nc'; 
+fn = 'CATS2008_update_2022.nc'; 
 
 % Predict tidal velocities: 
 u_pred = tmd_predict(fn,lat,lon,t,'u');  
