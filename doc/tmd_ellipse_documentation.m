@@ -27,7 +27,7 @@
 %% Example 
 % Get the tidal ellipse parameters for the o1 constituent:
 
-fn = 'CATS2008_update_2022-06-11.nc'; 
+fn = 'CATS2008_v2023.nc'; 
 lat = -71.9102; 
 lon =  172.6590;
 

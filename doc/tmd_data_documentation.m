@@ -69,7 +69,7 @@
 % working on at the moment, but you may have a different model filename.)
 
 % Filename: 
-fn = 'CATS2008_update_2022-06-11.nc';
+fn = 'CATS2008_v2023.nc';
 
 % Load complex height coefficients:
 [h,x,y,cons] = tmd_data(fn,'h'); 

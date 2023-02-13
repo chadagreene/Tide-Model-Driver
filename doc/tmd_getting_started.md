@@ -4,10 +4,10 @@
 This page contains the code from the introductory video tutorial found on youtube. 
 
 ## 1. Installing TMD 
-The first step toward getting started with TMD is to install the software on your computer. The installation process is described [here](doc/installing_tmd.md).
+The first step toward getting started with TMD is to install the software on your computer. The installation process is described [here](installing_tmd.md).
 
 ## 2. Getting tide model data 
-After you've installed the TMD functions, you'll need some tide model data. [Click here for a list of all available tide model data](doc/tide_model_data.md). 
+After you've installed the TMD functions, you'll need some tide model data. [Click here for a list of all available tide model data](tide_model_data.md). 
 
 ## 3. Getting help 
 #### Online
@@ -32,7 +32,10 @@ If you're not sure what function name you're looking for, just type `tmd` into t
 ```
 
 ## 4. Predicting tides 
+The procedure for predicting tides is described in detail in the documentation for the [`tmd_predict`](tmd_predict_documentation.md) function, but we'll cover a few quick examples here. After downloading your favorite tide model data file, unzip it, [make sure MATLAB can find it](https://www.mathworks.com/help/matlab/ref/addpath.html), and then enter the location and times that you want to predict tides. 
+
 #### Single-location time series 
+
 
 #### Drift-track time series 
 

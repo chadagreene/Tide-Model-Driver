@@ -30,7 +30,7 @@
 Get the tidal ellipse parameters for the o1 constituent:
 
 ```matlab
-fn = 'CATS2008_v2022.nc'; 
+fn = 'CATS2008_v2023.nc'; 
 lat = -71.9102; 
 lon =  172.6590;
 

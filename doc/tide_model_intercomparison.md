@@ -16,14 +16,14 @@ sl = ncread(fn,'sea_level')/1000;
 
 % Predict tides at the tide gauge location: 
 sl_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'h');
-sl_cats = tmd_predict('CATS2008_v2022.nc',lat,lon,t,'h');
+sl_cats = tmd_predict('CATS2008_v2023.nc',lat,lon,t,'h');
 
 % Also predict tidal currents: 
 % Predict tides at the tide gauge location: 
 u_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'u');
-u_cats = tmd_predict('CATS2008_v2022.nc',lat,lon,t,'u');
+u_cats = tmd_predict('CATS2008_v2023.nc',lat,lon,t,'u');
 v_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'v');
-v_cats = tmd_predict('CATS2008_v2022.nc',lat,lon,t,'v');
+v_cats = tmd_predict('CATS2008_v2023.nc',lat,lon,t,'v');
 
 % Plot observed and predicted tides: 
 figure
@@ -33,7 +33,7 @@ hold on
 p(2)=plot(t,sl_tpxo,'linewidth',1);
 p(3)=plot(t,sl_cats,'linewidth',1);
 ylabel 'tide height (m)'
-legend('observations','TPXO9_atlas_v5','CATS2008_v2022',...
+legend('observations','TPXO9_atlas_v5','CATS2008_v2023',...
    'interpreter','none','location','best')
 legend boxoff
 box off
@@ -66,15 +66,15 @@ datetick('x','keeplimits')
 <p align="center"><img src="markdown_figures/tide_model_intercomparison_01_hires.png" width="500"/></p>
 
 
-Above, the heights look good, but the velocities don't agree. That's likely due to differences in water column thickness (transports are divided by wct to get column-averaged velocity):
+Above, the heights look good, but the velocities don't agree. That could be partly—but clearly not entirely—due to differences in water column thickness (transports are divided by wct to get column-averaged velocity):
 
 ```matlab
 wct_tpxo = tmd_interp('TPXO9_atlas_v5.nc','wct',lat,lon);
-wct_cats = tmd_interp('CATS2008_v2022.nc','wct',lat,lon);
+wct_cats = tmd_interp('CATS2008_v2023.nc','wct',lat,lon);
 
 >> [wct_tpxo wct_cats]
 ans =
-        259.55        113.80
+        259.55        116.99
 ```
 
 ## Tide height measurements near Astrolabe Glacier, Antarctica: 
@@ -89,11 +89,11 @@ sl = ncread(fn,'sea_level')/1000;
 
 % Predict tides at the tide gauge location: 
 sl_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'h');
-sl_cats = tmd_predict('CATS2008_v2022.nc',lat,lon,t,'h');
+sl_cats = tmd_predict('CATS2008_v2023.nc',lat,lon,t,'h');
 u_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'u');
-u_cats = tmd_predict('CATS2008_v2022.nc',lat,lon,t,'u');
+u_cats = tmd_predict('CATS2008_v2023.nc',lat,lon,t,'u');
 v_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'v');
-v_cats = tmd_predict('CATS2008_v2022.nc',lat,lon,t,'v');
+v_cats = tmd_predict('CATS2008_v2023.nc',lat,lon,t,'v');
 
 % Plot observed and predicted tides: 
 figure
@@ -103,7 +103,7 @@ hold on
 p(2)=plot(t,sl_tpxo,'linewidth',1);
 p(3)=plot(t,sl_cats,'linewidth',1);
 ylabel 'tide height (m)'
-legend('observations','TPXO9_atlas_v5','CATS2008_v2022',...
+legend('observations','TPXO9_atlas_v5','CATS2008_v2023',...
    'interpreter','none','location','best')
 legend boxoff
 box off
@@ -139,16 +139,16 @@ Above, the heights look good, but the velocities don't agree. That's likely due 
 
 ```matlab
 wct_tpxo = tmd_interp('TPXO9_atlas_v5.nc','wct',lat,lon);
-wct_cats = tmd_interp('CATS2008_v2022.nc','wct',lat,lon);
+wct_cats = tmd_interp('CATS2008_v2023.nc','wct',lat,lon);
 
 >> [wct_tpxo wct_cats]
 ans =
-        297.18         54.68
+        259.55        116.99
 ```
 The difference in water column thickness explains the big difference in magnitudes of the velocity predictions. Phase, not so much. 
 
 ## Tidal current observations near Getz Ice Shelf, Antarctica 
-% This data is explored in more detail in the [Tidal Current Tutorial](tutorial_currents.md). 
+This data is explored in more detail in the [Tidal Current Tutorial](tutorial_currents.md). 
 
 ```
 t = ncread('ADCP_S112.nc','time') + datenum(1950,1,1,0,0,0); 
@@ -160,11 +160,11 @@ v = mean(ncread('ADCP_S112.nc','v'),'omitnan');
 
 % Predict tides at the tide gauge location: 
 sl_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'h');
-sl_cats = tmd_predict('CATS2008_v2022.nc',lat,lon,t,'h');
+sl_cats = tmd_predict('CATS2008_v2023.nc',lat,lon,t,'h');
 u_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'u');
-u_cats = tmd_predict('CATS2008_v2022.nc',lat,lon,t,'u');
+u_cats = tmd_predict('CATS2008_v2023.nc',lat,lon,t,'u');
 v_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'v');
-v_cats = tmd_predict('CATS2008_v2022.nc',lat,lon,t,'v');
+v_cats = tmd_predict('CATS2008_v2023.nc',lat,lon,t,'v');
 
 % Plot observed and predicted tides: 
 figure
@@ -174,7 +174,7 @@ hold on
 p(2)=plot(t,sl_tpxo,'linewidth',1);
 p(3)=plot(t,sl_cats,'linewidth',1);
 ylabel 'tide height (m)'
-legend('observations','TPXO9_atlas_v5','CATS2008_v2022',...
+legend('observations','TPXO9_atlas_v5','CATS2008_v2023',...
    'interpreter','none','location','best')
 legend boxoff
 box off
@@ -272,4 +272,4 @@ datetick('x','keeplimits')
 <p align="center"><img src="markdown_figures/tide_model_intercomparison_04_hires.png" width="500"/></p>
 
 ## Author Info
-This intercomparison was written by [Chad A. Greene](https://www.chadagreene.com) in June 2022. CATS2008_v2022.nc
+This intercomparison was written by [Chad A. Greene](https://www.chadagreene.com) in June 2022. 
