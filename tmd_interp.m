@@ -170,7 +170,7 @@ end
 
 switch variable 
    case 'mask'
-      zi = interp2(x,y,z,xi,yi,'nearest'); 
+      zi = interp2(x,y,z,xi,yi,'nearest',2); 
    otherwise 
       zi = nan(size(xi,1),size(xi,2),size(z,3)); 
       for k = 1:size(zi,3) 

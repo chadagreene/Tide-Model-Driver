@@ -11,7 +11,7 @@
 %% Enter initial file info 
 
 % Output file: 
-newfilename = ['/Users/cgreene/Documents/data/tides/CATS2008_v2022.nc']; 
+newfilename = ['/Users/cgreene/Documents/data/tides/CATS2008_v2023.nc']; 
 
 % Input files: 
 filename_grd = '/Users/cgreene/Documents/data/tides/CATS2008/grid_CATS2008'; 
@@ -30,9 +30,13 @@ con_string = 'm2 s2 n2 k2 k1 o1 p1 q1 mf mm'; % constituents in original model o
 % Read the grid file: 
 [ll_lims,wct,mask,~,~] = grd_in(filename_grd); 
 
+[~,masku,maskv] = Muv(mask);
+
 % Reorient and reduce data size:
 mask = uint8(flipud(mask')); 
-wct = uint16(flipud(wct')); 
+masku = uint8(flipud(masku')); 
+maskv = uint8(flipud(maskv')); 
+wct = flipud(wct'); 
 
 % Create spatial arrays: 
 x = (ll_lims(1)+old_res/2):old_res:(ll_lims(2)-old_res/2); 
@@ -78,17 +82,21 @@ ax(1) = gca;
 
 %% Fill NaNs
 
+% Fix u and v masks where all data are zero amplitude: 
+masku(all(abs(U)==0,3)) = 0; 
+maskv(all(abs(V)==0,3)) = 0; 
+
 for k = 1:Ncons
    tmp = h(:,:,k); 
-   tmp = complex(regionfill(real(tmp),mask==0),regionfill(imag(tmp),mask==0));
+   tmp = complex(regionfill(real(tmp),mask==0|isnan(tmp)),regionfill(imag(tmp),mask==0|isnan(tmp)));
    h(:,:,k) = tmp; 
    
    tmp = U(:,:,k); 
-   tmp = complex(regionfill(real(tmp),mask==0),regionfill(imag(tmp),mask==0));
+   tmp = complex(regionfill(real(tmp),masku==0|isnan(tmp)),regionfill(imag(tmp),masku==0|isnan(tmp)));
    U(:,:,k) = tmp; 
    
    tmp = V(:,:,k); 
-   tmp = complex(regionfill(real(tmp),mask==0),regionfill(imag(tmp),mask==0));
+   tmp = complex(regionfill(real(tmp),maskv==0|isnan(tmp)),regionfill(imag(tmp),maskv==0|isnan(tmp)));
    V(:,:,k) = tmp; 
    
    k
@@ -166,7 +174,7 @@ mask(oldmask==0 & Lat>max(gllat)) = 0;
 
 wct(mask==0) = 0; 
 wct(wct<1 & mask==1) = 1; % just in case of any apparent grounded but not grounded ice 
-wct = uint16(wct); 
+wct = int16(wct); 
 
 %%
 
@@ -179,26 +187,68 @@ axis tight off
 bedmachine
 cmocean phase 
 ax(2) = gca; 
-title('CATS2008_update_2022','interpreter','none')
+title('CATS2008_update_2023','interpreter','none')
 
 linkaxes(ax,'xy'); 
 axis([  -1609006.64    -415618.02      63826.14    1152447.96])
 
-% export_fig CATS2008_update_2022_comparison.png -r600 -p0.01
-
-%% Tidal range
-% After writing the whole file, calculate the peak-to-peak tidal range and 
-% add it to the NetCDF. 
-
-% Takes ~5 hours! 
-%h_range = tidal_range(h,conList,mask==1);
-% h_range = permute(ncread('CATS2008_update_2022-06-06.nc','h_range'),[2 1]); 
+% export_fig CATS2008_update_2023_comparison.png -r600 -p0.01
 
 %%
 
+% Maximum real and imaginary values for each constitutent (breaking it up by constituent reduces memory.) 
+for k=1:Ncons
+   tmp = abs(real(h(:,:,k))); 
+   mxhr(k) = max(tmp(mask==1)); 
+   tmp = abs(imag(h(:,:,k))); 
+   mxhi(k) = max(tmp(mask==1)); 
+   
+   tmp = abs(real(U(:,:,k))); 
+   mxur(k) = max(tmp(mask==1)); 
+   tmp = abs(imag(U(:,:,k))); 
+   mxui(k) = max(tmp(mask==1)); 
+   
+   tmp = abs(real(V(:,:,k))); 
+   mxvr(k) = max(tmp(mask==1)); 
+   tmp = abs(imag(V(:,:,k))); 
+   mxvi(k) = max(tmp(mask==1)); 
+   k
+end
+
 % Scaling factor for saving to NCSHORT (int16):
-scale_h = floor(32767/max(abs([real(h(:));imag(h(:))])));
-scale_UV = floor(32767/max(abs([real(U(:));real(V(:));imag(U(:));imag(V(:));])));
+scale_h = 32767/max([mxhr mxhi])
+scale_UV= 32767/max([mxur mxui mxvr mxvi])
+
+%% Convert U and V to int16
+
+FillValue = int16(-32767);
+
+hRe = int16(scale_h*real(h)); 
+hIm = int16(scale_h*imag(h)); 
+URe = int16(scale_UV*real(U)); 
+UIm = int16(scale_UV*imag(U)); 
+VRe = int16(scale_UV*real(V)); 
+VIm = int16(scale_UV*imag(V)); 
+
+% Mask land for U and V (not for h) 
+for k = 1:Ncons
+    tmp = URe(:,:,k); 
+    tmp(mask~=1) = FillValue;
+    URe(:,:,k) = tmp; 
+
+    tmp = UIm(:,:,k); 
+    tmp(mask~=1) = FillValue;
+    UIm(:,:,k) = tmp; 
+
+    tmp = VRe(:,:,k); 
+    tmp(mask~=1) = FillValue;
+    VRe(:,:,k) = tmp; 
+
+    tmp = VIm(:,:,k); 
+    tmp(mask~=1) = FillValue;
+    VIm(:,:,k) = tmp; 
+end
+%%
 
 [ispec,amp,ph,omega,alpha] = tmd_constit(strsplit(con_string));
 
@@ -247,13 +297,13 @@ netcdf.putAtt(ncid,y_var_id,'long_name',    'Cartesian y-coordinate, grid cell c
 netcdf.putAtt(ncid,y_var_id,'units',        'kilometer');
 
 % Define lat
-lat_var_id = netcdf.defVar(ncid,'lat','NC_DOUBLE',[x_id y_id]);
+lat_var_id = netcdf.defVar(ncid,'lat','NC_FLOAT',[x_id y_id]);
 netcdf.putAtt(ncid,lat_var_id,'standard_name','latitude');
 netcdf.putAtt(ncid,lat_var_id,'long_name',    'grid cell center latitude');
 netcdf.putAtt(ncid,lat_var_id,'units',        'degree');
 
 % Define lon
-lon_var_id = netcdf.defVar(ncid,'lon','NC_DOUBLE',[x_id y_id]);
+lon_var_id = netcdf.defVar(ncid,'lon','NC_FLOAT',[x_id y_id]);
 netcdf.putAtt(ncid,lon_var_id,'standard_name','longitude');
 netcdf.putAtt(ncid,lon_var_id,'long_name',    'grid cell center longitude');
 netcdf.putAtt(ncid,lon_var_id,'units',        'degree');
@@ -308,6 +358,7 @@ netcdf.putAtt(ncid,uRe_var_id,'long_name',    'real component of U transport con
 netcdf.putAtt(ncid,uRe_var_id,'grid_mapping', 'polar_stereographic');
 netcdf.putAtt(ncid,uRe_var_id,'units',        'm^2/s');
 netcdf.putAtt(ncid,uRe_var_id,'scale_factor',  1/scale_UV);
+netcdf.putAtt(ncid,uRe_var_id,'_FillValue',    FillValue);
 
 % Define uIm
 uIm_var_id = netcdf.defVar(ncid,'UIm','NC_SHORT',[x_id y_id cons_id]);
@@ -316,6 +367,7 @@ netcdf.putAtt(ncid,uIm_var_id,'long_name',    'imaginary component of U transpor
 netcdf.putAtt(ncid,uIm_var_id,'grid_mapping', 'polar_stereographic');
 netcdf.putAtt(ncid,uIm_var_id,'units',        'm^2/s');
 netcdf.putAtt(ncid,uIm_var_id,'scale_factor',  1/scale_UV);
+netcdf.putAtt(ncid,uIm_var_id,'_FillValue',    FillValue);
 
 % Define vRe
 vRe_var_id = netcdf.defVar(ncid,'VRe','NC_SHORT',[x_id y_id cons_id]);
@@ -324,6 +376,7 @@ netcdf.putAtt(ncid,vRe_var_id,'long_name',    'real component of V transport con
 netcdf.putAtt(ncid,vRe_var_id,'grid_mapping', 'polar_stereographic');
 netcdf.putAtt(ncid,vRe_var_id,'units',        'm^2/s');
 netcdf.putAtt(ncid,vRe_var_id,'scale_factor',  1/scale_UV);
+netcdf.putAtt(ncid,vRe_var_id,'_FillValue',    FillValue);
 
 % Define vIm
 vIm_var_id = netcdf.defVar(ncid,'VIm','NC_SHORT',[x_id y_id cons_id]);
@@ -332,6 +385,7 @@ netcdf.putAtt(ncid,vIm_var_id,'long_name',    'imaginary component of V transpor
 netcdf.putAtt(ncid,vIm_var_id,'grid_mapping', 'polar_stereographic');
 netcdf.putAtt(ncid,vIm_var_id,'units',        'm^2/s');
 netcdf.putAtt(ncid,vIm_var_id,'scale_factor',  1/scale_UV);
+netcdf.putAtt(ncid,vIm_var_id,'_FillValue',    FillValue);
 
 % Define wct: 
 wct_var_id = netcdf.defVar(ncid,'wct','NC_SHORT',[x_id y_id]);
@@ -355,19 +409,18 @@ netcdf.putAtt(ncid,flexure_var_id,'standard_name','ice_flexure_percent');
 netcdf.putAtt(ncid,flexure_var_id,'long_name',    'Forward-modeled coefficient of tidal flexure assuming linear elastic response applied to BedMachine v2 geometry with rho_sw=1027 kg/m3, poisson=0.4, E=4.8 GPa. Can exceed 100% (by a few percent) near the hydrostatic line.');
 netcdf.putAtt(ncid,flexure_var_id,'grid_mapping', 'polar_stereographic');
 
-% Compress and stop variable definition
-netcdf.defVarDeflate(ncid,lat_var_id,true,true,9);
-netcdf.defVarDeflate(ncid,lon_var_id,true,true,9);
-netcdf.defVarDeflate(ncid,hRe_var_id,true,true,9);
-netcdf.defVarDeflate(ncid,hIm_var_id,true,true,9);
-netcdf.defVarDeflate(ncid,uRe_var_id,true,true,9);
-netcdf.defVarDeflate(ncid,uIm_var_id,true,true,9);
-netcdf.defVarDeflate(ncid,vRe_var_id,true,true,9);
-netcdf.defVarDeflate(ncid,vIm_var_id,true,true,9);
-netcdf.defVarDeflate(ncid,wct_var_id,true,true,9);
-netcdf.defVarDeflate(ncid,mask_var_id,true,true,9);
-netcdf.defVarDeflate(ncid,flexure_var_id,true,true,9);
-% netcdf.defVarDeflate(ncid,R_var_id,true,true,9);
+% % Compress and stop variable definition
+% netcdf.defVarDeflate(ncid,lat_var_id,true,true,9);
+% netcdf.defVarDeflate(ncid,lon_var_id,true,true,9);
+% netcdf.defVarDeflate(ncid,hRe_var_id,true,true,9);
+% netcdf.defVarDeflate(ncid,hIm_var_id,true,true,9);
+% netcdf.defVarDeflate(ncid,uRe_var_id,true,true,9);
+% netcdf.defVarDeflate(ncid,uIm_var_id,true,true,9);
+% netcdf.defVarDeflate(ncid,vRe_var_id,true,true,9);
+% netcdf.defVarDeflate(ncid,vIm_var_id,true,true,9);
+% netcdf.defVarDeflate(ncid,wct_var_id,true,true,9);
+% netcdf.defVarDeflate(ncid,mask_var_id,true,true,9);
+% netcdf.defVarDeflate(ncid,flexure_var_id,true,true,9);
 netcdf.endDef(ncid);
 
 %3. Place data
@@ -380,16 +433,15 @@ netcdf.putVar(ncid,amp_var_id,amp);
 netcdf.putVar(ncid,ph_var_id,ph);
 netcdf.putVar(ncid,om_var_id,omega);
 netcdf.putVar(ncid,alp_var_id,alpha);
-netcdf.putVar(ncid,hRe_var_id,ipermute(int16(scale_h*real(h)),[2 1 3]));
-netcdf.putVar(ncid,hIm_var_id,ipermute(int16(scale_h*imag(h)),[2 1 3]));
-netcdf.putVar(ncid,uRe_var_id,ipermute(int16(scale_UV*real(U)),[2 1 3]));
-netcdf.putVar(ncid,uIm_var_id,ipermute(int16(scale_UV*imag(U)),[2 1 3]));
-netcdf.putVar(ncid,vRe_var_id,ipermute(int16(scale_UV*real(V)),[2 1 3]));
-netcdf.putVar(ncid,vIm_var_id,ipermute(int16(scale_UV*imag(V)),[2 1 3]));
+netcdf.putVar(ncid,hRe_var_id,ipermute(hRe,[2 1 3]));
+netcdf.putVar(ncid,hIm_var_id,ipermute(hIm,[2 1 3]));
+netcdf.putVar(ncid,uRe_var_id,ipermute(URe,[2 1 3]));
+netcdf.putVar(ncid,uIm_var_id,ipermute(UIm,[2 1 3]));
+netcdf.putVar(ncid,vRe_var_id,ipermute(VRe,[2 1 3]));
+netcdf.putVar(ncid,vIm_var_id,ipermute(VIm,[2 1 3]));
 netcdf.putVar(ncid,wct_var_id,ipermute(wct,[2 1]));
 netcdf.putVar(ncid,mask_var_id,ipermute(mask,[2 1]));
 netcdf.putVar(ncid,flexure_var_id,ipermute(flexure,[2 1]));
-% netcdf.putVar(ncid,R_var_id,ipermute(h_range*1000,[2 1]));
 
 %4. Close file 
 netcdf.close(ncid)

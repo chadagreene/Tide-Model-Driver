@@ -170,12 +170,12 @@ netcdf.putAtt(ncid,mask_var_id,'valid_range',  [0 1]);
 netcdf.putAtt(ncid,mask_var_id,'flag_values',  [0 1]);
 netcdf.putAtt(ncid,mask_var_id,'flag_meanings','land ocean');
 
-% Compress and stop variable definition
-netcdf.defVarDeflate(ncid,lat_var_id,true,true,9);
-netcdf.defVarDeflate(ncid,lon_var_id,true,true,9);
-netcdf.defVarDeflate(ncid,hRe_var_id,true,true,9);
-netcdf.defVarDeflate(ncid,hIm_var_id,true,true,9);
-netcdf.defVarDeflate(ncid,mask_var_id,true,true,9);
+% % Compress and stop variable definition
+% netcdf.defVarDeflate(ncid,lat_var_id,true,true,9);
+% netcdf.defVarDeflate(ncid,lon_var_id,true,true,9);
+% netcdf.defVarDeflate(ncid,hRe_var_id,true,true,9);
+% netcdf.defVarDeflate(ncid,hIm_var_id,true,true,9);
+% netcdf.defVarDeflate(ncid,mask_var_id,true,true,9);
 netcdf.endDef(ncid);
 
 %3. Place data
