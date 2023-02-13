@@ -7,7 +7,7 @@
 % This script takes about 2 minutes to run on my 2019-era laptop. 
 
 addpath(genpath('/Users/cgreene/Documents/MATLAB/TMD3.00_alpha'))
-addpath(genpath('/Users/cgreene/Documents/data/tides/AOTIM5'))
+addpath(genpath('/Users/cgreene/Documents/data/tides/AODTM5'))
 
 %% Enter initial file info 
 
@@ -75,21 +75,21 @@ end
 
 %% Fill NaNs
 
-% % Fix u and v masks where all data are zero amplitude: 
-% masku(all(abs(U)==0,3)) = 0; 
-% maskv(all(abs(V)==0,3)) = 0; 
+% Fix u and v masks where all data are zero amplitude: 
+masku(all(abs(U)==0,3) | all(isnan(U),3)) = 0; 
+maskv(all(abs(V)==0,3) | all(isnan(V),3)) = 0; 
 
 for k = 1:Ncons
    tmp = h(:,:,k); 
-   tmp = complex(regionfill(real(tmp),mask==0),regionfill(imag(tmp),mask==0));
+   tmp = complex(regionfill(real(tmp),mask==0|isnan(tmp)), regionfill(imag(tmp),mask==0|isnan(tmp)));
    h(:,:,k) = tmp; 
    
    tmp = U(:,:,k); 
-   tmp = complex(regionfill(real(tmp),masku==0),regionfill(imag(tmp),masku==0));
+   tmp = complex(regionfill(real(tmp),masku==0|isnan(tmp)),regionfill(imag(tmp),masku==0|isnan(tmp)));
    U(:,:,k) = tmp; 
    
    tmp = V(:,:,k); 
-   tmp = complex(regionfill(real(tmp),maskv==0),regionfill(imag(tmp),maskv==0));
+   tmp = complex(regionfill(real(tmp),maskv==0|isnan(tmp)),regionfill(imag(tmp),maskv==0|isnan(tmp)));
    V(:,:,k) = tmp; 
    
    k
@@ -128,7 +128,7 @@ end
 
 % Interpolate mask and wct to new grid, filling extrapolated values appropriately. 
 mask = interp2(x,y,mask,Xi,Yi,'nearest',2);
-wct = uint16(interp2(x,y,wct,Xi,Yi,'linear',32767)); 
+wct = int16(interp2(x,y,wct,Xi,Yi,'linear',32767)); 
 
 % Overwrite old h, U, and V with new, interpolated values: 
 h = htmp; 
@@ -141,28 +141,6 @@ x = xps;
 y = yps; 
 Lat = Latps; 
 Lon = Lonps; 
-
-%% Fill missing (extrapolated) values 
-
-for k=1:Ncons
-   tmpr = real(h(:,:,k)); 
-   tmpi = imag(h(:,:,k)); 
-   tmpr(mask==2) = 32767; 
-   tmpi(mask==2) = 32767; 
-   h(:,:,k) = complex(tmpr,tmpi); 
-   
-   tmpr = real(U(:,:,k)); 
-   tmpi = imag(U(:,:,k)); 
-   tmpr(mask==2) = 32767; 
-   tmpi(mask==2) = 32767; 
-   U(:,:,k) = complex(tmpr,tmpi); 
-   
-   tmpr = real(V(:,:,k)); 
-   tmpi = imag(V(:,:,k)); 
-   tmpr(mask==2) = 32767; 
-   tmpi(mask==2) = 32767; 
-   V(:,:,k) = complex(tmpr,tmpi); 
-end
 
 %%
 
@@ -187,8 +165,46 @@ for k=1:Ncons
 end
 
 % Scaling factor for saving to NCSHORT (int16):
-scale_h = 32765/max([mxhr mxhi])
-scale_UV= 32765/max([mxur mxui mxvr mxvi])
+scale_h = 32767/max([mxhr mxhi])
+scale_UV= 32767/max([mxur mxui mxvr mxvi])
+
+%% Convert U and V to int16
+
+FillValue = int16(-32767);
+
+hRe = int16(scale_h*real(h)); 
+hIm = int16(scale_h*imag(h)); 
+URe = int16(scale_UV*real(U)); 
+UIm = int16(scale_UV*imag(U)); 
+VRe = int16(scale_UV*real(V)); 
+VIm = int16(scale_UV*imag(V)); 
+
+% Mask land for U and V (not for h) 
+for k = 1:Ncons
+    tmp = hRe(:,:,k); 
+    tmp(mask==2) = FillValue; % mask==2 for h, but mask~=1 for U and V  
+    hRe(:,:,k) = tmp; 
+
+    tmp = hIm(:,:,k); 
+    tmp(mask==2) = FillValue;
+    hIm(:,:,k) = tmp; 
+
+    tmp = URe(:,:,k); 
+    tmp(mask~=1) = FillValue;
+    URe(:,:,k) = tmp; 
+
+    tmp = UIm(:,:,k); 
+    tmp(mask~=1) = FillValue;
+    UIm(:,:,k) = tmp; 
+
+    tmp = VRe(:,:,k); 
+    tmp(mask~=1) = FillValue;
+    VRe(:,:,k) = tmp; 
+
+    tmp = VIm(:,:,k); 
+    tmp(mask~=1) = FillValue;
+    VIm(:,:,k) = tmp; 
+end
 
 %%
 
@@ -284,7 +300,7 @@ netcdf.putAtt(ncid,hRe_var_id,'long_name',    'real component of height constitu
 netcdf.putAtt(ncid,hRe_var_id,'grid_mapping', 'polar_stereographic');
 netcdf.putAtt(ncid,hRe_var_id,'units',        'm');
 netcdf.putAtt(ncid,hRe_var_id,'scale_factor',  1/scale_h);
-netcdf.defVarFill(ncid,hRe_var_id,false,uint16(32767))
+netcdf.putAtt(ncid,hRe_var_id,'_FillValue',    FillValue);
 
 % Define hIm
 hIm_var_id = netcdf.defVar(ncid,'hIm','NC_SHORT',[x_id y_id cons_id]);
@@ -293,43 +309,43 @@ netcdf.putAtt(ncid,hIm_var_id,'long_name',    'imaginary component of height con
 netcdf.putAtt(ncid,hIm_var_id,'grid_mapping', 'polar_stereographic');
 netcdf.putAtt(ncid,hIm_var_id,'units',        'm');
 netcdf.putAtt(ncid,hIm_var_id,'scale_factor',  1/scale_h);
-netcdf.defVarFill(ncid,hIm_var_id,false,uint16(32767))
+netcdf.putAtt(ncid,hIm_var_id,'_FillValue',    FillValue);
 
 % Define uRe
 uRe_var_id = netcdf.defVar(ncid,'URe','NC_SHORT',[x_id y_id cons_id]);
-netcdf.putAtt(ncid,uRe_var_id,'standard_name','transport_constituent');
+netcdf.putAtt(ncid,uRe_var_id,'standard_name','transport_coefficient');
 netcdf.putAtt(ncid,uRe_var_id,'long_name',    'real component of U transport constituent. This is the zonal (east-west) flow component in geographic coordinates.');
 netcdf.putAtt(ncid,uRe_var_id,'grid_mapping', 'polar_stereographic');
 netcdf.putAtt(ncid,uRe_var_id,'units',        'm^2/s');
 netcdf.putAtt(ncid,uRe_var_id,'scale_factor',  1/scale_UV);
-netcdf.defVarFill(ncid,uRe_var_id,false,uint16(32767))
+netcdf.putAtt(ncid,uRe_var_id,'_FillValue',    FillValue);
 
 % Define uIm
 uIm_var_id = netcdf.defVar(ncid,'UIm','NC_SHORT',[x_id y_id cons_id]);
-netcdf.putAtt(ncid,uIm_var_id,'standard_name','transport_constituent');
+netcdf.putAtt(ncid,uIm_var_id,'standard_name','transport_coefficient');
 netcdf.putAtt(ncid,uIm_var_id,'long_name',    'imaginary component of U transport constituent. This is the zonal (east-west) flow component in geographic coordinates.');
 netcdf.putAtt(ncid,uIm_var_id,'grid_mapping', 'polar_stereographic');
 netcdf.putAtt(ncid,uIm_var_id,'units',        'm^2/s');
 netcdf.putAtt(ncid,uIm_var_id,'scale_factor',  1/scale_UV);
-netcdf.defVarFill(ncid,uIm_var_id,false,uint16(32767))
+netcdf.putAtt(ncid,uIm_var_id,'_FillValue',    FillValue);
 
 % Define vRe
 vRe_var_id = netcdf.defVar(ncid,'VRe','NC_SHORT',[x_id y_id cons_id]);
-netcdf.putAtt(ncid,vRe_var_id,'standard_name','transport_constituent');
+netcdf.putAtt(ncid,vRe_var_id,'standard_name','transport_coefficient');
 netcdf.putAtt(ncid,vRe_var_id,'long_name',    'real component of V transport constituent. This is the meridional (north-south) flow component in geographic coordinates.');
 netcdf.putAtt(ncid,vRe_var_id,'grid_mapping', 'polar_stereographic');
 netcdf.putAtt(ncid,vRe_var_id,'units',        'm^2/s');
 netcdf.putAtt(ncid,vRe_var_id,'scale_factor',  1/scale_UV);
-netcdf.defVarFill(ncid,vRe_var_id,false,uint16(32767))
+netcdf.putAtt(ncid,vRe_var_id,'_FillValue',    FillValue);
 
 % Define vIm
 vIm_var_id = netcdf.defVar(ncid,'VIm','NC_SHORT',[x_id y_id cons_id]);
-netcdf.putAtt(ncid,vIm_var_id,'standard_name','transport_constituent');
+netcdf.putAtt(ncid,vIm_var_id,'standard_name','transport_coefficient');
 netcdf.putAtt(ncid,vIm_var_id,'long_name',    'imaginary component of V transport constituent. This is the meridional (north-south) flow component in geographic coordinates.');
 netcdf.putAtt(ncid,vIm_var_id,'grid_mapping', 'polar_stereographic');
 netcdf.putAtt(ncid,vIm_var_id,'units',        'm^2/s');
 netcdf.putAtt(ncid,vIm_var_id,'scale_factor',  1/scale_UV);
-netcdf.defVarFill(ncid,vIm_var_id,false,uint16(32767))
+netcdf.putAtt(ncid,vIm_var_id,'_FillValue',    FillValue);
 
 % Define wct: 
 wct_var_id = netcdf.defVar(ncid,'wct','NC_SHORT',[x_id y_id]);
@@ -337,7 +353,7 @@ netcdf.putAtt(ncid,wct_var_id,'standard_name','wct');
 netcdf.putAtt(ncid,wct_var_id,'long_name','water column thickness');
 netcdf.putAtt(ncid,wct_var_id,'units',    'meters');
 netcdf.putAtt(ncid,wct_var_id,'grid_mapping', 'polar_stereographic');
-netcdf.defVarFill(ncid,wct_var_id,false,uint16(32767))
+netcdf.putAtt(ncid,wct_var_id,'_FillValue',    int16(32767));
 
 % Define mask
 mask_var_id = netcdf.defVar(ncid,'mask','NC_BYTE',[x_id y_id]);
@@ -371,12 +387,12 @@ netcdf.putVar(ncid,amp_var_id,amp);
 netcdf.putVar(ncid,ph_var_id,ph);
 netcdf.putVar(ncid,om_var_id,omega);
 netcdf.putVar(ncid,alp_var_id,alpha);
-netcdf.putVar(ncid,hRe_var_id,ipermute(int16(scale_h*real(h)),[2 1 3]));
-netcdf.putVar(ncid,hIm_var_id,ipermute(int16(scale_h*imag(h)),[2 1 3]));
-netcdf.putVar(ncid,uRe_var_id,ipermute(int16(scale_UV*real(U)),[2 1 3]));
-netcdf.putVar(ncid,uIm_var_id,ipermute(int16(scale_UV*imag(U)),[2 1 3]));
-netcdf.putVar(ncid,vRe_var_id,ipermute(int16(scale_UV*real(V)),[2 1 3]));
-netcdf.putVar(ncid,vIm_var_id,ipermute(int16(scale_UV*imag(V)),[2 1 3]));
+netcdf.putVar(ncid,hRe_var_id,ipermute(hRe,[2 1 3]));
+netcdf.putVar(ncid,hIm_var_id,ipermute(hIm,[2 1 3]));
+netcdf.putVar(ncid,uRe_var_id,ipermute(URe,[2 1 3]));
+netcdf.putVar(ncid,uIm_var_id,ipermute(UIm,[2 1 3]));
+netcdf.putVar(ncid,vRe_var_id,ipermute(VIm,[2 1 3]));
+netcdf.putVar(ncid,vIm_var_id,ipermute(VRe,[2 1 3]));
 netcdf.putVar(ncid,wct_var_id,ipermute(wct,[2 1]));
 netcdf.putVar(ncid,mask_var_id,ipermute(mask,[2 1]));
 
