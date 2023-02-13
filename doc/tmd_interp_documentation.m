@@ -101,7 +101,7 @@ cmocean deep % optional colormap
 % Here we compare the bathymetry in the updated CATS2008 model to the
 % bathymetry we obtained in the previous example: 
 
-Z_cats = tmd_interp('CATS2008_update_2022-06-11.nc','wct',Lat,Lon); 
+Z_cats = tmd_interp('CATS2008_v2023.nc','wct',Lat,Lon); 
 
 figure
 h = imagesc(lon,lat,Z_cats-Z_tpxo);
@@ -162,7 +162,7 @@ whos lat lon hc
 di = pathdistps(lati,loni,'km'); % distance along flowline
 
 % Get the s2 tidal amplitudes along the flowline: 
-fn = 'CATS2008_update_2022-06-11.nc'; 
+fn = 'CATS2008_v2023.nc'; 
 s2_default = tmd_interp(fn,'hAm',lati,loni,'constituents','s2');
 s2_unmask = tmd_interp(fn,'hAm',lati,loni,'constituents','s2','coasts','unmask');  
 s2_flexure = tmd_interp(fn,'hAm',lati,loni,'constituents','s2','coasts','flexure'); 

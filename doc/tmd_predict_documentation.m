@@ -185,7 +185,7 @@ title 'Syowa station tide gauge'
 % what does the CATS model think? 
 
 % Predict tides at the location of interest: 
-sl_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'h');
+sl_cats = tmd_predict('CATS2008_v2023.nc',lat,lon,t,'h');
 
 % See how many tide predictions are finite: 
 sum(isfinite(sl_cats))
@@ -195,7 +195,7 @@ sum(isfinite(sl_cats))
 % the CATS model, so it gets NaN'd out by default. To un-NaN the
 % interpolation, choose the |'unmask'| option: 
 
-sl_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'h','coasts','unmask');
+sl_cats = tmd_predict('CATS2008_v2023.nc',lat,lon,t,'h','coasts','unmask');
 sl_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'h','coasts','unmask');
 
 % Plot observations "detided" by each model: 
@@ -222,7 +222,7 @@ y = 521366:-res:-38552;
 [Lat,Lon] = ps2ll(X,Y); % ll2ps is an AMT function.
 
 % Estimate ice shelf flexure at each point on the grid: 
-flex = tmd_interp('CATS2008_update_2022-06-11.nc','flexure',Lat,Lon); 
+flex = tmd_interp('CATS2008_v2023.nc','flexure',Lat,Lon); 
 
 figure
 h = imagesc(x,y,flex); 
@@ -273,7 +273,7 @@ text(xi(1),yi(1),'Flight path','color','r','fontsize',14,'vert','top')
 t = datenum('22-Jan-2000 03:28:00');
 
 % Predict tides along the flight path at time t: 
-fn = 'CATS2008_update_2022-06-11.nc';
+fn = 'CATS2008_v2023.nc';
 z_default = tmd_predict(fn,lati,loni,t,'h'); 
 z_unmask = tmd_predict(fn,lati,loni,t,'h','coasts','unmask'); 
 z_flexure = tmd_predict(fn,lati,loni,t,'h','coasts','flexure'); 

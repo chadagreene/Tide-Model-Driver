@@ -151,7 +151,7 @@ Get the predicted zonal and meridional components of the tidal current at the mo
 
 ```matlab
 % (My) file path to the model file: 
-fn = '/Users/cgreene/Downloads/CATS2008/CATS2008_update_2022-04-22.nc'; 
+fn = '/Users/cgreene/Downloads/CATS2008/CATS2008_v2023.nc'; 
 
 % Predict tidal velocities: 
 u_pred = tmd_predict(fn,lat,lon,t,'u');  

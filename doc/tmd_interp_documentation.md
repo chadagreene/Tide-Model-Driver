@@ -92,7 +92,7 @@ The `tmd_interp` function works exactly the same for regional models as it does 
 Here we compare the bathymetry in the updated CATS2008 model to the bathymetry we obtained in the previous example: 
 
 ```matlab
-Z_cats = tmd_interp('CATS2008_v2022.nc','wct',Lat,Lon); 
+Z_cats = tmd_interp('CATS2008_v2023.nc','wct',Lat,Lon); 
 
 figure
 h = imagesc(lon,lat,Z_cats-Z_tpxo);
@@ -157,7 +157,7 @@ constant along the entire ice shelf.
 di = pathdistps(lati,loni,'km'); % distance along flowline
 
 % Get the s2 tidal amplitudes along the flowline: 
-fn = 'CATS2008_v2022.nc'; 
+fn = 'CATS2008_v2023.nc'; 
 s2_default = tmd_interp(fn,'hAm',lati,loni,'constituents','s2');
 s2_unmask = tmd_interp(fn,'hAm',lati,loni,'constituents','s2','coasts','unmask');  
 s2_flexure = tmd_interp(fn,'hAm',lati,loni,'constituents','s2','coasts','flexure'); 
