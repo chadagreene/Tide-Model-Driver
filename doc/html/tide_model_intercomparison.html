@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Tide Model Intercomparison</title><meta name="generator" content="MATLAB 9.10"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2022-06-14"><meta name="DC.source" content="tide_model_intercomparison.m"><style type="text/css">
+      --><title>Tide Model Intercomparison</title><meta name="generator" content="MATLAB 9.11"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2023-04-16"><meta name="DC.source" content="tide_model_intercomparison.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -67,7 +67,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Tide Model Intercomparison</h1><!--introduction--><p>The primary purpose of this page is to verify that tide models have been converted to the consolidated NetCDF format correctly.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Tide height measurements near Skua Island, Antarctica</a></li><li><a href="#3">Tide height measurements near Astrolabe Glacier, Antarctica:</a></li><li><a href="#5">Tidal current observations in Antarctica</a></li><li><a href="#6">Tide height observations near Nuuk, Greenland</a></li><li><a href="#7">Author Info</a></li></ul></div><h2 id="1">Tide height measurements near Skua Island, Antarctica</h2><p>The plots on this page use the <tt>subsubplot</tt> function from Climate Data Toolbox (Greene et al., 2019) but you can easily replace them with MATLAB's built-in <tt>subplot</tt> function. The only difference is how much whitespace results.</p><pre class="codeinput"><span class="comment">% Load example tide gauge data (found in the doc/example_data folder.)</span>
+  </style></head><body><div class="content"><h1>Tide Model Intercomparison</h1><!--introduction--><p>The primary purpose of this page is to verify that tide models have been converted to the consolidated NetCDF format correctly.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Tide height measurements near Skua Island, Antarctica</a></li><li><a href="#3">Tide height measurements near Astrolabe Glacier, Antarctica:</a></li><li><a href="#4">Tidal current observations near Getz Ice Shelf, Antarctica</a></li><li><a href="#5">Tide height observations near Nuuk, Greenland</a></li><li><a href="#6">Author Info</a></li></ul></div><h2 id="1">Tide height measurements near Skua Island, Antarctica</h2><p>The plots on this page use the <tt>subsubplot</tt> function from Climate Data Toolbox (Greene et al., 2019) but you can easily replace them with MATLAB's built-in <tt>subplot</tt> function. The only difference is how much whitespace results.</p><pre class="codeinput"><span class="comment">% Load example tide gauge data (found in the doc/example_data folder.)</span>
 fn = <span class="string">'h700_skua.nc'</span>;
 lat = ncread(fn,<span class="string">'lat'</span>);
 lon = ncread(fn,<span class="string">'lon'</span>);
@@ -76,14 +76,14 @@ sl = ncread(fn,<span class="string">'sea_level'</span>)/1000;
 
 <span class="comment">% Predict tides at the tide gauge location:</span>
 sl_tpxo = tmd_predict(<span class="string">'TPXO9_atlas_v5.nc'</span>,lat,lon,t,<span class="string">'h'</span>);
-sl_cats = tmd_predict(<span class="string">'CATS2008_update_2022-06-11.nc'</span>,lat,lon,t,<span class="string">'h'</span>);
+sl_cats = tmd_predict(<span class="string">'CATS2008_v2023.nc'</span>,lat,lon,t,<span class="string">'h'</span>);
 
 <span class="comment">% Also predict tidal currents:</span>
 <span class="comment">% Predict tides at the tide gauge location:</span>
 u_tpxo = tmd_predict(<span class="string">'TPXO9_atlas_v5.nc'</span>,lat,lon,t,<span class="string">'u'</span>);
-u_cats = tmd_predict(<span class="string">'CATS2008_update_2022-06-11.nc'</span>,lat,lon,t,<span class="string">'u'</span>);
+u_cats = tmd_predict(<span class="string">'CATS2008_v2023.nc'</span>,lat,lon,t,<span class="string">'u'</span>);
 v_tpxo = tmd_predict(<span class="string">'TPXO9_atlas_v5.nc'</span>,lat,lon,t,<span class="string">'v'</span>);
-v_cats = tmd_predict(<span class="string">'CATS2008_update_2022-06-11.nc'</span>,lat,lon,t,<span class="string">'v'</span>);
+v_cats = tmd_predict(<span class="string">'CATS2008_v2023.nc'</span>,lat,lon,t,<span class="string">'v'</span>);
 
 <span class="comment">% Plot observed and predicted tides:</span>
 figure
@@ -93,7 +93,7 @@ hold <span class="string">on</span>
 p(2)=plot(t,sl_tpxo,<span class="string">'linewidth'</span>,1);
 p(3)=plot(t,sl_cats,<span class="string">'linewidth'</span>,1);
 ylabel <span class="string">'tide height (m)'</span>
-legend(<span class="string">'observations'</span>,<span class="string">'TPXO9_atlas_v5'</span>,<span class="string">'CATS2008_update_2022-06-11'</span>,<span class="keyword">...</span>
+legend(<span class="string">'observations'</span>,<span class="string">'TPXO9_atlas_v5'</span>,<span class="string">'CATS2008_2022'</span>,<span class="keyword">...</span>
    <span class="string">'interpreter'</span>,<span class="string">'none'</span>,<span class="string">'location'</span>,<span class="string">'best'</span>)
 legend <span class="string">boxoff</span>
 box <span class="string">off</span>
@@ -121,12 +121,12 @@ box <span class="string">off</span>
 axis <span class="string">tight</span>
 xlim([725709.92     725724.55])
 datetick(<span class="string">'x'</span>,<span class="string">'keeplimits'</span>)
-</pre><img vspace="5" hspace="5" src="tide_model_intercomparison_01.png" alt=""> <p>Above, the heights look good, but the velocities don't agree. That's likely due to differences in water column thickness (transports are divided by wct to get column-averaged velocity):</p><pre class="codeinput">wct_tpxo = tmd_interp(<span class="string">'TPXO9_atlas_v5.nc'</span>,<span class="string">'wct'</span>,lat,lon);
-wct_cats = tmd_interp(<span class="string">'CATS2008_update_2022-06-11.nc'</span>,<span class="string">'wct'</span>,lat,lon);
+</pre><img vspace="5" hspace="5" src="tide_model_intercomparison_01.png" alt=""> <p>Above, the heights look good, but the velocities don't agree. That could be partly&#8212;but clearly not entirely&#8212;due to differences in water column thickness (transports are divided by wct to get column-averaged velocity):</p><pre class="codeinput">wct_tpxo = tmd_interp(<span class="string">'TPXO9_atlas_v5.nc'</span>,<span class="string">'wct'</span>,lat,lon);
+wct_cats = tmd_interp(<span class="string">'CATS2008_v2023.nc'</span>,<span class="string">'wct'</span>,lat,lon);
 
 [wct_tpxo wct_cats]
 </pre><pre class="codeoutput">ans =
-        259.55        113.80
+  259.5511  116.9865
 </pre><h2 id="3">Tide height measurements near Astrolabe Glacier, Antarctica:</h2><pre class="codeinput"><span class="comment">% Load example tide gauge data (found in the doc/example_data folder.)</span>
 fn = <span class="string">'h189_astrolabe.nc'</span>;
 lat = ncread(fn,<span class="string">'lat'</span>);
@@ -136,11 +136,11 @@ sl = ncread(fn,<span class="string">'sea_level'</span>)/1000;
 
 <span class="comment">% Predict tides at the tide gauge location:</span>
 sl_tpxo = tmd_predict(<span class="string">'TPXO9_atlas_v5.nc'</span>,lat,lon,t,<span class="string">'h'</span>);
-sl_cats = tmd_predict(<span class="string">'CATS2008_update_2022-06-11.nc'</span>,lat,lon,t,<span class="string">'h'</span>);
+sl_cats = tmd_predict(<span class="string">'CATS2008_v2023.nc'</span>,lat,lon,t,<span class="string">'h'</span>);
 u_tpxo = tmd_predict(<span class="string">'TPXO9_atlas_v5.nc'</span>,lat,lon,t,<span class="string">'u'</span>);
-u_cats = tmd_predict(<span class="string">'CATS2008_update_2022-06-11.nc'</span>,lat,lon,t,<span class="string">'u'</span>);
+u_cats = tmd_predict(<span class="string">'CATS2008_v2023.nc'</span>,lat,lon,t,<span class="string">'u'</span>);
 v_tpxo = tmd_predict(<span class="string">'TPXO9_atlas_v5.nc'</span>,lat,lon,t,<span class="string">'v'</span>);
-v_cats = tmd_predict(<span class="string">'CATS2008_update_2022-06-11.nc'</span>,lat,lon,t,<span class="string">'v'</span>);
+v_cats = tmd_predict(<span class="string">'CATS2008_v2023.nc'</span>,lat,lon,t,<span class="string">'v'</span>);
 
 <span class="comment">% Plot observed and predicted tides:</span>
 figure
@@ -150,7 +150,7 @@ hold <span class="string">on</span>
 p(2)=plot(t,sl_tpxo,<span class="string">'linewidth'</span>,1);
 p(3)=plot(t,sl_cats,<span class="string">'linewidth'</span>,1);
 ylabel <span class="string">'tide height (m)'</span>
-legend(<span class="string">'observations'</span>,<span class="string">'TPXO9_atlas_v5'</span>,<span class="string">'CATS2008_update_2022-06-11'</span>,<span class="keyword">...</span>
+legend(<span class="string">'observations'</span>,<span class="string">'TPXO9_atlas_v5'</span>,<span class="string">'CATS2008_v2023'</span>,<span class="keyword">...</span>
    <span class="string">'interpreter'</span>,<span class="string">'none'</span>,<span class="string">'location'</span>,<span class="string">'best'</span>)
 legend <span class="string">boxoff</span>
 box <span class="string">off</span>
@@ -178,13 +178,7 @@ box <span class="string">off</span>
 axis <span class="string">tight</span>
 xlim([733711.67     733729.88])
 datetick(<span class="string">'x'</span>,<span class="string">'keeplimits'</span>)
-</pre><img vspace="5" hspace="5" src="tide_model_intercomparison_02.png" alt=""> <p>Above, the heights look good, but the velocities don't agree. That's likely due to differences in water column thickness (transports are divided by wct to get column-averaged velocity):</p><pre class="codeinput">wct_tpxo = tmd_interp(<span class="string">'TPXO9_atlas_v5.nc'</span>,<span class="string">'wct'</span>,lat,lon);
-wct_cats = tmd_interp(<span class="string">'CATS2008_update_2022-06-11.nc'</span>,<span class="string">'wct'</span>,lat,lon);
-
-[wct_tpxo wct_cats]
-</pre><pre class="codeoutput">ans =
-        297.18         54.68
-</pre><h2 id="5">Tidal current observations in Antarctica</h2><pre class="codeinput">t = ncread(<span class="string">'ADCP_S112.nc'</span>,<span class="string">'time'</span>) + datenum(1950,1,1,0,0,0);
+</pre><img vspace="5" hspace="5" src="tide_model_intercomparison_02.png" alt=""> <h2 id="4">Tidal current observations near Getz Ice Shelf, Antarctica</h2><pre class="codeinput">t = ncread(<span class="string">'ADCP_S112.nc'</span>,<span class="string">'time'</span>) + datenum(1950,1,1,0,0,0);
 lat = ncread(<span class="string">'ADCP_S112.nc'</span>,<span class="string">'lat'</span>);
 lon = ncread(<span class="string">'ADCP_S112.nc'</span>,<span class="string">'lon'</span>);
 z = ncread(<span class="string">'ADCP_S112.nc'</span>,<span class="string">'z'</span>);
@@ -193,11 +187,11 @@ v = mean(ncread(<span class="string">'ADCP_S112.nc'</span>,<span class="string">
 
 <span class="comment">% Predict tides at the tide gauge location:</span>
 sl_tpxo = tmd_predict(<span class="string">'TPXO9_atlas_v5.nc'</span>,lat,lon,t,<span class="string">'h'</span>);
-sl_cats = tmd_predict(<span class="string">'CATS2008_update_2022-06-11.nc'</span>,lat,lon,t,<span class="string">'h'</span>);
+sl_cats = tmd_predict(<span class="string">'CATS2008_v2023.nc'</span>,lat,lon,t,<span class="string">'h'</span>);
 u_tpxo = tmd_predict(<span class="string">'TPXO9_atlas_v5.nc'</span>,lat,lon,t,<span class="string">'u'</span>);
-u_cats = tmd_predict(<span class="string">'CATS2008_update_2022-06-11.nc'</span>,lat,lon,t,<span class="string">'u'</span>);
+u_cats = tmd_predict(<span class="string">'CATS2008_v2023.nc'</span>,lat,lon,t,<span class="string">'u'</span>);
 v_tpxo = tmd_predict(<span class="string">'TPXO9_atlas_v5.nc'</span>,lat,lon,t,<span class="string">'v'</span>);
-v_cats = tmd_predict(<span class="string">'CATS2008_update_2022-06-11.nc'</span>,lat,lon,t,<span class="string">'v'</span>);
+v_cats = tmd_predict(<span class="string">'CATS2008_v2023.nc'</span>,lat,lon,t,<span class="string">'v'</span>);
 
 <span class="comment">% Plot observed and predicted tides:</span>
 figure
@@ -207,7 +201,7 @@ hold <span class="string">on</span>
 p(2)=plot(t,sl_tpxo,<span class="string">'linewidth'</span>,1);
 p(3)=plot(t,sl_cats,<span class="string">'linewidth'</span>,1);
 ylabel <span class="string">'tide height (m)'</span>
-legend(<span class="string">'observations'</span>,<span class="string">'TPXO9_atlas_v5'</span>,<span class="string">'CATS2008_update_2022-06-11'</span>,<span class="keyword">...</span>
+legend(<span class="string">'observations'</span>,<span class="string">'TPXO9_atlas_v5'</span>,<span class="string">'CATS2008_v2023'</span>,<span class="keyword">...</span>
    <span class="string">'interpreter'</span>,<span class="string">'none'</span>,<span class="string">'location'</span>,<span class="string">'best'</span>)
 legend <span class="string">boxoff</span>
 box <span class="string">off</span>
@@ -237,7 +231,7 @@ box <span class="string">off</span>
 axis <span class="string">tight</span>
 xlim([735007.70     735033.06])
 datetick(<span class="string">'x'</span>,<span class="string">'keeplimits'</span>)
-</pre><img vspace="5" hspace="5" src="tide_model_intercomparison_03.png" alt=""> <h2 id="6">Tide height observations near Nuuk, Greenland</h2><p>Note, the Nuuk tide gauge is too close to shore for the Arc2km model, so we have to "unmask" the solution there.</p><pre class="codeinput"><span class="comment">% Load example tide gauge data (found in the doc/example_data folder.)</span>
+</pre><img vspace="5" hspace="5" src="tide_model_intercomparison_03.png" alt=""> <h2 id="5">Tide height observations near Nuuk, Greenland</h2><p>Note, the Nuuk tide gauge is too close to shore for the Arc2km model, so we have to "unmask" the solution there.</p><pre class="codeinput"><span class="comment">% Load example tide gauge data (found in the doc/example_data folder.)</span>
 fn = <span class="string">'h820_nuuk.nc'</span>;
 lat = ncread(fn,<span class="string">'lat'</span>);
 lon = ncread(fn,<span class="string">'lon'</span>);
@@ -248,16 +242,9 @@ sl = ncread(fn,<span class="string">'sea_level'</span>)/1000;
 sl_tpxo = tmd_predict(<span class="string">'TPXO9_atlas_v5.nc'</span>,lat,lon,t,<span class="string">'h'</span>);
 sl_Gr1km = tmd_predict(<span class="string">'Gr1kmTM_v1.nc'</span>,lat,lon,t,<span class="string">'h'</span>);
 sl_Arc2km = tmd_predict(<span class="string">'Arc2kmTM_v1.nc'</span>,lat,lon,t,<span class="string">'h'</span>,<span class="string">'coasts'</span>,<span class="string">'unmask'</span>);
-u_tpxo = tmd_predict(<span class="string">'TPXO9_atlas_v5.nc'</span>,lat,lon,t,<span class="string">'u'</span>);
-u_Gr1km = tmd_predict(<span class="string">'Gr1kmTM_v1.nc'</span>,lat,lon,t,<span class="string">'u'</span>);
-u_Arc2km = tmd_predict(<span class="string">'Arc2kmTM_v1.nc'</span>,lat,lon,t,<span class="string">'u'</span>,<span class="string">'coasts'</span>,<span class="string">'unmask'</span>);
-v_tpxo = tmd_predict(<span class="string">'TPXO9_atlas_v5.nc'</span>,lat,lon,t,<span class="string">'v'</span>);
-v_Gr1km = tmd_predict(<span class="string">'Gr1kmTM_v1.nc'</span>,lat,lon,t,<span class="string">'v'</span>);
-v_Arc2km = tmd_predict(<span class="string">'Arc2kmTM_v1.nc'</span>,lat,lon,t,<span class="string">'v'</span>,<span class="string">'coasts'</span>,<span class="string">'unmask'</span>);
 
 <span class="comment">% Plot observed and predicted tides:</span>
 figure
-subsubplot(3,1,1)
 p(1)=plot(t,sl-mean(sl,<span class="string">'omitnan'</span>),<span class="string">'k'</span>,<span class="string">'linewidth'</span>,2);
 hold <span class="string">on</span>
 p(2)=plot(t,sl_tpxo,<span class="string">'linewidth'</span>,1);
@@ -271,30 +258,7 @@ box <span class="string">off</span>
 axis <span class="string">tight</span>
 xlim([736976.01     736981.12])
 datetick(<span class="string">'x'</span>,<span class="string">'keeplimits'</span>)
-
-<span class="comment">% Plot tidal currents:</span>
-subsubplot(3,1,2)
-hold <span class="string">on</span>
-plot(t,u_tpxo,<span class="string">'linewidth'</span>,1,<span class="string">'color'</span>,p(2).Color);
-plot(t,u_Gr1km,<span class="string">'linewidth'</span>,1,<span class="string">'color'</span>,p(3).Color);
-plot(t,u_Arc2km,<span class="string">'linewidth'</span>,1,<span class="string">'color'</span>,p(4).Color);
-ylabel <span class="string">'zonal velocity (m/s)'</span>
-box <span class="string">off</span>
-axis <span class="string">tight</span>
-xlim([736976.01     736981.12])
-datetick(<span class="string">'x'</span>,<span class="string">'keeplimits'</span>)
-
-subsubplot(3,1,3)
-hold <span class="string">on</span>
-plot(t,v_tpxo,<span class="string">'linewidth'</span>,1,<span class="string">'color'</span>,p(2).Color);
-plot(t,v_Gr1km,<span class="string">'linewidth'</span>,1,<span class="string">'color'</span>,p(3).Color);
-plot(t,v_Arc2km,<span class="string">'linewidth'</span>,1,<span class="string">'color'</span>,p(4).Color);
-ylabel <span class="string">'meridional velocity (m/s)'</span>
-box <span class="string">off</span>
-axis <span class="string">tight</span>
-xlim([736976.01     736981.12])
-datetick(<span class="string">'x'</span>,<span class="string">'keeplimits'</span>)
-</pre><img vspace="5" hspace="5" src="tide_model_intercomparison_04.png" alt=""> <h2 id="7">Author Info</h2><p>This intercomparison was written by Chad A. Greene in June 2022.</p><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2021a</a><br></p></div><!--
+</pre><img vspace="5" hspace="5" src="tide_model_intercomparison_04.png" alt=""> <h2 id="6">Author Info</h2><p>This intercomparison was written by Chad A. Greene in June 2022.</p><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2021b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Tide Model Intercomparison
 % The primary purpose of this page is to verify that tide models have been
@@ -315,14 +279,14 @@ sl = ncread(fn,'sea_level')/1000;
 
 % Predict tides at the tide gauge location: 
 sl_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'h');
-sl_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'h');
+sl_cats = tmd_predict('CATS2008_v2023.nc',lat,lon,t,'h');
 
 % Also predict tidal currents: 
 % Predict tides at the tide gauge location: 
 u_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'u');
-u_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'u');
+u_cats = tmd_predict('CATS2008_v2023.nc',lat,lon,t,'u');
 v_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'v');
-v_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'v');
+v_cats = tmd_predict('CATS2008_v2023.nc',lat,lon,t,'v');
 
 % Plot observed and predicted tides: 
 figure
@@ -332,7 +296,7 @@ hold on
 p(2)=plot(t,sl_tpxo,'linewidth',1);
 p(3)=plot(t,sl_cats,'linewidth',1);
 ylabel 'tide height (m)'
-legend('observations','TPXO9_atlas_v5','CATS2008_update_2022-06-11',...
+legend('observations','TPXO9_atlas_v5','CATS2008_2022',...
    'interpreter','none','location','best')
 legend boxoff
 box off
@@ -362,12 +326,12 @@ xlim([725709.92     725724.55])
 datetick('x','keeplimits')
 
 %%
-% Above, the heights look good, but the velocities don't agree. That's
-% likely due to differences in water column thickness (transports are
+% Above, the heights look good, but the velocities don't agree. That could be partly—but 
+% clearly not entirely—due to differences in water column thickness (transports are
 % divided by wct to get column-averaged velocity):
 
 wct_tpxo = tmd_interp('TPXO9_atlas_v5.nc','wct',lat,lon);
-wct_cats = tmd_interp('CATS2008_update_2022-06-11.nc','wct',lat,lon);
+wct_cats = tmd_interp('CATS2008_v2023.nc','wct',lat,lon);
 
 [wct_tpxo wct_cats]
 
@@ -382,11 +346,11 @@ sl = ncread(fn,'sea_level')/1000;
 
 % Predict tides at the tide gauge location: 
 sl_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'h');
-sl_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'h');
+sl_cats = tmd_predict('CATS2008_v2023.nc',lat,lon,t,'h');
 u_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'u');
-u_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'u');
+u_cats = tmd_predict('CATS2008_v2023.nc',lat,lon,t,'u');
 v_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'v');
-v_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'v');
+v_cats = tmd_predict('CATS2008_v2023.nc',lat,lon,t,'v');
 
 % Plot observed and predicted tides: 
 figure
@@ -396,7 +360,7 @@ hold on
 p(2)=plot(t,sl_tpxo,'linewidth',1);
 p(3)=plot(t,sl_cats,'linewidth',1);
 ylabel 'tide height (m)'
-legend('observations','TPXO9_atlas_v5','CATS2008_update_2022-06-11',...
+legend('observations','TPXO9_atlas_v5','CATS2008_v2023',...
    'interpreter','none','location','best')
 legend boxoff
 box off
@@ -425,17 +389,7 @@ axis tight
 xlim([733711.67     733729.88])
 datetick('x','keeplimits')
 
-%%
-% Above, the heights look good, but the velocities don't agree. That's
-% likely due to differences in water column thickness (transports are
-% divided by wct to get column-averaged velocity):
-
-wct_tpxo = tmd_interp('TPXO9_atlas_v5.nc','wct',lat,lon);
-wct_cats = tmd_interp('CATS2008_update_2022-06-11.nc','wct',lat,lon);
-
-[wct_tpxo wct_cats]
-
-%% Tidal current observations in Antarctica 
+%% Tidal current observations near Getz Ice Shelf, Antarctica 
 
 t = ncread('ADCP_S112.nc','time') + datenum(1950,1,1,0,0,0); 
 lat = ncread('ADCP_S112.nc','lat'); 
@@ -446,11 +400,11 @@ v = mean(ncread('ADCP_S112.nc','v'),'omitnan');
 
 % Predict tides at the tide gauge location: 
 sl_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'h');
-sl_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'h');
+sl_cats = tmd_predict('CATS2008_v2023.nc',lat,lon,t,'h');
 u_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'u');
-u_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'u');
+u_cats = tmd_predict('CATS2008_v2023.nc',lat,lon,t,'u');
 v_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'v');
-v_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'v');
+v_cats = tmd_predict('CATS2008_v2023.nc',lat,lon,t,'v');
 
 % Plot observed and predicted tides: 
 figure
@@ -460,7 +414,7 @@ hold on
 p(2)=plot(t,sl_tpxo,'linewidth',1);
 p(3)=plot(t,sl_cats,'linewidth',1);
 ylabel 'tide height (m)'
-legend('observations','TPXO9_atlas_v5','CATS2008_update_2022-06-11',...
+legend('observations','TPXO9_atlas_v5','CATS2008_v2023',...
    'interpreter','none','location','best')
 legend boxoff
 box off
@@ -506,16 +460,9 @@ sl = ncread(fn,'sea_level')/1000;
 sl_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'h');
 sl_Gr1km = tmd_predict('Gr1kmTM_v1.nc',lat,lon,t,'h');
 sl_Arc2km = tmd_predict('Arc2kmTM_v1.nc',lat,lon,t,'h','coasts','unmask');
-u_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'u');
-u_Gr1km = tmd_predict('Gr1kmTM_v1.nc',lat,lon,t,'u');
-u_Arc2km = tmd_predict('Arc2kmTM_v1.nc',lat,lon,t,'u','coasts','unmask');
-v_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'v');
-v_Gr1km = tmd_predict('Gr1kmTM_v1.nc',lat,lon,t,'v');
-v_Arc2km = tmd_predict('Arc2kmTM_v1.nc',lat,lon,t,'v','coasts','unmask');
 
 % Plot observed and predicted tides: 
 figure
-subsubplot(3,1,1)
 p(1)=plot(t,sl-mean(sl,'omitnan'),'k','linewidth',2);
 hold on
 p(2)=plot(t,sl_tpxo,'linewidth',1);
@@ -525,29 +472,6 @@ ylabel 'tide height (m)'
 legend('observations','TPXO9_atlas_v5','Gr1kmTm','Arc2kmTM',...
    'interpreter','none','location','best')
 legend boxoff
-box off
-axis tight
-xlim([736976.01     736981.12])
-datetick('x','keeplimits')
-
-% Plot tidal currents:
-subsubplot(3,1,2)
-hold on
-plot(t,u_tpxo,'linewidth',1,'color',p(2).Color);
-plot(t,u_Gr1km,'linewidth',1,'color',p(3).Color);
-plot(t,u_Arc2km,'linewidth',1,'color',p(4).Color);
-ylabel 'zonal velocity (m/s)'
-box off
-axis tight
-xlim([736976.01     736981.12])
-datetick('x','keeplimits')
-
-subsubplot(3,1,3)
-hold on
-plot(t,v_tpxo,'linewidth',1,'color',p(2).Color);
-plot(t,v_Gr1km,'linewidth',1,'color',p(3).Color);
-plot(t,v_Arc2km,'linewidth',1,'color',p(4).Color);
-ylabel 'meridional velocity (m/s)'
 box off
 axis tight
 xlim([736976.01     736981.12])

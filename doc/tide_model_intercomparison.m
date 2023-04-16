@@ -127,17 +127,7 @@ axis tight
 xlim([733711.67     733729.88])
 datetick('x','keeplimits')
 
-%%
-% Above, the heights look good, but the velocities don't agree. That's
-% likely due to differences in water column thickness (transports are
-% divided by wct to get column-averaged velocity):
-
-wct_tpxo = tmd_interp('TPXO9_atlas_v5.nc','wct',lat,lon);
-wct_cats = tmd_interp('CATS2008_v2023.nc','wct',lat,lon);
-
-[wct_tpxo wct_cats]
-
-%% Tidal current observations in Antarctica 
+%% Tidal current observations near Getz Ice Shelf, Antarctica 
 
 t = ncread('ADCP_S112.nc','time') + datenum(1950,1,1,0,0,0); 
 lat = ncread('ADCP_S112.nc','lat'); 
@@ -148,11 +138,11 @@ v = mean(ncread('ADCP_S112.nc','v'),'omitnan');
 
 % Predict tides at the tide gauge location: 
 sl_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'h');
-sl_cats = tmd_predict('CATS2008_v2022.nc',lat,lon,t,'h');
+sl_cats = tmd_predict('CATS2008_v2023.nc',lat,lon,t,'h');
 u_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'u');
-u_cats = tmd_predict('CATS2008_v2022.nc',lat,lon,t,'u');
+u_cats = tmd_predict('CATS2008_v2023.nc',lat,lon,t,'u');
 v_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'v');
-v_cats = tmd_predict('CATS2008_v2022.nc',lat,lon,t,'v');
+v_cats = tmd_predict('CATS2008_v2023.nc',lat,lon,t,'v');
 
 % Plot observed and predicted tides: 
 figure
@@ -208,16 +198,9 @@ sl = ncread(fn,'sea_level')/1000;
 sl_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'h');
 sl_Gr1km = tmd_predict('Gr1kmTM_v1.nc',lat,lon,t,'h');
 sl_Arc2km = tmd_predict('Arc2kmTM_v1.nc',lat,lon,t,'h','coasts','unmask');
-u_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'u');
-u_Gr1km = tmd_predict('Gr1kmTM_v1.nc',lat,lon,t,'u');
-u_Arc2km = tmd_predict('Arc2kmTM_v1.nc',lat,lon,t,'u');
-v_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'v');
-v_Gr1km = tmd_predict('Gr1kmTM_v1.nc',lat,lon,t,'v');
-v_Arc2km = tmd_predict('Arc2kmTM_v1.nc',lat,lon,t,'v');
 
 % Plot observed and predicted tides: 
 figure
-subsubplot(3,1,1)
 p(1)=plot(t,sl-mean(sl,'omitnan'),'k','linewidth',2);
 hold on
 p(2)=plot(t,sl_tpxo,'linewidth',1);
@@ -227,29 +210,6 @@ ylabel 'tide height (m)'
 legend('observations','TPXO9_atlas_v5','Gr1kmTm','Arc2kmTM',...
    'interpreter','none','location','best')
 legend boxoff
-box off
-axis tight
-xlim([736976.01     736981.12])
-datetick('x','keeplimits')
-
-% Plot tidal currents:
-subsubplot(3,1,2)
-hold on
-plot(t,u_tpxo,'linewidth',1,'color',p(2).Color);
-plot(t,u_Gr1km,'linewidth',1,'color',p(3).Color);
-plot(t,u_Arc2km,'linewidth',1,'color',p(4).Color);
-ylabel 'zonal velocity (m/s)'
-box off
-axis tight
-xlim([736976.01     736981.12])
-datetick('x','keeplimits')
-
-subsubplot(3,1,3)
-hold on
-plot(t,v_tpxo,'linewidth',1,'color',p(2).Color);
-plot(t,v_Gr1km,'linewidth',1,'color',p(3).Color);
-plot(t,v_Arc2km,'linewidth',1,'color',p(4).Color);
-ylabel 'meridional velocity (m/s)'
 box off
 axis tight
 xlim([736976.01     736981.12])

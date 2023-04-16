@@ -47,7 +47,7 @@ zi = tmd_interp(...,'coasts',MaskingMethod)
 `zi = tmd_interp(...,'constituents',conList)` specifies tidal constituents as a 
 cell array (e.g, `{'m2','s2'}`). If constituents are not specified, all constituents from the model are returned. 
 
-`zi = tmd_interp(...,'coasts',MaskingMethod)` specifies how coastal regions are masked. Can be `NaN`, `'flexure'`, or `'unmask'`. By default, `MaskingMethod` is `NaN`, meaning outputs are set to `NaN` wherever a nearest-neighbor interpolation of the ocean indicates land. The `'flexure'` option scales tidal constituents by a predicted coefficient of tidal deflection for ice shelf grounding zones. A third option, `'unmask'`, does not apply any masking, which may be preferred close to coasts, where, for example, a tide gauge may exist between land and ocean grid cells. 
+`zi = tmd_interp(...,'coasts',MaskingMethod)` specifies how coastal regions are masked. Can be `NaN`, `'flexure'`, or `'unmask'`. By default, `MaskingMethod` is `NaN`, meaning outputs are set to `NaN` wherever a nearest-neighbor interpolation of the ocean indicates land. The `'flexure'` option scales tidal constituents by a predicted coefficient of tidal deflection for ice shelf grounding zones. A third option, `'unmask'`, does not apply any masking, which may be preferred close to coasts, where, for example, a tide gauge may exist between land and ocean grid cells. The `unmask` option is available for height only. 
 
 ## Example: Global Model
 The `tmd_interp` function loads data from any TMD3.0 compatible tide model data file. Here's how you may get the water column thickness and an ocean mask corresponding to the `TPXO_atlas_v5` global tide model file. 
@@ -204,4 +204,4 @@ the hydrostatic line, and this represents true ice behavior.
 
 ## Author Info 
 The `tmd_interp` function and its documentation were written by Chad A.
-Greene, June 2022. CATS2008_v2022.nc
+Greene, June 2022.

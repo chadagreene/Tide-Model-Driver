@@ -16,11 +16,14 @@ Depending on how you interact with GitHub, you may have downloaded the TMD3.0 fi
 Inside `startup.m`, include a line that adds the path to your TMD3.0 folder, let's assume you've called it `TMD_functions`. Use `genpath()` to add all the folders within folders. You may also want to add a path to wherever you have placed your tide model data. The lines you'll put in your `startup.m` should look something like: 
 
 ```matlab
+% On my computer I have one directory for TMD functions...
 addpath(genpath('/Users/cgreene/Documents/TMD_functions'))
+
+% ...and another directory where I keep the model data: 
 addpath(genpath('/Users/cgreene/Documents/TideModelData'))
 ```
 # After TMD3.0 is installed
-After installing TMD3.0, be sure to [download your favorite tide model data](tide_model_data.md), and then you should be ready to predict some tides. 
+After installing TMD3.0, be sure to [download your favorite tide model data](tide_model_data.md), unzip it, and then you should be ready to predict some tides. 
 
 # Author Info
 This page was written by [Chad A. Greene](https://www.chadagreene.com), June 2022. 

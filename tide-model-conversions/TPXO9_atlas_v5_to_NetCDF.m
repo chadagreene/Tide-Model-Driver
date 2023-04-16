@@ -7,8 +7,11 @@
 
 %% Enter initial file info 
 
+% Add path to old TMD: 
+addpath(genpath('/Users/cgreene/Documents/MATLAB/TMD3.00_alpha'))
+
 % Output file: 
-newfilename = ['/Users/cgreene/Documents/data/tides/TPXO9_atlas_v5_update_',datestr(now,'yyyy-mm-dd'),'.nc']; 
+newfilename = '/Users/cgreene/Documents/data/tides/TPXO9_atlas_v5.nc'; 
 
 con_string = '2n2 k1 k2 m2 m4 mf mm mn4 ms4 n2 o1 p1 q1 s1 s2'; % constituents in alphabetical order
 uv = true; 
@@ -27,7 +30,7 @@ lat = fliplr(lat);
 mask = uint8(flipud(mask')); 
 masku = uint8(flipud(masku')); 
 maskv = uint8(flipud(maskv')); 
-wct = uint16(flipud(wct')); 
+wct = int16(flipud(wct')); 
 
 % Number of constituents: 
 cons_cell = strsplit(con_string,' ');
@@ -67,32 +70,7 @@ if uv
    V = cat(2,V(:,end,:),V,V(:,1,:));
 end
 
-%%
 
-% Maximum real and imaginary values for each constitutent (breaking it up by constituent reduces memory.) 
-for k=1:Ncons
-   tmp = abs(real(h(:,:,k))); 
-   mxhr(k) = max(tmp(mask==1)); 
-   tmp = abs(imag(h(:,:,k))); 
-   mxhi(k) = max(tmp(mask==1)); 
-   tmp = abs(real(U(:,:,k))); 
-   mxur(k) = max(tmp(mask==1)); 
-   tmp = abs(imag(U(:,:,k))); 
-   mxui(k) = max(tmp(mask==1)); 
-   tmp = abs(real(V(:,:,k))); 
-   mxvr(k) = max(tmp(mask==1)); 
-   tmp = abs(imag(V(:,:,k))); 
-   mxvi(k) = max(tmp(mask==1)); 
-   k
-end
-
-% Scaling factor for saving to NCSHORT (int16):
-scale_h = 32767/max([mxhr mxhi]);
-scale_UV = 32767/max([mxur mxvr mxui mxvi]);
-
-[ispec,amp,ph,omega,alpha] = tmd_constit(cons_cell);
-
-proj4 = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs';
 
 %% Fill NaNs
 % You may be asking: "Why are we filling the land areas with tide values??"
@@ -110,21 +88,76 @@ maskv(all(abs(V)==0,3)) = 0;
 
 for k = 1:Ncons
    tmp = h(:,:,k); 
-   tmp = complex(regionfill(real(tmp),mask==0),regionfill(imag(tmp),mask==0));
+   tmp = complex(regionfill(real(tmp),mask==0|isnan(tmp)),regionfill(imag(tmp),mask==0|isnan(tmp)));
    h(:,:,k) = tmp; 
    
-   if uv
-      tmp = U(:,:,k); 
-      tmp = complex(regionfill(real(tmp),masku==0),regionfill(imag(tmp),masku==0));
-      U(:,:,k) = tmp; 
+  tmp = U(:,:,k); 
+  tmp = complex(regionfill(real(tmp),masku==0|isnan(tmp)),regionfill(imag(tmp),masku==0|isnan(tmp)));
+  U(:,:,k) = tmp; 
 
-      tmp = V(:,:,k); 
-      tmp = complex(regionfill(real(tmp),maskv==0),regionfill(imag(tmp),maskv==0));
-      V(:,:,k) = tmp; 
-   end
+  tmp = V(:,:,k); 
+  tmp = complex(regionfill(real(tmp),maskv==0|isnan(tmp)),regionfill(imag(tmp),maskv==0|isnan(tmp)));
+  V(:,:,k) = tmp; 
    
    k
 end
+
+%%
+
+% Maximum real and imaginary values for each constitutent (breaking it up by constituent reduces memory.) 
+for k=1:Ncons
+   tmp = abs(real(h(:,:,k))); 
+   mxhr(k) = max(tmp(mask==1)); 
+   tmp = abs(imag(h(:,:,k))); 
+   mxhi(k) = max(tmp(mask==1)); 
+   tmp = abs(real(U(:,:,k))); 
+   mxur(k) = max(tmp(masku==1)); 
+   tmp = abs(imag(U(:,:,k))); 
+   mxui(k) = max(tmp(masku==1)); 
+   tmp = abs(real(V(:,:,k))); 
+   mxvr(k) = max(tmp(maskv==1)); 
+   tmp = abs(imag(V(:,:,k))); 
+   mxvi(k) = max(tmp(maskv==1)); 
+   k
+end
+
+% Scaling factor for saving to NCSHORT (int16):
+scale_h = 32767/max([mxhr mxhi]);
+scale_UV = 32767/max([mxur mxvr mxui mxvi]);
+
+% Convert U and V to int16
+
+FillValue = int16(-32767);
+
+URe = int16(scale_UV*real(U)); 
+UIm = int16(scale_UV*imag(U)); 
+VRe = int16(scale_UV*real(V)); 
+VIm = int16(scale_UV*imag(V)); 
+
+% Mask land for U and V (not for h) 
+for k = 1:Ncons
+    tmp = URe(:,:,k); 
+    tmp(mask~=1) = FillValue;
+    URe(:,:,k) = tmp; 
+
+    tmp = UIm(:,:,k); 
+    tmp(mask~=1) = FillValue;
+    UIm(:,:,k) = tmp; 
+
+    tmp = VRe(:,:,k); 
+    tmp(mask~=1) = FillValue;
+    VRe(:,:,k) = tmp; 
+
+    tmp = VIm(:,:,k); 
+    tmp(mask~=1) = FillValue;
+    VIm(:,:,k) = tmp; 
+end
+
+%%
+
+[ispec,amp,ph,omega,alpha] = tmd_constit(cons_cell);
+
+proj4 = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs';
 
 %% Write the netcdf 
 
@@ -282,12 +315,10 @@ netcdf.putVar(ncid,om_var_id,omega);
 netcdf.putVar(ncid,alp_var_id,alpha);
 netcdf.putVar(ncid,hRe_var_id,ipermute(int16(scale_h*real(h)),[2 1 3]));
 netcdf.putVar(ncid,hIm_var_id,ipermute(int16(scale_h*imag(h)),[2 1 3]));
-if uv
-   netcdf.putVar(ncid,uRe_var_id,ipermute(int16(scale_UV*real(U)),[2 1 3]));
-   netcdf.putVar(ncid,uIm_var_id,ipermute(int16(scale_UV*imag(U)),[2 1 3]));
-   netcdf.putVar(ncid,vRe_var_id,ipermute(int16(scale_UV*real(V)),[2 1 3]));
-   netcdf.putVar(ncid,vIm_var_id,ipermute(int16(scale_UV*imag(V)),[2 1 3]));
-end
+netcdf.putVar(ncid,uRe_var_id,ipermute(URe,[2 1 3]));
+netcdf.putVar(ncid,uIm_var_id,ipermute(UIm,[2 1 3]));
+netcdf.putVar(ncid,vRe_var_id,ipermute(VRe,[2 1 3]));
+netcdf.putVar(ncid,vIm_var_id,ipermute(VIm,[2 1 3]));
 netcdf.putVar(ncid,wct_var_id,ipermute(wct,[2 1]));
 netcdf.putVar(ncid,mask_var_id,ipermute(mask,[2 1]));
 

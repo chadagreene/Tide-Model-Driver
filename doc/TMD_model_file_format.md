@@ -21,15 +21,16 @@ Source:
 Format:
            netcdf4_classic
 Global Attributes:
-           Conventions   = 'CF-1.7'
-           Title         = 'TPXO9_atlas_v5'
-           Description   = 'Global tide model at 1/30 degree resolution.'
-           Author        = 'Egbert, Gary D., and Svetlana Y. Erofeeva.'
-           creation_date = '2022-06-12'
-           tmd_version   = 3
-           license       = 'ask'
-           Data_citation = 'Egbert, Gary D., and Svetlana Y. Erofeeva. "Efficient inverse modeling of barotropic ocean tides." Journal of Atmospheric and Oceanic Technology 19.2 (2002): 183-204.'
-           model_type    = 'ocean'
+           Conventions       = 'CF-1.7'
+           Title             = 'TPXO9_atlas_v5'
+           Description       = 'Global tide model at 1/30 degree resolution.'
+           Author            = 'Egbert, Gary D., and Svetlana Y. Erofeeva.'
+           creation_date     = '2023-04-15'
+           tmd_version       = 3
+           NetCDF_conversion = 'Chad A. Greene'
+           model_type        = 'ocean'
+           license           = 'ask'
+           Data_citation     = 'Egbert, Gary D., and Svetlana Y. Erofeeva. "Efficient inverse modeling of barotropic ocean tides." Journal of Atmospheric and Oceanic Technology 19.2 (2002): 183-204.'
 Dimensions:
            lon          = 10802
            lat          = 5401
@@ -48,16 +49,16 @@ Variables:
            Dimensions: lon
            Datatype:   single
            Attributes:
-                       long_name     = 'grid cell center longitude (first and last columns are repeats, to enable seamless interpolation)'
                        standard_name = 'longitude'
+                       long_name     = 'grid cell center longitude (first and last columns are repeats, to enable seamless interpolation)'
                        units         = 'degrees'
     lat         
            Size:       5401x1
            Dimensions: lat
            Datatype:   single
            Attributes:
-                       long_name     = 'grid cell center latitude'
                        standard_name = 'latitude'
+                       long_name     = 'grid cell center latitude'
                        units         = 'degrees'
     constituents
            Size:       15x1
@@ -103,8 +104,8 @@ Variables:
            Dimensions: lon,lat,constituents
            Datatype:   int16
            Attributes:
+                       standard_name = 'height_coefficient'
                        long_name     = 'real component of height constituent'
-                       standard_name = 'height_constituent'
                        grid_mapping  = 'polar_stereographic'
                        units         = 'm'
                        scale_factor  = 0.00030746
@@ -113,8 +114,8 @@ Variables:
            Dimensions: lon,lat,constituents
            Datatype:   int16
            Attributes:
+                       standard_name = 'height_coefficient'
                        long_name     = 'imaginary component of height constituent'
-                       standard_name = 'height_constituent'
                        grid_mapping  = 'polar_stereographic'
                        units         = 'm'
                        scale_factor  = 0.00030746
@@ -123,8 +124,8 @@ Variables:
            Dimensions: lon,lat,constituents
            Datatype:   int16
            Attributes:
-                       long_name     = 'real component of U transport constituent.'
-                       standard_name = 'height_constituent'
+                       standard_name = 'transport_coefficient'
+                       long_name     = 'real component of U transport constituent. This is the zonal (east-west) flow component in geographic coordinates.'
                        grid_mapping  = 'polar_stereographic'
                        units         = 'm^2/s'
                        scale_factor  = 0.015712
@@ -133,8 +134,8 @@ Variables:
            Dimensions: lon,lat,constituents
            Datatype:   int16
            Attributes:
-                       long_name     = 'imaginary component of U transport constituent.'
-                       standard_name = 'height_constituent'
+                       standard_name = 'transport_coefficient'
+                       long_name     = 'imaginary component of U transport constituent. This is the zonal (east-west) flow component in geographic coordinates.'
                        grid_mapping  = 'polar_stereographic'
                        units         = 'm^2/s'
                        scale_factor  = 0.015712
@@ -143,8 +144,8 @@ Variables:
            Dimensions: lon,lat,constituents
            Datatype:   int16
            Attributes:
-                       long_name     = 'real component of V transport constituent.'
-                       standard_name = 'height_constituent'
+                       standard_name = 'transport_coefficient'
+                       long_name     = 'real component of V transport constituent. This is the meridional (north-south) flow component in geographic coordinates.'
                        grid_mapping  = 'polar_stereographic'
                        units         = 'm^2/s'
                        scale_factor  = 0.015712
@@ -153,8 +154,8 @@ Variables:
            Dimensions: lon,lat,constituents
            Datatype:   int16
            Attributes:
-                       long_name     = 'imaginary component of V transport constituent.'
-                       standard_name = 'height_constituent'
+                       standard_name = 'transport_coefficient'
+                       long_name     = 'imaginary component of V transport constituent. This is the meridional (north-south) flow component in geographic coordinates.'
                        grid_mapping  = 'polar_stereographic'
                        units         = 'm^2/s'
                        scale_factor  = 0.015712
@@ -163,8 +164,8 @@ Variables:
            Dimensions: lon,lat
            Datatype:   int16
            Attributes:
-                       long_name     = 'water column thickness'
                        standard_name = 'wct'
+                       long_name     = 'water column thickness'
                        units         = 'meters'
                        grid_mapping  = 'polar_stereographic'
     mask        
@@ -172,8 +173,8 @@ Variables:
            Dimensions: lon,lat
            Datatype:   int8
            Attributes:
-                       long_name     = 'ocean mask'
                        standard_name = 'ocean_mask'
+                       long_name     = 'ocean mask'
                        grid_mapping  = 'polar_stereographic'
                        valid_range   = [0  1]
                        flag_values   = [0  1]
@@ -292,7 +293,7 @@ produces smoother, more physical interpolation close to the coast and is
 a reasonable approximation where the underlying tide model cannot offer a
 solution. 
 
-Note that we only fill the landmasses for tidal heights (h, not U or V), because tidal height predictions should be reasonable in a narrow, tidal inland creek that the mask identifies as land, whereas inland transport values would depend on geometry that was not represented in the model. 
+Note that we only fill the landmasses for tidal heights (h; not U or V), because tidal height predictions should be reasonable in a narrow, tidal inland creek that the mask identifies as land, whereas inland transport values would depend on geometry that was not represented in the model. 
 
 The [`tmd_interp`](tmd_interp_documentation.md) function sets land areas 
 to NaN by default (but offers an option to "unmask"). For your tidal needs, 

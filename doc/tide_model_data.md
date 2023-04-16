@@ -1,7 +1,7 @@
 [&larr; Back to TMD3.0 Main Page](../README.md)
 
 # Getting Tide Models
-After you [add TMD3.0 to MATLAB](installing_tmd.md), you'll need to get one or more tide model files described below. For TMD3.0, these will always be NetCDF ( \*.nc) files, but they may be compressed into files with a .zip extension, in which case, unzip them and you'll be ready to start using TMD3.0.
+After you [add TMD3.0 to MATLAB](installing_tmd.md), you'll need to get one or more tide model files described below. For TMD3.0, these will always be NetCDF ( \*.nc) files, but when you download them, they may be compressed into files with a .zip extension, in which case, unzip the folder and you'll be ready to start using TMD3.0.
  
 ## Barotropic Ocean Models
 Barotropic ocean models contain complex tidal coefficients for water height and depth-integrated transport, for a set of tidal constituents. Depth-averaged tidal current velocity coefficients are calculated as the predicted transport values divided by water column thickness. Ocean models are either *global* or *regional*. 
