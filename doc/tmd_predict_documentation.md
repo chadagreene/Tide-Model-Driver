@@ -27,7 +27,7 @@ z = tmd_predict(...,'InferMinor',true_or_false)
  
 `z = tmd_predict(filename,lat,lon,time,ptype,'constituents',conList)` specifies tidal constituents as a cell array (e.g, `{'m2','s2'}`). If constituents are not specified, all constituents from the model are used. 
 
-`z = tmd_predict(...,,'coasts',MaskingMethod)` specifies how coastal regions are masked. Can be `NaN`, `'flexure'`, or `'unmask'`. By default, `MaskingMethod` is `NaN`, meaning outputs  are set to `NaN` wherever a nearest-neighbor interpolation of the ocean indicates land. The `'flexure'` option scales tidal constituents by a predicted coefficient of tidal deflection for ice shelf grounding zones (for CATS only). A third option, `'unmask'`, does not apply any masking, which may be preferred close to coasts, where, for example, a tide gauge may exist between land and ocean grid cells. 
+`z = tmd_predict(...,,'coasts',MaskingMethod)` specifies how coastal regions are masked. Can be `NaN`, `'flexure'`, or `'unmask'`. By default, `MaskingMethod` is `NaN`, meaning outputs  are set to `NaN` wherever a nearest-neighbor interpolation of the ocean indicates land. The `'flexure'` option scales tidal constituents by a predicted coefficient of tidal deflection for ice shelf grounding zones (for CATS only). A third option, `'unmask'`, does not apply any masking, which may be preferred close to coasts, where, for example, a tide gauge may exist between land and ocean grid cells. The `'unmask'` option is available for height only. 
 
 `z = tmd_predict(...,'InferMinor',true_or_false)` specifies whether minor constituents should be inferred (`true` or `false`). By default, minor constituents are inferred unless constituents are specified. 
 
@@ -271,7 +271,7 @@ xlabel 'distance along profile (km)'
 <p align="center"><img src="markdown_figures/tmd_predict_documentation_08_hires.png" width="500"/></p>
 
 ## Example: Drift Track
-We've all been there. You've gassed up your dinghy, and you're about to run some illegal substances from Miami Beach to Red Bay, Bahamas. You know the trip will take 24 hours, but you're not sure what kind of tides you'll experience along the way. Well, there's nothing to worry about, because we have TMD! 
+We've all been there. You've gassed up your dinghy, and you're about to make a clandestine run from Miami Beach to Red Bay, Bahamas. You know the trip will take 24 hours, but you're not sure what kind of tides you'll experience along the way. Well, there's nothing to worry about, because we have TMD! 
 
 ```matlab
 % 24 hours of data at 1 minute resolution: 

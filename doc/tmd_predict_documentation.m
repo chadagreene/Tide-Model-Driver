@@ -38,7 +38,7 @@
 % The |'flexure'| option scales tidal constituents by a predicted coefficient of tidal 
 % deflection for ice shelf grounding zones (for CATS only). A third option, |'unmask'|, does not apply 
 % any masking, which may be preferred close to coasts, where, for example, a tide gauge 
-% may exist between land and ocean grid cells. 
+% may exist between land and ocean grid cells. The |'unmask'| option is available for height only. 
 % 
 % |z = tmd_predict(...,'InferMinor',true_or_false)| specifies whether minor
 % constituents should be inferred (|true| or |false|). By default, minor constituents are
@@ -297,7 +297,7 @@ xlabel 'distance along profile (km)'
 
 %% Example: Drift track 
 % We've all been there. You've gassed up your dinghy, and you're about to
-% run some illegal substances from Miami Beach to Red Bay, Bahamas. You know 
+% make a clandestine run from Miami Beach to Red Bay, Bahamas. You know 
 % the trip will take 24 hours, but you're not sure what kind of tides
 % you'll experience along the way. Well, there's nothing to worry about,
 % because we have TMD! 

@@ -52,7 +52,8 @@ function zi = tmd_interp(filename,variable,lati,loni,varargin)
 % The 'flexure' option scales tidal constituents by a predicted coefficient of tidal 
 % deflection for ice shelf grounding zones. A third option, 'unmask', does not apply 
 % any masking, which may be preferred close to coasts, where, for example, a tide gauge 
-% may exist between land and ocean grid cells. 
+% may exist between land and ocean grid cells. The 'unmask' option is available for height 
+% only. 
 % 
 %% Examples 
 % For examples type 

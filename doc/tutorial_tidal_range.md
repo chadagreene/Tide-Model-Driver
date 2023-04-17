@@ -111,7 +111,7 @@ t = (datenum(2000,1,1):1/48:datenum(2001,1,1))';
 ```
 
 ## Method 3: Efficient, exact analytic solution 
-I am certain that there's an analytic solution to this problem of adding a bunch of sinusoids of various amplitudes and frequencies set by well known astronomical forces. (Because it's a simple problem, right?) Such a solution would provide an exact and accurate value of the total tidal range. However, my brain is too simple to figure it out on my own, so if you figure it out yourself, will ya let me know? ? Keep in mind that other processes such as storm surge and the change in sea level from varying atmospheric pressure can sum up to a meter or more of sea level change. So, in general, high precision in tidal height range is rarely critical.
+I am certain that there's an analytic solution to this problem of adding a bunch of sinusoids of various amplitudes and frequencies set by well known astronomical forces. (Because it's a simple problem, right?) Such a solution would provide an exact and accurate value of the total tidal range. However, my brain is too simple to figure it out on my own, so if you figure it out yourself, will ya let me know? Keep in mind that other processes such as storm surge and the change in sea level from varying atmospheric pressure can sum up to a meter or more of sea level change. So, in general, high precision in tidal height range is rarely critical.
 
 ## Author Info 
 This tutorial was written by Chad A. Greene and Laurie Padman, June 2022. 

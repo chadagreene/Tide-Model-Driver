@@ -38,7 +38,7 @@ function z = tmd_predict(filename,lat,lon,t,ptype,varargin)
 % The 'flexure' option scales tidal constituents by a predicted coefficient of tidal 
 % deflection for ice shelf grounding zones (for CATS only). A third option, 'unmask', does not apply 
 % any masking, which may be preferred close to coasts, where, for example, a tide gauge 
-% may exist between land and ocean grid cells. 
+% may exist between land and ocean grid cells. The 'unmask' option is available for height only. 
 % 
 % z = tmd_predict(...,'InferMinor',true_or_false) specifies whether minor
 % constituents should be inferred (true or false). By default, minor constituents are

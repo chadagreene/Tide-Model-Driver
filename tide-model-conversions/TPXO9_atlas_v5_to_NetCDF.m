@@ -70,8 +70,6 @@ if uv
    V = cat(2,V(:,end,:),V,V(:,1,:));
 end
 
-
-
 %% Fill NaNs
 % You may be asking: "Why are we filling the land areas with tide values??"
 % It's because a tide gauge might find itself between an ocean pixel and a 
@@ -240,39 +238,41 @@ netcdf.putAtt(ncid,hIm_var_id,'grid_mapping', 'polar_stereographic');
 netcdf.putAtt(ncid,hIm_var_id,'units',        'm');
 netcdf.putAtt(ncid,hIm_var_id,'scale_factor',  1/scale_h);
 
-if uv
-   % Define uRe
-   uRe_var_id = netcdf.defVar(ncid,'URe','NC_SHORT',[lon_id lat_id cons_id]);
-   netcdf.putAtt(ncid,uRe_var_id,'standard_name','transport_coefficient');
-   netcdf.putAtt(ncid,uRe_var_id,'long_name',    'real component of U transport constituent. This is the zonal (east-west) flow component in geographic coordinates.');
-   netcdf.putAtt(ncid,uRe_var_id,'grid_mapping', 'polar_stereographic');
-   netcdf.putAtt(ncid,uRe_var_id,'units',        'm^2/s');
-   netcdf.putAtt(ncid,uRe_var_id,'scale_factor',  1/scale_UV);
+% Define uRe
+uRe_var_id = netcdf.defVar(ncid,'URe','NC_SHORT',[lon_id lat_id cons_id]);
+netcdf.putAtt(ncid,uRe_var_id,'standard_name','transport_coefficient');
+netcdf.putAtt(ncid,uRe_var_id,'long_name',    'real component of U transport constituent. This is the zonal (east-west) flow component in geographic coordinates.');
+netcdf.putAtt(ncid,uRe_var_id,'grid_mapping', 'polar_stereographic');
+netcdf.putAtt(ncid,uRe_var_id,'units',        'm^2/s');
+netcdf.putAtt(ncid,uRe_var_id,'scale_factor',  1/scale_UV);
+netcdf.putAtt(ncid,uRe_var_id,'_FillValue',    FillValue);
 
-   % Define uIm
-   uIm_var_id = netcdf.defVar(ncid,'UIm','NC_SHORT',[lon_id lat_id cons_id]);
-   netcdf.putAtt(ncid,uIm_var_id,'standard_name','transport_coefficient');
-   netcdf.putAtt(ncid,uIm_var_id,'long_name',    'imaginary component of U transport constituent. This is the zonal (east-west) flow component in geographic coordinates.');
-   netcdf.putAtt(ncid,uIm_var_id,'grid_mapping', 'polar_stereographic');
-   netcdf.putAtt(ncid,uIm_var_id,'units',        'm^2/s');
-   netcdf.putAtt(ncid,uIm_var_id,'scale_factor',  1/scale_UV);
+% Define uIm
+uIm_var_id = netcdf.defVar(ncid,'UIm','NC_SHORT',[lon_id lat_id cons_id]);
+netcdf.putAtt(ncid,uIm_var_id,'standard_name','transport_coefficient');
+netcdf.putAtt(ncid,uIm_var_id,'long_name',    'imaginary component of U transport constituent. This is the zonal (east-west) flow component in geographic coordinates.');
+netcdf.putAtt(ncid,uIm_var_id,'grid_mapping', 'polar_stereographic');
+netcdf.putAtt(ncid,uIm_var_id,'units',        'm^2/s');
+netcdf.putAtt(ncid,uIm_var_id,'scale_factor',  1/scale_UV);
+netcdf.putAtt(ncid,uIm_var_id,'_FillValue',    FillValue);
 
-   % Define vRe
-   vRe_var_id = netcdf.defVar(ncid,'VRe','NC_SHORT',[lon_id lat_id cons_id]);
-   netcdf.putAtt(ncid,vRe_var_id,'standard_name','transport_coefficient');
-   netcdf.putAtt(ncid,vRe_var_id,'long_name',    'real component of V transport constituent. This is the meridional (north-south) flow component in geographic coordinates.');
-   netcdf.putAtt(ncid,vRe_var_id,'grid_mapping', 'polar_stereographic');
-   netcdf.putAtt(ncid,vRe_var_id,'units',        'm^2/s');
-   netcdf.putAtt(ncid,vRe_var_id,'scale_factor',  1/scale_UV);
+% Define vRe
+vRe_var_id = netcdf.defVar(ncid,'VRe','NC_SHORT',[lon_id lat_id cons_id]);
+netcdf.putAtt(ncid,vRe_var_id,'standard_name','transport_coefficient');
+netcdf.putAtt(ncid,vRe_var_id,'long_name',    'real component of V transport constituent. This is the meridional (north-south) flow component in geographic coordinates.');
+netcdf.putAtt(ncid,vRe_var_id,'grid_mapping', 'polar_stereographic');
+netcdf.putAtt(ncid,vRe_var_id,'units',        'm^2/s');
+netcdf.putAtt(ncid,vRe_var_id,'scale_factor',  1/scale_UV);
+netcdf.putAtt(ncid,vRe_var_id,'_FillValue',    FillValue);
 
-   % Define vIm
-   vIm_var_id = netcdf.defVar(ncid,'VIm','NC_SHORT',[lon_id lat_id cons_id]);
-   netcdf.putAtt(ncid,vIm_var_id,'standard_name','transport_coefficient');
-   netcdf.putAtt(ncid,vIm_var_id,'long_name',    'imaginary component of V transport constituent. This is the meridional (north-south) flow component in geographic coordinates.');
-   netcdf.putAtt(ncid,vIm_var_id,'grid_mapping', 'polar_stereographic');
-   netcdf.putAtt(ncid,vIm_var_id,'units',        'm^2/s');
-   netcdf.putAtt(ncid,vIm_var_id,'scale_factor',  1/scale_UV);
-end
+% Define vIm
+vIm_var_id = netcdf.defVar(ncid,'VIm','NC_SHORT',[lon_id lat_id cons_id]);
+netcdf.putAtt(ncid,vIm_var_id,'standard_name','transport_coefficient');
+netcdf.putAtt(ncid,vIm_var_id,'long_name',    'imaginary component of V transport constituent. This is the meridional (north-south) flow component in geographic coordinates.');
+netcdf.putAtt(ncid,vIm_var_id,'grid_mapping', 'polar_stereographic');
+netcdf.putAtt(ncid,vIm_var_id,'units',        'm^2/s');
+netcdf.putAtt(ncid,vIm_var_id,'scale_factor',  1/scale_UV);
+netcdf.putAtt(ncid,vIm_var_id,'_FillValue',    FillValue);
 
 % Define wct: 
 wct_var_id = netcdf.defVar(ncid,'wct','NC_SHORT',[lon_id lat_id]);

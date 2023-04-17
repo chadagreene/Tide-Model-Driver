@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>tmd_predict documentation</title><meta name="generator" content="MATLAB 9.10"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2022-06-22"><meta name="DC.source" content="tmd_predict_documentation.m"><style type="text/css">
+      --><title>tmd_predict documentation</title><meta name="generator" content="MATLAB 9.11"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2023-04-17"><meta name="DC.source" content="tmd_predict_documentation.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -71,7 +71,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 z = tmd_predict(filename,lat,lon,time,ptype)
 z = tmd_predict(filename,lat,lon,time,ptype,'constituents',conList)
 z = tmd_predict(...,,'coasts',MaskingMethod)
-z = tmd_predict(...,'InferMinor',true_or_false)</pre><h2 id="2">Description</h2><p><tt>z = tmd_predict(filename,lat,lon,time)</tt> predicts tide heights at the specified <tt>lat,lon</tt> and <tt>time</tt>, using the TMD3.0 compatible consolidated NetCDF tide model data file. Location(s) <tt>lat,lon</tt> are decimal degrees, and can be scalars, vectors, or MxN arrays. Input <tt>time</tt> can be datetime or MATLAB's datenum format, and must be a scalar or a 1D vector.</p><p><tt>z = tmd_predict(filename,lat,lon,time,ptype)</tt> specifies a solution type. If <tt>ptype</tt> is not specified, <tt>'h'</tt> is the assumed <tt>ptype</tt>. Note the <tt>ptype</tt> is case sensitive! Options for <tt>ptype</tt> are:</p><div><ul><li><tt>'h'</tt> tidal height (m) (default)</li><li><tt>'u'</tt> zonal current velocity, positive pointing east (m/s)</li><li><tt>'v'</tt> meridional current velocity, positive pointing north (m/s)</li><li><tt>'U'</tt> zonal transport (m^2/s)</li><li><tt>'V'</tt> meridional height (m^2/s)</li></ul></div><p><tt>z = tmd_predict(filename,lat,lon,time,ptype,'constituents',conList)</tt> specifies tidal constituents as a cell array (e.g, <tt>{'m2','s2'}</tt>). If constituents are not specified, all constituents from the model are used.</p><p><tt>z = tmd_predict(...,,'coasts',MaskingMethod)</tt> specifies how coastal regions are masked. Can be <tt>NaN</tt>, <tt>'flexure'</tt>, or <tt>'unmask'</tt>. By default, <tt>MaskingMethod</tt> is <tt>NaN</tt>, meaning outputs are set to <tt>NaN</tt> wherever a nearest-neighbor interpolation of the ocean indicates land. The <tt>'flexure'</tt> option scales tidal constituents by a predicted coefficient of tidal deflection for ice shelf grounding zones (for CATS only). A third option, <tt>'unmask'</tt>, does not apply any masking, which may be preferred close to coasts, where, for example, a tide gauge may exist between land and ocean grid cells.</p><p><tt>z = tmd_predict(...,'InferMinor',true_or_false)</tt> specifies whether minor constituents should be inferred (<tt>true</tt> or <tt>false</tt>). By default, minor constituents are inferred unless constituents are specified.</p><h2 id="3">Example: Tide gauge time series</h2><p>This example uses data from a tide gauge near Nuuk, Greenland. The example data is in the <tt>doc/example_data</tt> folder of this toolbox.</p><p>Start by loading the tide gauge data, then predict tides at that location using the 15 constituent global `TPXO9_atlas_v5` model and the 8 constituent `Gr1kmTM` regional model.</p><pre class="codeinput"><span class="comment">% Load tide gauge data:</span>
+z = tmd_predict(...,'InferMinor',true_or_false)</pre><h2 id="2">Description</h2><p><tt>z = tmd_predict(filename,lat,lon,time)</tt> predicts tide heights at the specified <tt>lat,lon</tt> and <tt>time</tt>, using the TMD3.0 compatible consolidated NetCDF tide model data file. Location(s) <tt>lat,lon</tt> are decimal degrees, and can be scalars, vectors, or MxN arrays. Input <tt>time</tt> can be datetime or MATLAB's datenum format, and must be a scalar or a 1D vector.</p><p><tt>z = tmd_predict(filename,lat,lon,time,ptype)</tt> specifies a solution type. If <tt>ptype</tt> is not specified, <tt>'h'</tt> is the assumed <tt>ptype</tt>. Note the <tt>ptype</tt> is case sensitive! Options for <tt>ptype</tt> are:</p><div><ul><li><tt>'h'</tt> tidal height (m) (default)</li><li><tt>'u'</tt> zonal current velocity, positive pointing east (m/s)</li><li><tt>'v'</tt> meridional current velocity, positive pointing north (m/s)</li><li><tt>'U'</tt> zonal transport (m^2/s)</li><li><tt>'V'</tt> meridional height (m^2/s)</li></ul></div><p><tt>z = tmd_predict(filename,lat,lon,time,ptype,'constituents',conList)</tt> specifies tidal constituents as a cell array (e.g, <tt>{'m2','s2'}</tt>). If constituents are not specified, all constituents from the model are used.</p><p><tt>z = tmd_predict(...,,'coasts',MaskingMethod)</tt> specifies how coastal regions are masked. Can be <tt>NaN</tt>, <tt>'flexure'</tt>, or <tt>'unmask'</tt>. By default, <tt>MaskingMethod</tt> is <tt>NaN</tt>, meaning outputs are set to <tt>NaN</tt> wherever a nearest-neighbor interpolation of the ocean indicates land. The <tt>'flexure'</tt> option scales tidal constituents by a predicted coefficient of tidal deflection for ice shelf grounding zones (for CATS only). A third option, <tt>'unmask'</tt>, does not apply any masking, which may be preferred close to coasts, where, for example, a tide gauge may exist between land and ocean grid cells. The <tt>'unmask'</tt> option is available for height only.</p><p><tt>z = tmd_predict(...,'InferMinor',true_or_false)</tt> specifies whether minor constituents should be inferred (<tt>true</tt> or <tt>false</tt>). By default, minor constituents are inferred unless constituents are specified.</p><h2 id="3">Example: Tide gauge time series</h2><p>This example uses data from a tide gauge near Nuuk, Greenland. The example data is in the <tt>doc/example_data</tt> folder of this toolbox.</p><p>Start by loading the tide gauge data, then predict tides at that location using the 15 constituent global `TPXO9_atlas_v5` model and the 8 constituent `Gr1kmTM` regional model.</p><pre class="codeinput"><span class="comment">% Load tide gauge data:</span>
 fn = <span class="string">'h820_nuuk.nc'</span>;
 lat = ncread(fn,<span class="string">'lat'</span>);
 lon = ncread(fn,<span class="string">'lon'</span>);
@@ -152,13 +152,13 @@ axis <span class="string">tight</span>
 ylabel <span class="string">'tide gauge measurement (m)')</span>
 title <span class="string">'Syowa station tide gauge'</span>
 </pre><img vspace="5" hspace="5" src="tmd_predict_documentation_04.png" alt=""> <p>For 26 years, the tide gauge at Syowa station has logged hourly tides, with only a few interruptions. Clearly, tidal variability exists here, but what does the CATS model think?</p><pre class="codeinput"><span class="comment">% Predict tides at the location of interest:</span>
-sl_cats = tmd_predict(<span class="string">'CATS2008_update_2022-06-11.nc'</span>,lat,lon,t,<span class="string">'h'</span>);
+sl_cats = tmd_predict(<span class="string">'CATS2008_v2023.nc'</span>,lat,lon,t,<span class="string">'h'</span>);
 
 <span class="comment">% See how many tide predictions are finite:</span>
 sum(isfinite(sl_cats))
 </pre><pre class="codeoutput">ans =
      0
-</pre><p>The Syowa tide gauge is closer to a land pixel than an ocean pixel in the CATS model, so it gets NaN'd out by default. To un-NaN the interpolation, choose the <tt>'unmask'</tt> option:</p><pre class="codeinput">sl_cats = tmd_predict(<span class="string">'CATS2008_update_2022-06-11.nc'</span>,lat,lon,t,<span class="string">'h'</span>,<span class="string">'coasts'</span>,<span class="string">'unmask'</span>);
+</pre><p>The Syowa tide gauge is closer to a land pixel than an ocean pixel in the CATS model, so it gets NaN'd out by default. To un-NaN the interpolation, choose the <tt>'unmask'</tt> option:</p><pre class="codeinput">sl_cats = tmd_predict(<span class="string">'CATS2008_v2023.nc'</span>,lat,lon,t,<span class="string">'h'</span>,<span class="string">'coasts'</span>,<span class="string">'unmask'</span>);
 sl_tpxo = tmd_predict(<span class="string">'TPXO9_atlas_v5.nc'</span>,lat,lon,t,<span class="string">'h'</span>,<span class="string">'coasts'</span>,<span class="string">'unmask'</span>);
 
 <span class="comment">% Plot observations "detided" by each model:</span>
@@ -176,7 +176,7 @@ y = 521366:-res:-38552;
 [Lat,Lon] = ps2ll(X,Y); <span class="comment">% ll2ps is an AMT function.</span>
 
 <span class="comment">% Estimate ice shelf flexure at each point on the grid:</span>
-flex = tmd_interp(<span class="string">'CATS2008_update_2022-06-11.nc'</span>,<span class="string">'flexure'</span>,Lat,Lon);
+flex = tmd_interp(<span class="string">'CATS2008_v2023.nc'</span>,<span class="string">'flexure'</span>,Lat,Lon);
 
 figure
 h = imagesc(x,y,flex);
@@ -205,7 +205,7 @@ text(xi(1),yi(1),<span class="string">'Flight path'</span>,<span class="string">
 t = datenum(<span class="string">'22-Jan-2000 03:28:00'</span>);
 
 <span class="comment">% Predict tides along the flight path at time t:</span>
-fn = <span class="string">'CATS2008_update_2022-06-11.nc'</span>;
+fn = <span class="string">'CATS2008_v2023.nc'</span>;
 z_default = tmd_predict(fn,lati,loni,t,<span class="string">'h'</span>);
 z_unmask = tmd_predict(fn,lati,loni,t,<span class="string">'h'</span>,<span class="string">'coasts'</span>,<span class="string">'unmask'</span>);
 z_flexure = tmd_predict(fn,lati,loni,t,<span class="string">'h'</span>,<span class="string">'coasts'</span>,<span class="string">'flexure'</span>);
@@ -226,7 +226,7 @@ subplot(2,1,2)
 bedmachine_profile(lati,loni,<span class="string">'horiz'</span>,di)
 axis <span class="string">tight</span>
 xlabel <span class="string">'distance along profile (km)'</span>
-</pre><img vspace="5" hspace="5" src="tmd_predict_documentation_08.png" alt=""> <h2 id="14">Example: Drift track</h2><p>We've all been there. You've gassed up your dinghy, and you're about to run some illegal substances from Miami Beach to Red Bay, Bahamas. You know the trip will take 24 hours, but you're not sure what kind of tides you'll experience along the way. Well, there's nothing to worry about, because we have TMD!</p><pre class="codeinput"><span class="comment">% 24 hours of data at 1 minute resolution:</span>
+</pre><img vspace="5" hspace="5" src="tmd_predict_documentation_08.png" alt=""> <h2 id="14">Example: Drift track</h2><p>We've all been there. You've gassed up your dinghy, and you're about to make a clandestine run from Miami Beach to Red Bay, Bahamas. You know the trip will take 24 hours, but you're not sure what kind of tides you'll experience along the way. Well, there's nothing to worry about, because we have TMD!</p><pre class="codeinput"><span class="comment">% 24 hours of data at 1 minute resolution:</span>
 t = datetime(<span class="string">'may 27, 2022 6:00'</span>):minutes(1):datetime(<span class="string">'may 28, 2022 6:00'</span>);
 
 <span class="comment">% GPS locations along the way from Miami to Bahamas:</span>
@@ -252,7 +252,7 @@ y = (2000:-5:-4000)*1000;
 
 t = datenum(<span class="string">'march 29, 2017'</span>):1/24:datenum(<span class="string">'march 30, 2017'</span>);
 Z = tmd_predict(<span class="string">'Arc2kmTM_v1.nc'</span>,Lat,Lon,t);
-</pre><img vspace="5" hspace="5" src="tmd_predict_documentation_10.png" alt=""> <p>If you're following along, you probably noticed it took a minute to churn through all 25 hourly solutions for a grid this size. That is expected, so again, be mindful that solving a long time series with short timesteps and a big grid will probably take a while to solve.</p><p>Here's a look at the data we just created:</p><pre class="codeinput">whos <span class="string">Lat</span> <span class="string">Lon</span> <span class="string">Z</span> <span class="string">t</span>
+</pre><p>If you're following along, you probably noticed it took a minute to churn through all 25 hourly solutions for a grid this size. That is expected, so again, be mindful that solving a long time series with short timesteps and a big grid will probably take a while to solve.</p><p>Here's a look at the data we just created:</p><pre class="codeinput">whos <span class="string">Lat</span> <span class="string">Lon</span> <span class="string">Z</span> <span class="string">t</span>
 </pre><pre class="codeoutput">  Name         Size                     Bytes  Class     Attributes
 
   Lat       1201x1261                12115688  double              
@@ -281,7 +281,7 @@ for k = 2:25
    h.CData = Z(:,:,k);
    txt.String = datestr(t(k),'mmm dd, yyyy HH:MM:SS');
    gif
-end</pre><p><img vspace="5" hspace="5" src="arctic_tides.gif" alt=""> </p><h2 id="21">Author Info</h2><p>The <tt>tmd_predict</tt> function and its documentation were written by Chad A. Greene, June 2022.</p><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2021a</a><br></p></div><!--
+end</pre><p><img vspace="5" hspace="5" src="arctic_tides.gif" alt=""> </p><h2 id="21">Author Info</h2><p>The <tt>tmd_predict</tt> function and its documentation were written by Chad A. Greene, June 2022.</p><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2021b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% |tmd_predict| documentation
 % |tmd_predict| constructs tidal predictions from the complex constituent 
@@ -323,7 +323,7 @@ end</pre><p><img vspace="5" hspace="5" src="arctic_tides.gif" alt=""> </p><h2 id
 % The |'flexure'| option scales tidal constituents by a predicted coefficient of tidal 
 % deflection for ice shelf grounding zones (for CATS only). A third option, |'unmask'|, does not apply 
 % any masking, which may be preferred close to coasts, where, for example, a tide gauge 
-% may exist between land and ocean grid cells. 
+% may exist between land and ocean grid cells. The |'unmask'| option is available for height only. 
 % 
 % |z = tmd_predict(...,'InferMinor',true_or_false)| specifies whether minor
 % constituents should be inferred (|true| or |false|). By default, minor constituents are
@@ -470,7 +470,7 @@ title 'Syowa station tide gauge'
 % what does the CATS model think? 
 
 % Predict tides at the location of interest: 
-sl_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'h');
+sl_cats = tmd_predict('CATS2008_v2023.nc',lat,lon,t,'h');
 
 % See how many tide predictions are finite: 
 sum(isfinite(sl_cats))
@@ -480,7 +480,7 @@ sum(isfinite(sl_cats))
 % the CATS model, so it gets NaN'd out by default. To un-NaN the
 % interpolation, choose the |'unmask'| option: 
 
-sl_cats = tmd_predict('CATS2008_update_2022-06-11.nc',lat,lon,t,'h','coasts','unmask');
+sl_cats = tmd_predict('CATS2008_v2023.nc',lat,lon,t,'h','coasts','unmask');
 sl_tpxo = tmd_predict('TPXO9_atlas_v5.nc',lat,lon,t,'h','coasts','unmask');
 
 % Plot observations "detided" by each model: 
@@ -507,7 +507,7 @@ y = 521366:-res:-38552;
 [Lat,Lon] = ps2ll(X,Y); % ll2ps is an AMT function.
 
 % Estimate ice shelf flexure at each point on the grid: 
-flex = tmd_interp('CATS2008_update_2022-06-11.nc','flexure',Lat,Lon); 
+flex = tmd_interp('CATS2008_v2023.nc','flexure',Lat,Lon); 
 
 figure
 h = imagesc(x,y,flex); 
@@ -558,7 +558,7 @@ text(xi(1),yi(1),'Flight path','color','r','fontsize',14,'vert','top')
 t = datenum('22-Jan-2000 03:28:00');
 
 % Predict tides along the flight path at time t: 
-fn = 'CATS2008_update_2022-06-11.nc';
+fn = 'CATS2008_v2023.nc';
 z_default = tmd_predict(fn,lati,loni,t,'h'); 
 z_unmask = tmd_predict(fn,lati,loni,t,'h','coasts','unmask'); 
 z_flexure = tmd_predict(fn,lati,loni,t,'h','coasts','flexure'); 
@@ -582,7 +582,7 @@ xlabel 'distance along profile (km)'
 
 %% Example: Drift track 
 % We've all been there. You've gassed up your dinghy, and you're about to
-% run some illegal substances from Miami Beach to Red Bay, Bahamas. You know 
+% make a clandestine run from Miami Beach to Red Bay, Bahamas. You know 
 % the trip will take 24 hours, but you're not sure what kind of tides
 % you'll experience along the way. Well, there's nothing to worry about,
 % because we have TMD! 
