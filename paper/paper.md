@@ -3,6 +3,7 @@ title: 'Tide Model Driver for MATLAB'
 tags:
   - MATLAB
   - tides
+  - oceanography
   - TMD
 authors:
   - name: Chad A. Greene
@@ -32,7 +33,7 @@ affiliations:
    index: 3
  - name: University of Washington Applied Physics Laboratory Polar Science Center, Seattle, WA, 98122, USA
    index: 4
-date: 19 July 2022
+date: 4 August 2023
 bibliography: paper.bib
 
 ---
