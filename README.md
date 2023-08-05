@@ -49,7 +49,7 @@ If you're not sure what function name you're looking for, just type `tmd` into t
 # Tutorials & More Documentation
 Be sure to check out the documentation for each of the **Main functions**. There, you'll find multiple examples of how to use each function. In addition, the following tutorials and other documentation may be of interest: 
 
-* [TMD Getting Started](doc/tmd_getting_started.md) 🚧
+* [TMD Getting Started](doc/tmd_getting_started.md)
 * [TMD Model file format](doc/TMD_model_file_format.md)
 * [Tide Model Intercomparison](doc/tide_model_intercomparison.md)
 * [How to: Analyze ADCP current data](doc/tutorial_currents.md)

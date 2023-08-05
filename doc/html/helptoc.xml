@@ -22,9 +22,9 @@
             <tocitem target="tmd_conlist_documentation.html">tmd_conlist</tocitem>
             <tocitem target="tmd_ellipse_documentation.html">tmd_ellipse</tocitem>
         </tocitem>
-        
 
         <tocitem target="TMD_main_page.html">Examples, etc 
+            <tocitem target="tmd_getting_started.html">Getting Started</tocitem>
             <tocitem target="TMD_model_file_format.html">TMD model file format</tocitem>
             <tocitem target="tide_model_intercomparison.html">Tide Model Intercomparison</tocitem>
             <tocitem target="tutorial_currents.html">How to: Analyze ADCP current data</tocitem>

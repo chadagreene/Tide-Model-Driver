@@ -46,7 +46,7 @@
 %% Tutorials & More Documentation
 % Be sure to check out the documentation for each of the *Main functions*. There, you'll find multiple examples of how to use each function. In addition, the following tutorials and other documentation may be of interest: 
 % 
-% * TMD Getting Started
+% * <tmd_getting_started.html TMD Getting Started>
 % * <TMD_model_file_format.html TMD Model file format> 
 % * <tide_model_intercomparison.html Tide Model Intercomparison>
 % * <tutorial_currents.html How to: Analyze ADCP current data>
