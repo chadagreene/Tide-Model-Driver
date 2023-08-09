@@ -1,7 +1,9 @@
 [&larr; Back to TMD3.0 Main Page](../README.md)
 
 # Getting Started with TMD
-This page contains the code from the introductory video tutorial found on youtube. 
+This page contains the code from the introductory video tutorial [found on youtube](https://www.youtube.com/watch?v=CYhErY6WNL8). 
+
+[![Getting Started with Tide Model Driver for MATLAB, version 3.0](https://img.youtube.com/vi/CYhErY6WNL8/0.jpg)](https://www.youtube.com/watch?v=CYhErY6WNL8 "Getting Started with Tide Model Driver for MATLAB, version 3.0")
 
 ## 1. Installing TMD 
 The first step toward getting started with TMD is to install the software on your computer. The installation process is described [here](installing_tmd.md).

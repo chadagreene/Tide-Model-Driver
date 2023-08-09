@@ -10,7 +10,8 @@
 %% TMD Functions
 % For most applications, |tmd_predict| is the only function you will need to call directly, although you may occasionally want |tmd_interp| to retrieve bathymetry, |tmd_ellipse| to get tidal current characteristics, or |tmd_conlist| for a quick list of tidal constituents in a given model. Complete documentation is provided for the functions whose names are hyperlinked below, and simple text documentation can be found in the headers of all functions. 
 % 
-% * Main functions:* 
+% *Main functions:* 
+%
 % * <tmd_predict_documentation.html *|tmd_predict|*> predicts tidal elevation, transport, or current velocities for given location(s) and time(s). 
 % * <tmd_interp_documentation.html *|tmd_interp|*> provides water column thickness, land/ocean mask, ice shelf flexure, and tidal constituent parameters at specified geographic locations, for a given tide model. 
 % * <tmd_data_documentation.html *|tmd_data|*> loads gridded tide model data without interpolation. 

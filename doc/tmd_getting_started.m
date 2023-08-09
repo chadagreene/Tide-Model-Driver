@@ -1,8 +1,8 @@
 %% Getting Started with TMD
 % <TMD_Contents.html Back to Tide Model Driver Contents>.
 % 
-% This page contains the code from the introductory video tutorial found 
-% on youtube. 
+% This page contains the code from the introductory video tutorial <https://www.youtube.com/watch?v=CYhErY6WNL8 found 
+% on youtube>. 
 %
 %% 1. Installing TMD 
 % The first step toward getting started with TMD is to install the software
