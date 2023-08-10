@@ -1,3 +1,5 @@
+[![View Tide Model Driver (TMD) version 3.0 on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/133417-tide-model-driver-tmd-version-3-0)
+
 # Tide Model Driver 3.0
 ![TMD logo](doc/markdown_figures/tmd_logo_v2.gif)
 Tide Model Driver for MATLAB, version 3.0. This is a fast, user-friendly, well-documented rewrite of [ESR](https://www.esr.org/)'s classic Tide Model Driver by [Svetlana Erofeeva](https://ceoas.oregonstate.edu/svetlana-erofeeva).
