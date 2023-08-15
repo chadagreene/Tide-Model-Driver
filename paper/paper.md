@@ -9,7 +9,7 @@ authors:
   - name: Chad A. Greene
     orcid: 0000-0001-6710-6297 
     corresponding: true
-    affiliation: " " # (Multiple affiliations must be quoted)
+    affiliation: 1 # (Multiple affiliations must be quoted)
   - name: Svetlana Erofeeva
     orcid: 0000-0002-4489-7505 
     affiliation: 2
@@ -25,8 +25,8 @@ authors:
   - name: Gary Egbert
     affiliation: 2
 affiliations:
- - name: 
-   index: 
+ - name: Institute for Geophysics, John A. and Katherine G. Jackson School of Geosciences, University of Texas at Austin, Austin, TX, USA
+   index: 1 
  - name: College of Earth, Ocean, and Atmospheric Sciences, Oregon State University, Corvallis, OR, USA
    index: 2
  - name: Earth and Space Research, Corvallis, OR, USA
