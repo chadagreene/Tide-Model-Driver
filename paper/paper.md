@@ -26,7 +26,7 @@ authors:
     affiliation: 2
 affiliations:
  - name: 
-   index: 1
+   index: 
  - name: College of Earth, Ocean, and Atmospheric Sciences, Oregon State University, Corvallis, OR, USA
    index: 2
  - name: Earth and Space Research, Corvallis, OR, USA
