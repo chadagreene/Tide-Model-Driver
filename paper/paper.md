@@ -9,30 +9,28 @@ authors:
   - name: Chad A. Greene
     orcid: 0000-0001-6710-6297 
     corresponding: true
-    affiliation: 1 # (Multiple affiliations must be quoted)
+    affiliation:  # (Multiple affiliations must be quoted)
   - name: Svetlana Erofeeva
     orcid: 0000-0002-4489-7505 
-    affiliation: 2
+    affiliation: 1
   - name: Laurie Padman
     orcid: 0000-0003-2010-642X
-    affiliation: 3
+    affiliation: 2
   - name: Susan L. Howard
     orcid: 0000-0002-9183-0178 
-    affiliation: 3
+    affiliation: 2
   - name: Tyler Sutterley
     orcid: 0000-0002-6964-1194  
-    affiliation: 4
+    affiliation: 3
   - name: Gary Egbert
-    affiliation: 2
+    affiliation: 1
 affiliations:
- - name: Jet Propulsion Laboratory, California Institute of Technology, Pasadena, CA, USA
-   index: 1
  - name: College of Earth, Ocean, and Atmospheric Sciences, Oregon State University, Corvallis, OR, USA
-   index: 2
+   index: 1
  - name: Earth and Space Research, Corvallis, OR, USA
-   index: 3
+   index: 2
  - name: University of Washington Applied Physics Laboratory Polar Science Center, Seattle, WA, 98122, USA
-   index: 4
+   index: 3
 date: 4 August 2023
 bibliography: paper.bib
 
