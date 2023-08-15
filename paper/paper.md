@@ -9,7 +9,6 @@ authors:
   - name: Chad A. Greene
     orcid: 0000-0001-6710-6297 
     corresponding: true
-    #affiliation: 1 # (Multiple affiliations must be quoted)
   - name: Svetlana Erofeeva
     orcid: 0000-0002-4489-7505 
     affiliation: 2
