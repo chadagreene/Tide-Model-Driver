@@ -1,4 +1,5 @@
 [![View Tide Model Driver (TMD) version 3.0 on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/133417-tide-model-driver-tmd-version-3-0)
+ [![status](https://joss.theoj.org/papers/228e6fd7edc42dc6d443ce60feef8c6d/status.svg)](https://joss.theoj.org/papers/228e6fd7edc42dc6d443ce60feef8c6d)
 
 # Tide Model Driver 3.0
 ![TMD logo](doc/markdown_figures/tmd_logo_v2.gif)
