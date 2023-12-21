@@ -81,3 +81,6 @@ Don't like MATLAB? No worries, just try one of these alternatives:
 We are working on a proper literature citation. For now, if you use TMD3.0, please cite the following: 
 
 [Chad A. Greene](https://github.com/chadagreene), [Svetlana Erofeeva](https://ceoas.oregonstate.edu/svetlana-erofeeva), [Laurie Padman](https://github.com/LPadman), [Susan Howard](https://github.com/slhowardESR), [Tyler Sutterley](https://github.com/tsutterley), and [Gary Egbert](https://ceoas.oregonstate.edu/people/gary-egbert) (2023). The Tide Model Driver for MATLAB, version 3.0. [https://github.com/chadagreene/Tide-Model-Driver](https://github.com/chadagreene/Tide-Model-Driver).
+
+# How to contribute
+If you find a bug or have suggestions for how to improve TMD, please [open up an issue](https://github.com/chadagreene/Tide-Model-Driver/issues). 
