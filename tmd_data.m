@@ -10,7 +10,9 @@ function [Z,x_or_lon,y_or_lat,conList] = tmd_data(filename,variable,varargin)
 %
 %% Description 
 % 
-% [Z,x_or_lon,y_or_lat] = tmd_data(filename,variable)
+% [Z,x_or_lon,y_or_lat] = tmd_data(filename,variable) loads any of the following
+% variables from a given tide model file along with projected x,y model 
+% coordinates: 
 % 
 %  * 'h'   complex tidal height (m)  
 %  * 'hRe' real part of tidal height

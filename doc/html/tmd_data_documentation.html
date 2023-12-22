@@ -1,12 +1,17 @@
-
-<!DOCTYPE html
-  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head>
-      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-   <!--
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>tmd_data</title><meta name="generator" content="MATLAB 9.10"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2022-06-13"><meta name="DC.source" content="tmd_data_documentation.m"><style type="text/css">
+      -->
+<title>tmd_data documentation</title>
+<meta name="generator" content="MATLAB 23.2">
+<link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
+<meta name="DC.date" content="2023-12-22">
+<meta name="DC.source" content="tmd_data_documentation.m">
+<style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -67,26 +72,152 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1><tt>tmd_data</tt></h1><!--introduction--><p><tt>tmd_data</tt> loads tide model data into the Matlab workspace.</p><p><a href="TMD_Contents.html">Back to Tide Model Driver Contents</a>.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Syntax</a></li><li><a href="#2">Description</a></li><li><a href="#3">Example: Exploring tide model data</a></li><li><a href="#5">Example: Water column thickness</a></li><li><a href="#6">Example: Geographic coordinates from a regional model</a></li><li><a href="#7">Example: Constituent amplitude and phase</a></li><li><a href="#8">Example: A global model</a></li><li><a href="#9">Example: Load a small area of data</a></li><li><a href="#10">Author Info</a></li></ul></div><h2 id="1">Syntax</h2><pre>[Z,x,y] = tmd_data(filename,variable)
+  </style>
+</head>
+<body>
+<div class="content">
+<h1>
+<tt>tmd_data</tt> documentation</h1>
+<!--introduction-->
+<p>
+<tt>tmd_data</tt> loads tide model data into the Matlab workspace.</p>
+<p>
+<a href="TMD_Contents.html">Back to Tide Model Driver Contents</a>.</p>
+<!--/introduction-->
+<h2>Contents</h2>
+<div>
+<ul>
+<li>
+<a href="#1">Syntax</a>
+</li>
+<li>
+<a href="#2">Description</a>
+</li>
+<li>
+<a href="#3">Example: Exploring tide model data</a>
+</li>
+<li>
+<a href="#5">Example: Water column thickness</a>
+</li>
+<li>
+<a href="#6">Example: Geographic coordinates from a regional model</a>
+</li>
+<li>
+<a href="#7">Example: Constituent amplitude and phase</a>
+</li>
+<li>
+<a href="#8">Example: A global model</a>
+</li>
+<li>
+<a href="#9">Example: Load a small area of data</a>
+</li>
+<li>
+<a href="#10">Author Info</a>
+</li>
+</ul>
+</div>
+<h2 id="1">Syntax</h2>
+<pre>[Z,x,y] = tmd_data(filename,variable)
 [...] = tmd_data(...,'constituents',conList)
 [...] = tmd_data(...,'bounds',[xi yi])
 [Z,lon,lat] = tmd_data(...,'geo')
-[...,cons] = tmd_data(...)</pre><h2 id="2">Description</h2><p><tt>[Z,x,y] = tmd_data(filename,variable)</tt> loads any of the following variables from a given tide model file:</p><div><ul><li><tt>'h'</tt>   complex tidal height (m)</li><li><tt>'hRe'</tt> real part of tidal height</li><li><tt>'hIm'</tt> imaginary part of tidal height</li><li><tt>'hAm'</tt> amplitude of tidal height</li><li><tt>'hPh'</tt> phase of tidal height</li><li><tt>'u'</tt>   complex zonal velocity (m/s)</li><li><tt>'uRe'</tt> real part of zonal velocity</li><li><tt>'uIm'</tt> imaginary part of zonal velocity</li><li><tt>'uAm'</tt> amplitude of zonal velocity</li><li><tt>'uPh'</tt> phase of zonal velocity</li><li><tt>'U'</tt>   complex zonal transport (m^2/s)</li><li><tt>'URe'</tt>  real part of zonal transport</li><li><tt>'UIm'</tt> imaginary part of zonal transport</li><li><tt>'UAm'</tt> amplitude of zonal transport</li><li><tt>'UPh'</tt> phase of zonal transport</li><li><tt>'v'</tt>   complex meridional velocity (m/s)</li><li><tt>'vRe'</tt> real part of meridional velocity</li><li><tt>'vIm'</tt> imaginary part of meridional velocity</li><li><tt>'vAm'</tt> amplitude of meridional velocity</li><li><tt>'vPh'</tt> phase of meridional velocity</li><li><tt>'V'</tt>   complex meridional transport (m^2/s)</li><li><tt>'VRe'</tt> real part of meridional transport</li><li><tt>'VIm'</tt> imaginary part of meridional transport</li><li><tt>'VAm'</tt> amplitude of meridional transport</li><li><tt>'VPh'</tt> phase of meridional transport</li><li><tt>'wct'</tt> water column thickness (m)</li><li><tt>'mask'</tt> binary land/ocean mask</li><li><tt>'flexure'</tt> ice shelf flexure coefficient from a linear elastic model applied to BedMachine ice thickness (can slightly exceed 1). Only for CATS model.</li></ul></div><p><tt>[...] = tmd_data(...,'constituents',conList)</tt> specifies tidal constituents as a cell array (e.g, <tt>{'m2','s2'}</tt>). If constituents are not specified, all model constituents are returned.</p><p><tt>[...] = tmd_data(...,'bounds',[xi yi])</tt> enter an Mx2 matrix of coordinates to only load data in a rectangle around the specified <tt>[xi(:) yi(:)]</tt> where <tt>xi</tt> and <tt>yi</tt> are projected coordinates for tide models that are in projected coordinates. For tide models in geo coordinates (global tide models, generally), <tt>xi</tt> refers to longitudes of interest and <tt>yi</tt> is latitudes of interest. The advantage of specifying bounds is to minimize the amount of data that are loaded, when only a small area within a larger tide model is of interest.</p><p><tt>[Z,lon,lat] = tmd_data(...,'geo')</tt> returns grid coordinates as geographic coordinates. This is the default behavior for global models, whereas regional models return projected coordinates by default.</p><p><tt>[...,cons] = tmd_data(...)</tt> returns a list of constituents in the model.</p><h2 id="3">Example: Exploring tide model data</h2><p>Explore the model data for the height variable <tt>h</tt> in the CATS model. (Here I'm defining <tt>fn</tt> as the filename of the version of CATS I'm working on at the moment, but you may have a different model filename.)</p><pre class="codeinput"><span class="comment">% Filename:</span>
-fn = <span class="string">'CATS2008_update_2022-06-11.nc'</span>;
+[...,cons] = tmd_data(...)</pre>
+<h2 id="2">Description</h2>
+<p>
+<tt>[Z,x,y] = tmd_data(filename,variable)</tt> loads any of the following variables from a given tide model file along with projected x,y model coordinates:</p>
+<div>
+<ul>
+<li>
+<tt>'h'</tt> complex tidal height (m)</li>
+<li>
+<tt>'hRe'</tt> real part of tidal height</li>
+<li>
+<tt>'hIm'</tt> imaginary part of tidal height</li>
+<li>
+<tt>'hAm'</tt> amplitude of tidal height</li>
+<li>
+<tt>'hPh'</tt> phase of tidal height</li>
+<li>
+<tt>'u'</tt> complex zonal velocity (m/s)</li>
+<li>
+<tt>'uRe'</tt> real part of zonal velocity</li>
+<li>
+<tt>'uIm'</tt> imaginary part of zonal velocity</li>
+<li>
+<tt>'uAm'</tt> amplitude of zonal velocity</li>
+<li>
+<tt>'uPh'</tt> phase of zonal velocity</li>
+<li>
+<tt>'U'</tt> complex zonal transport (m^2/s)</li>
+<li>
+<tt>'URe'</tt> real part of zonal transport</li>
+<li>
+<tt>'UIm'</tt> imaginary part of zonal transport</li>
+<li>
+<tt>'UAm'</tt> amplitude of zonal transport</li>
+<li>
+<tt>'UPh'</tt> phase of zonal transport</li>
+<li>
+<tt>'v'</tt> complex meridional velocity (m/s)</li>
+<li>
+<tt>'vRe'</tt> real part of meridional velocity</li>
+<li>
+<tt>'vIm'</tt> imaginary part of meridional velocity</li>
+<li>
+<tt>'vAm'</tt> amplitude of meridional velocity</li>
+<li>
+<tt>'vPh'</tt> phase of meridional velocity</li>
+<li>
+<tt>'V'</tt> complex meridional transport (m^2/s)</li>
+<li>
+<tt>'VRe'</tt> real part of meridional transport</li>
+<li>
+<tt>'VIm'</tt> imaginary part of meridional transport</li>
+<li>
+<tt>'VAm'</tt> amplitude of meridional transport</li>
+<li>
+<tt>'VPh'</tt> phase of meridional transport</li>
+<li>
+<tt>'wct'</tt> water column thickness (m)</li>
+<li>
+<tt>'mask'</tt> binary land/ocean mask</li>
+<li>
+<tt>'flexure'</tt> ice shelf flexure coefficient from a linear elastic model applied to BedMachine ice thickness (can slightly exceed 1). Only for CATS model.</li>
+</ul>
+</div>
+<p>
+<tt>[...] = tmd_data(...,'constituents',conList)</tt> specifies tidal constituents as a cell array (e.g, <tt>{'m2','s2'}</tt>). If constituents are not specified, all model constituents are returned.</p>
+<p>
+<tt>[...] = tmd_data(...,'bounds',[xi yi])</tt> enter an Mx2 matrix of coordinates to only load data in a rectangle around the specified <tt>[xi(:) yi(:)]</tt> where <tt>xi</tt> and <tt>yi</tt> are projected coordinates for tide models that are in projected coordinates. For tide models in geo coordinates (global tide models, generally), <tt>xi</tt> refers to longitudes of interest and <tt>yi</tt> is latitudes of interest. The advantage of specifying bounds is to minimize the amount of data that are loaded, when only a small area within a larger tide model is of interest.</p>
+<p>
+<tt>[Z,lon,lat] = tmd_data(...,'geo')</tt> returns grid coordinates as geographic coordinates. This is the default behavior for global models, whereas regional models return projected coordinates by default.</p>
+<p>
+<tt>[...,cons] = tmd_data(...)</tt> returns a list of constituents in the model.</p>
+<h2 id="3">Example: Exploring tide model data</h2>
+<p>Explore the model data for the height variable <tt>h</tt> in the CATS model. (Here I'm defining <tt>fn</tt> as the filename of the version of CATS I'm working on at the moment, but you may have a different model filename.)</p>
+<pre class="codeinput">
+<span class="comment">% Filename:</span>
+fn = <span class="string">'CATS2008_v2023.nc'</span>;
 
 <span class="comment">% Load complex height coefficients:</span>
 [h,x,y,cons] = tmd_data(fn,<span class="string">'h'</span>);
 
 <span class="comment">% Examine outputs:</span>
 whos <span class="string">h</span> <span class="string">x</span> <span class="string">y</span> <span class="string">cons</span>
-</pre><pre class="codeoutput">  Name         Size                      Bytes  Class     Attributes
+</pre>
+<pre class="codeoutput">  Name         Size                      Bytes  Class     Attributes
 
   cons         1x10                       1080  cell                
   h         4051x3325x10            2155132000  double    complex   
   x         3325x1                       26600  double              
   y         4051x1                       32408  double              
 
-</pre><p>Above, we see that <tt>h</tt> is a complex variable whose dimensions correspond to <tt>y</tt>, <tt>x</tt>, and the constituents in the model.</p><h2 id="5">Example: Water column thickness</h2><p>Using the same CATS filename <tt>fn</tt> we defined above, load and plot the water column thickness:</p><pre class="codeinput"><span class="comment">% Load water column thickness:</span>
+</pre>
+<p>Above, we see that <tt>h</tt> is a complex variable whose dimensions correspond to <tt>y</tt>, <tt>x</tt>, and the constituents in the model.</p>
+<h2 id="5">Example: Water column thickness</h2>
+<p>Using the same CATS filename <tt>fn</tt> we defined above, load and plot the water column thickness:</p>
+<pre class="codeinput">
+<span class="comment">% Load water column thickness:</span>
 [wct,x,y] = tmd_data(fn,<span class="string">'wct'</span>);
 
 figure
@@ -97,7 +228,11 @@ ylabel <span class="string">'y (kilometers')</span>
 cb = colorbar;
 ylabel(cb,<span class="string">'water column thickness (m)'</span>)
 cmocean <span class="string">deep</span> <span class="comment">% optional colormap</span>
-</pre><img vspace="5" hspace="5" src="tmd_data_documentation_01.png" alt=""> <h2 id="6">Example: Geographic coordinates from a regional model</h2><p>You see above that the regional CATS model was generated in a nonstandard projection. If you don't want to work in the CATS model coordinates, you can unproject them yourself with <tt>tmd_ps2ll</tt> or you can include the <tt>'geo'</tt> flag to get the geographic coordinates when you call <tt>tmd_data</tt>.</p><p>Below, I'm plotting with <a href="https://github.com/chadagreene/Antarctic-Mapping-Tools">Antarctic Mapping Tools'</a> <tt>pcolorps</tt> function, but you can use <tt>lat</tt> and <tt>lon</tt> with any geographic plotting functions like MATLAB's <tt>pcolorm</tt> or M_Map's <tt>m_pcolor</tt>:</p><pre class="codeinput">[wct,lon,lat] = tmd_data(fn,<span class="string">'wct'</span>,<span class="string">'geo'</span>);
+</pre>
+<img vspace="5" hspace="5" src="tmd_data_documentation_01.png" alt=""> <h2 id="6">Example: Geographic coordinates from a regional model</h2>
+<p>You see above that the regional CATS model was generated in a nonstandard projection. If you don't want to work in the CATS model coordinates, you can unproject them yourself with <tt>tmd_ps2ll</tt> or you can include the <tt>'geo'</tt> flag to get the geographic coordinates when you call <tt>tmd_data</tt>.</p>
+<p>Below, I'm plotting with <a href="https://github.com/chadagreene/Antarctic-Mapping-Tools">Antarctic Mapping Tools'</a> <tt>pcolorps</tt> function, but you can use <tt>lat</tt> and <tt>lon</tt> with any geographic plotting functions like MATLAB's <tt>pcolorm</tt> or M_Map's <tt>m_pcolor</tt>:</p>
+<pre class="codeinput">[wct,lon,lat] = tmd_data(fn,<span class="string">'wct'</span>,<span class="string">'geo'</span>);
 
 figure
 pcolorps(lat,lon,wct) <span class="comment">% requires AMT</span>
@@ -107,7 +242,10 @@ ylabel(cb,<span class="string">'water column thickness (m)'</span>)
 cmocean <span class="string">deep</span> <span class="comment">% optional colormap</span>
 axis <span class="string">tight</span> <span class="string">off</span>
 graticuleps <span class="comment">% geographic grid lines</span>
-</pre><img vspace="5" hspace="5" src="tmd_data_documentation_02.png" alt=""> <h2 id="7">Example: Constituent amplitude and phase</h2><p>Here's how you may load and plot the amplitude and phase of the s2 constituent from a model file:</p><pre class="codeinput">[hAm,x,y] = tmd_data(fn,<span class="string">'hAm'</span>,<span class="string">'constituents'</span>,<span class="string">'s2'</span>);
+</pre>
+<img vspace="5" hspace="5" src="tmd_data_documentation_02.png" alt=""> <h2 id="7">Example: Constituent amplitude and phase</h2>
+<p>Here's how you may load and plot the amplitude and phase of the s2 constituent from a model file:</p>
+<pre class="codeinput">[hAm,x,y] = tmd_data(fn,<span class="string">'hAm'</span>,<span class="string">'constituents'</span>,<span class="string">'s2'</span>);
 hPh = tmd_data(fn,<span class="string">'hPh'</span>,<span class="string">'constituents'</span>,<span class="string">'s2'</span>);
 ocean = tmd_data(fn,<span class="string">'mask'</span>);
 
@@ -124,7 +262,11 @@ contour(x,y,rad2deg(hPh),-180:30:180,<span class="string">'k'</span>)
 xlabel <span class="string">'easting (km)'</span>
 ylabel <span class="string">'northing (km)'</span>
 caxis([0 1.2])
-</pre><img vspace="5" hspace="5" src="tmd_data_documentation_03.png" alt=""> <h2 id="8">Example: A global model</h2><p>Working with global models is very similar to working with regional models. The only real difference is we let lon=x and lat=y. Here's an example:</p><pre class="codeinput"><span class="comment">% Load the M2 global tidal height amplitude:</span>
+</pre>
+<img vspace="5" hspace="5" src="tmd_data_documentation_03.png" alt=""> <h2 id="8">Example: A global model</h2>
+<p>Working with global models is very similar to working with regional models. The only real difference is we let lon=x and lat=y. Here's an example:</p>
+<pre class="codeinput">
+<span class="comment">% Load the M2 global tidal height amplitude:</span>
 [M2,lon,lat] = tmd_data(<span class="string">'TPXO9_atlas_v5.nc'</span>,<span class="string">'hAm'</span>,<span class="string">'constituents'</span>,<span class="string">'m2'</span>);
 
 <span class="comment">% Load the global ocean mask:</span>
@@ -140,7 +282,12 @@ xlabel(<span class="string">'longitude'</span>)
 ylabel(<span class="string">'latitude'</span>)
 caxis([0 2])
 cmocean <span class="string">amp</span> <span class="comment">% optional colormap</span>
-</pre><img vspace="5" hspace="5" src="tmd_data_documentation_04.png" alt=""> <h2 id="9">Example: Load a small area of data</h2><p>Let's say you want to use a global tide model, but you're only interested in the ocean around India. In such cases, you may not want to load the entire global dataset, so load the data surrounding your region of interest by specifiying the bounds as an Nx2 array, defining any number N data points whose x (or longitude for a global model) values are the first column, and y values (or latitude for a global model) are the second column.</p><p>Below, I'm setting the colormap with the <tt>cmocean</tt> function, and adding hillshade with <tt>shadem</tt>, both of which are in the <a href="https://github.com/chadagreene/CDT">Climate Data Toolbox for Matlab</a> (Greene et al., 2019).</p><pre class="codeinput"><span class="comment">% Some points defining your region of interest:</span>
+</pre>
+<img vspace="5" hspace="5" src="tmd_data_documentation_04.png" alt=""> <h2 id="9">Example: Load a small area of data</h2>
+<p>Let's say you want to use a global tide model, but you're only interested in the ocean around India. In such cases, you may not want to load the entire global dataset, so load the data surrounding your region of interest by specifiying the bounds as an Nx2 array, defining any number N data points whose x (or longitude for a global model) values are the first column, and y values (or latitude for a global model) are the second column.</p>
+<p>Below, I'm setting the colormap with the <tt>cmocean</tt> function, and adding hillshade with <tt>shadem</tt>, both of which are in the <a href="https://github.com/chadagreene/CDT">Climate Data Toolbox for Matlab</a> (Greene et al., 2019).</p>
+<pre class="codeinput">
+<span class="comment">% Some points defining your region of interest:</span>
 loni = [63.57 56.40 56.77 57.88 76.30 85.81 98.67 98.29 82.47];
 lati = [26.36 23.77 10.30  1.03  1.15  2.26  6.84 23.89 26.61];
 
@@ -164,9 +311,18 @@ xlabel <span class="string">'longitude'</span>
 ylabel <span class="string">'latitude'</span>
 cmocean <span class="string">deep</span> <span class="comment">% optional colormap</span>
 shadem(-13) <span class="comment">% a tiny bit of hillshade</span>
-</pre><img vspace="5" hspace="5" src="tmd_data_documentation_05.png" alt=""> <h2 id="10">Author Info</h2><p>The <tt>tmd_data</tt> function and its documentation were written by Chad A. Greene, June 2022.</p><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2021a</a><br></p></div><!--
+</pre>
+<img vspace="5" hspace="5" src="tmd_data_documentation_05.png" alt=""> <h2 id="10">Author Info</h2>
+<p>The <tt>tmd_data</tt> function and its documentation were written by Chad A. Greene, June 2022.</p>
+<p class="footer">
+<br>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2023b</a>
+<br>
+</p>
+</div>
+<!--
 ##### SOURCE BEGIN #####
-%% |tmd_data|
+%% |tmd_data| documentation 
 % |tmd_data| loads tide model data into the Matlab workspace. 
 % 
 % <TMD_Contents.html Back to Tide Model Driver Contents>.
@@ -181,7 +337,8 @@ shadem(-13) <span class="comment">% a tiny bit of hillshade</span>
 %% Description 
 % 
 % |[Z,x,y] = tmd_data(filename,variable)| loads any of the following
-% variables from a given tide model file: 
+% variables from a given tide model file along with projected x,y model 
+% coordinates: 
 % 
 % * |'h'|   complex tidal height (m)  
 % * |'hRe'| real part of tidal height
@@ -237,7 +394,7 @@ shadem(-13) <span class="comment">% a tiny bit of hillshade</span>
 % working on at the moment, but you may have a different model filename.)
 
 % Filename: 
-fn = 'CATS2008_update_2022-06-11.nc';
+fn = 'CATS2008_v2023.nc';
 
 % Load complex height coefficients:
 [h,x,y,cons] = tmd_data(fn,'h'); 
@@ -372,4 +529,6 @@ shadem(-13) % a tiny bit of hillshade
 % The |tmd_data| function and its documentation were written by Chad A.
 % Greene, June 2022. 
 ##### SOURCE END #####
---></body></html>
+-->
+</body>
+</html>

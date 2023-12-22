@@ -13,7 +13,8 @@
 %% Description 
 % 
 % |[Z,x,y] = tmd_data(filename,variable)| loads any of the following
-% variables from a given tide model file: 
+% variables from a given tide model file along with projected x,y model 
+% coordinates: 
 % 
 % * |'h'|   complex tidal height (m)  
 % * |'hRe'| real part of tidal height

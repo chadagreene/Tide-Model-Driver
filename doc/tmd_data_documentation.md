@@ -15,7 +15,7 @@ See also: [`tmd_interp`](tmd_interp_documentation.md) and [`tmd_predict`](tmd_pr
 ```
 ## Description 
 
-`[Z,x,y] = tmd_data(filename,variable)` loads any of the following variables from a given tide model file: 
+`[Z,x,y] = tmd_data(filename,variable)` loads any of the following variables from a given tide model file along with projected x,y model coordinates: 
 
 * `'h'`   complex tidal height (m)  
 * `'hRe'` real part of tidal height
