@@ -15,7 +15,7 @@ z = tmd_predict(...,'InferMinor',true_or_false)
 ```
 ## Description 
 
-`z = tmd_predict(filename,lat,lon,time)` predicts tide heights at the specified `lat,lon` and `time`, using the TMD3.0 compatible consolidated NetCDF tide model data file. Location(s) `lat,lon` are decimal degrees, and can be scalars, vectors, or MxN arrays. Input `time` can be datetime or MATLAB's datenum format, and must be a scalar or a 1D vector. 
+`z = tmd_predict(filename,lat,lon,time)` predicts tide heights at the specified `lat,lon` and `time`, using the TMD3.0 compatible consolidated NetCDF tide model data file. Location(s) `lat,lon` are decimal degrees, and can be scalars, vectors, or MxN arrays. Longitude can be -180 to 180 or 0 to 360 range. Input `time` can be datetime or MATLAB's datenum format, and must be a scalar or a 1D vector. 
 
 `z = tmd_predict(filename,lat,lon,time,ptype)` specifies a solution type. If `ptype` is not specified, `'h'` is the assumed `ptype`. Note the `ptype` is case sensitive! Options for `ptype` are: 
 
@@ -35,6 +35,9 @@ z = tmd_predict(...,'InferMinor',true_or_false)
 This example uses data from a tide gauge near Nuuk, Greenland. The example data is in the `doc/example_data` folder of this toolbox. 
 
 Start by loading the tide gauge data, then predict tides at that location using the 15 constituent global `TPXO9_atlas_v5` model and the 8 constituent `Gr1kmTM` regional model.  
+
+
+(Below, we're adding `datenum(1800,1,1,0,0,0)` to the time array because the tide gauge NetCDF is in units of `days since 1800-01-01 00:00:00` while MATLAB's `datenum` format is referenced to year zero.)
 
 ```matlab
 % Load tide gauge data: 
