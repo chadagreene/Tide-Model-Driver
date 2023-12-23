@@ -53,6 +53,7 @@ If you're not sure what function name you're looking for, just type `tmd` into t
 Be sure to check out the documentation for each of the **Main functions**. There, you'll find multiple examples of how to use each function. In addition, the following tutorials and other documentation may be of interest: 
 
 * [TMD Getting Started](doc/tmd_getting_started.md)
+* [What's new in TMD 3.0?](doc/whats_new.md)
 * [TMD Model file format](doc/TMD_model_file_format.md)
 * [Tide Model Intercomparison](doc/tide_model_intercomparison.md)
 * [How to: Analyze ADCP current data](doc/tutorial_currents.md)
@@ -60,15 +61,6 @@ Be sure to check out the documentation for each of the **Main functions**. There
 ](doc/tutorial_EOT.md)
 * [How to: Calculate tidal range](doc/tutorial_tidal_range.md)
 * [How to: Animate tidal motion](doc/tmd_logo_animation.md)
-
-# What's new in TMD 3.0?
-TMD3.0 is a rewrite of the [Tide Model Driver for MATLAB v2.5](https://github.com/EarthAndSpaceResearch/TMD_Matlab_Toolbox_v2.5). The goal of this update was to create a clean, efficient set of functions that are well documented, easy to use, and easy to debug. We also wanted to reduce the size, complexity, and overall hassle of dealing with multi-file or binary tide model data files. The biggest changes in this update to TMD3.0 are as follows: 
-
-* Introduced a new, [consolidated NetCDF model data format](doc/TMD_model_file_format.md).  
-* All functions rewritten for improved performance (*much faster* and lower memory usage than TMD2.5). 
-* Most functions were renamed and inputs have changed to make them more intuitive and easier to use.
-* All new documentation.
-* Updated the CATS2008 model, as described [here](doc/cats2008_updates.md).
 
 # Alternatives to MATLAB
 Don't like MATLAB? No worries, just try one of these alternatives: 

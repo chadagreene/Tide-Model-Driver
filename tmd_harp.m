@@ -18,7 +18,7 @@ function hhat = tmd_harp(t,hc,constituents,p,N,ph,omega)
 %    p: lunar perigee p given by the tmd_astrol function. (size Tx1), 
 %    N: ascending lunar node N given by the tmd_astrol function (size Tx1), 
 %    ph: astronomical phase given by the tmd_constit function (size Cx1), 
-%    omega: frequency given by the tmd_constit function (size Cx1). 
+%    omega: frequency given by the tmd_constit function (size Cx1) units s^-1. 
 % 
 % Outpus: 
 %    hhat: reconstructed tide (size Tx1).
