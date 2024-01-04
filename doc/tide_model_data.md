@@ -12,7 +12,7 @@ Barotropic ocean models contain complex tidal coefficients for water height and 
 	* **Resolution:** 1/30 degree.
 	* **Constituents:** 15: 2n2 k1 k2 m2 m4 mf mm mn4 ms4 n2 o1 p1 q1 s1 s2.
 	* **Restrictions:** For noncommercial use only (contact Gary Egbert or Svetlana Erofeeva otherwise). 
-	* **Data Access:** Coming soon [1.6 GB]. This data will be available from a proper repository soon. In the meantime, you may attempt to create your own data file yourself using [`TPXO9_atlas_v5_to_NetCDF.m`](https://github.com/chadagreene/Tide-Model-Driver/blob/main/tide-model-conversions/TPXO9_atlas_v5_to_NetCDF.m) (be warned, the script is not very user friendly and may take hours to run) or email me at chad@chadagreene.com to check the current status. 
+	* **Data Access:** Coming soon [1.6 GB]. This data will be available from a proper repository soon. In the meantime, you may create your own data file yourself using [`TPXO9_atlas_v5_to_NetCDF.m`](https://github.com/chadagreene/Tide-Model-Driver/blob/main/tide-model-conversions/TPXO9_atlas_v5_to_NetCDF.m) (be warned, the script is not very user friendly and may take hours to run) or email me at chad@chadagreene.com to check the current status. 
 	* **Website:** [https://www.tpxo.net/global/tpxo9-atlas](https://www.tpxo.net/global/tpxo9-atlas)
 	* **Data Citation:** Egbert, G. D., and Erofeeva, S. Y. (2002). Efficient inverse modeling of barotropic ocean tides. *Journal of Atmospheric and Oceanic Technology* 19(2), 183-204.
 	
