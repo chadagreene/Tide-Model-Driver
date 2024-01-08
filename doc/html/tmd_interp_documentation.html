@@ -1,12 +1,17 @@
-
-<!DOCTYPE html
-  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head>
-      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-   <!--
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>tmd_interp documentation</title><meta name="generator" content="MATLAB 9.11"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2023-04-16"><meta name="DC.source" content="tmd_interp_documentation.m"><style type="text/css">
+      -->
+<title>tmd_interp documentation</title>
+<meta name="generator" content="MATLAB 23.2">
+<link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
+<meta name="DC.date" content="2024-01-08">
+<meta name="DC.source" content="tmd_interp_documentation.m">
+<style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -67,9 +72,121 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1><tt>tmd_interp</tt> documentation</h1><!--introduction--><p><tt>tmd_interp</tt> interpolates tide model data at specified geographic locations.</p><p><a href="TMD_Contents.html">Back to Tide Model Driver Contents</a>.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Syntax</a></li><li><a href="#2">Description</a></li><li><a href="#3">Example: Global Model</a></li><li><a href="#4">Example: Regional Model</a></li><li><a href="#6">Example: Multiple constituents</a></li><li><a href="#8">Example: Ice shelf flexure</a></li><li><a href="#10">Author Info</a></li></ul></div><h2 id="1">Syntax</h2><pre>zi = tmd_interp(filename,variable,lati,loni)
+  </style>
+</head>
+<body>
+<div class="content">
+<h1>
+<tt>tmd_interp</tt> documentation</h1>
+<!--introduction-->
+<p>
+<tt>tmd_interp</tt> interpolates tide model data at specified geographic locations.</p>
+<p>
+<a href="TMD_Contents.html">Back to Tide Model Driver Contents</a>.</p>
+<!--/introduction-->
+<h2>Contents</h2>
+<div>
+<ul>
+<li>
+<a href="#1">Syntax</a>
+</li>
+<li>
+<a href="#2">Description</a>
+</li>
+<li>
+<a href="#3">Example: Global Model</a>
+</li>
+<li>
+<a href="#4">Example: Regional Model</a>
+</li>
+<li>
+<a href="#6">Example: Multiple constituents</a>
+</li>
+<li>
+<a href="#8">Example: Ice shelf flexure</a>
+</li>
+<li>
+<a href="#10">Author Info</a>
+</li>
+</ul>
+</div>
+<h2 id="1">Syntax</h2>
+<pre>zi = tmd_interp(filename,variable,lati,loni)
 zi = tmd_interp(...,'constituents',conList)
-zi = tmd_interp(...,'coasts',MaskingMethod)</pre><h2 id="2">Description</h2><p><tt>zi = tmd_interp(filename,variable,lati,loni)</tt> uses the NetCDF tide model specified by <tt>filename</tt> to interpolate a specified variable at the geographic coordinates <tt>lati,loni</tt>. The variable can be:</p><div><ul><li><tt>'h'</tt>   complex tidal height (m)</li><li><tt>'hRe'</tt> real part of tidal height</li><li><tt>'hIm'</tt> imaginary part of tidal height</li><li><tt>'hAm'</tt> amplitude of tidal height</li><li><tt>'hPh'</tt> phase of tidal height</li><li><tt>'u'</tt>   complex zonal velocity (m/s)</li><li><tt>'uRe'</tt> real part of zonal velocity</li><li><tt>'uIm'</tt> imaginary part of zonal velocity</li><li><tt>'uAm'</tt> amplitude of zonal velocity</li><li><tt>'uPh'</tt> phase of zonal velocity</li><li><tt>'U'</tt>   complex zonal transport (m^2/s)</li><li><tt>'URe'</tt>  real part of zonal transport</li><li><tt>'UIm'</tt> imaginary part of zonal transport</li><li><tt>'UAm'</tt> amplitude of zonal transport</li><li><tt>'UPh'</tt> phase of zonal transport</li><li><tt>'v'</tt>   complex meridional velocity (m/s)</li><li><tt>'vRe'</tt> real part of meridional velocity</li><li><tt>'vIm'</tt> imaginary part of meridional velocity</li><li><tt>'vAm'</tt> amplitude of meridional velocity</li><li><tt>'vPh'</tt> phase of meridional velocity</li><li><tt>'V'</tt>   complex meridional transport (m^2/s)</li><li><tt>'VRe'</tt> real part of meridional transport</li><li><tt>'VIm'</tt> imaginary part of meridional transport</li><li><tt>'VAm'</tt> amplitude of meridional transport</li><li><tt>'VPh'</tt> phase of meridional transport</li><li><tt>'wct'</tt> water column thickness (m)</li><li><tt>'mask'</tt> binary land/ocean mask</li><li><tt>'flexure'</tt> ice shelf flexure coefficient from a linear elastic model applied to BedMachine ice thickness (can slightly exceed 1). Only for CATS model.</li></ul></div><p><tt>zi = tmd_interp(...,'constituents',conList)</tt> specifies tidal constituents as a cell array (e.g, <tt>{'m2','s2'}</tt>). If constituents are not specified, all constituents from the model are returned.</p><p><tt>zi = tmd_interp(...,'coasts',MaskingMethod)</tt> specifies how coastal regions are masked. Can be <tt>NaN</tt>, <tt>'flexure'</tt>, or <tt>'unmask'</tt>. By default, <tt>MaskingMethod</tt> is <tt>NaN</tt>, meaning outputs are set to <tt>NaN</tt> wherever a nearest-neighbor interpolation of the ocean indicates land. The <tt>'flexure'</tt> option scales tidal constituents by a predicted coefficient of tidal deflection for ice shelf grounding zones. A third option, <tt>'unmask'</tt>, does not apply any masking, which may be preferred close to coasts, where, for example, a tide gauge may exist between land and ocean grid cells. The <tt>'unmask'</tt> option is available for height only.</p><h2 id="3">Example: Global Model</h2><p>The <tt>tmd_interp</tt> function loads data from any TMD3.0 compatible tide model data file. Here's how you may get the water column thickness and an ocean mask corresponding to the <tt>TPXO_atlas_v5</tt> global tide model file.</p><p>We'll also get the M2 constituent amplitude and overlay it in 0.5 m contours.</p><p>A minor note: The model file is published on a 1/30 degree grid, so below we're doing a proper job of interpolating to 1/100 degree grid, to prevent aliasing:</p><pre class="codeinput"><span class="comment">% Define a 1/100 degree lat,lon grid:</span>
+zi = tmd_interp(...,'coasts',MaskingMethod)</pre>
+<h2 id="2">Description</h2>
+<p>
+<tt>zi = tmd_interp(filename,variable,lati,loni)</tt> uses the NetCDF tide model specified by <tt>filename</tt> to interpolate a specified variable at the geographic coordinates <tt>lati,loni</tt>. The variable can be:</p>
+<div>
+<ul>
+<li>
+<tt>'h'</tt> complex tidal height (m)</li>
+<li>
+<tt>'hRe'</tt> real part of tidal height</li>
+<li>
+<tt>'hIm'</tt> imaginary part of tidal height</li>
+<li>
+<tt>'hAm'</tt> amplitude of tidal height</li>
+<li>
+<tt>'hPh'</tt> phase of tidal height (radians)</li>
+<li>
+<tt>'u'</tt> complex zonal velocity (m/s)</li>
+<li>
+<tt>'uRe'</tt> real part of zonal velocity</li>
+<li>
+<tt>'uIm'</tt> imaginary part of zonal velocity</li>
+<li>
+<tt>'uAm'</tt> amplitude of zonal velocity</li>
+<li>
+<tt>'uPh'</tt> phase of zonal velocity (radians)</li>
+<li>
+<tt>'U'</tt> complex zonal transport (m^2/s)</li>
+<li>
+<tt>'URe'</tt> real part of zonal transport</li>
+<li>
+<tt>'UIm'</tt> imaginary part of zonal transport</li>
+<li>
+<tt>'UAm'</tt> amplitude of zonal transport</li>
+<li>
+<tt>'UPh'</tt> phase of zonal transport (radians)</li>
+<li>
+<tt>'v'</tt> complex meridional velocity (m/s)</li>
+<li>
+<tt>'vRe'</tt> real part of meridional velocity</li>
+<li>
+<tt>'vIm'</tt> imaginary part of meridional velocity</li>
+<li>
+<tt>'vAm'</tt> amplitude of meridional velocity</li>
+<li>
+<tt>'vPh'</tt> phase of meridional velocity (radians)</li>
+<li>
+<tt>'V'</tt> complex meridional transport (m^2/s)</li>
+<li>
+<tt>'VRe'</tt> real part of meridional transport</li>
+<li>
+<tt>'VIm'</tt> imaginary part of meridional transport</li>
+<li>
+<tt>'VAm'</tt> amplitude of meridional transport</li>
+<li>
+<tt>'VPh'</tt> phase of meridional transport (radians)</li>
+<li>
+<tt>'wct'</tt> water column thickness (m)</li>
+<li>
+<tt>'mask'</tt> binary land/ocean mask</li>
+<li>
+<tt>'flexure'</tt> ice shelf flexure coefficient from a linear elastic model applied to BedMachine ice thickness (can slightly exceed 1). Only for CATS model.</li>
+</ul>
+</div>
+<p>
+<tt>zi = tmd_interp(...,'constituents',conList)</tt> specifies tidal constituents as a cell array (e.g, <tt>{'m2','s2'}</tt>). If constituents are not specified, all constituents from the model are returned.</p>
+<p>
+<tt>zi = tmd_interp(...,'coasts',MaskingMethod)</tt> specifies how coastal regions are masked. Can be <tt>NaN</tt>, <tt>'flexure'</tt>, or <tt>'unmask'</tt>. By default, <tt>MaskingMethod</tt> is <tt>NaN</tt>, meaning outputs are set to <tt>NaN</tt> wherever a nearest-neighbor interpolation of the ocean indicates land. The <tt>'flexure'</tt> option scales tidal constituents by a predicted coefficient of tidal deflection for ice shelf grounding zones. A third option, <tt>'unmask'</tt>, does not apply any masking, which may be preferred close to coasts, where, for example, a tide gauge may exist between land and ocean grid cells. The <tt>'unmask'</tt> option is available for height only.</p>
+<h2 id="3">Example: Global Model</h2>
+<p>The <tt>tmd_interp</tt> function loads data from any TMD3.0 compatible tide model data file. Here's how you may get the water column thickness and an ocean mask corresponding to the <tt>TPXO_atlas_v5</tt> global tide model file.</p>
+<p>We'll also get the M2 constituent amplitude and overlay it in 0.5 m contours.</p>
+<p>A minor note: The model file is published on a 1/30 degree grid, so below we're doing a proper job of interpolating to 1/100 degree grid, to prevent aliasing:</p>
+<pre class="codeinput">
+<span class="comment">% Define a 1/100 degree lat,lon grid:</span>
 lon = -90:0.01:-20;
 lat = -40:-0.01:-75;
 [Lon,Lat] = meshgrid(lon,lat);
@@ -94,7 +211,11 @@ caxis([0 6000])
 cb = colorbar;
 ylabel(cb,<span class="string">'water column thickness (m)'</span>)
 cmocean <span class="string">deep</span> <span class="comment">% optional colormap</span>
-</pre><img vspace="5" hspace="5" src="tmd_interp_documentation_01.png" alt=""> <h2 id="4">Example: Regional Model</h2><p>The <tt>tmd_interp</tt> function works exactly the same for regional models as it does for global models. Just enter the geographic coordinates, and it'll give you the data you request.</p><p>Here we compare the bathymetry in the updated CATS2008 model to the bathymetry we obtained in the previous example:</p><pre class="codeinput">Z_cats = tmd_interp(<span class="string">'CATS2008_v2023.nc'</span>,<span class="string">'wct'</span>,Lat,Lon);
+</pre>
+<img vspace="5" hspace="5" src="tmd_interp_documentation_01.png" alt=""> <h2 id="4">Example: Regional Model</h2>
+<p>The <tt>tmd_interp</tt> function works exactly the same for regional models as it does for global models. Just enter the geographic coordinates, and it'll give you the data you request.</p>
+<p>Here we compare the bathymetry in the updated CATS2008 model to the bathymetry we obtained in the previous example:</p>
+<pre class="codeinput">Z_cats = tmd_interp(<span class="string">'CATS2008_v2023.nc'</span>,<span class="string">'wct'</span>,Lat,Lon);
 
 figure
 h = imagesc(lon,lat,Z_cats-Z_tpxo);
@@ -107,7 +228,12 @@ caxis([-1 1]*1000)
 cb = colorbar;
 ylabel(cb,<span class="string">'CATS - TPXO water column thickness (m)'</span>)
 cmocean <span class="string">balance</span> <span class="comment">% optional colormap</span>
-</pre><img vspace="5" hspace="5" src="tmd_interp_documentation_02.png" alt=""> <p>The curving areas of missing data at the top of the figure above indicate regions outside the CATS2008 model domain. In CATS model space, that's a straight line, but in unprojected coordinates, it curves.</p><h2 id="6">Example: Multiple constituents</h2><p>Perhaps you want all of the complex coefficients of all of the tidal constituents at some locations. Here are the complex tidal height coefficients for a location near Florida, and another location near Maine:</p><pre class="codeinput"><span class="comment">% Locations near Florida and Maine:</span>
+</pre>
+<img vspace="5" hspace="5" src="tmd_interp_documentation_02.png" alt=""> <p>The curving areas of missing data at the top of the figure above indicate regions outside the CATS2008 model domain. In CATS model space, that's a straight line, but in unprojected coordinates, it curves.</p>
+<h2 id="6">Example: Multiple constituents</h2>
+<p>Perhaps you want all of the complex coefficients of all of the tidal constituents at some locations. Here are the complex tidal height coefficients for a location near Florida, and another location near Maine:</p>
+<pre class="codeinput">
+<span class="comment">% Locations near Florida and Maine:</span>
 lat = [28.7 42.1];
 lon = [-79.6 -67.6];
 
@@ -116,13 +242,21 @@ hc = tmd_interp(<span class="string">'TPXO9_atlas_v5.nc'</span>,<span class="str
 
 <span class="comment">% Describe the size and type of these variables:</span>
 whos <span class="string">lat</span> <span class="string">lon</span> <span class="string">hc</span>
-</pre><pre class="codeoutput">  Name      Size              Bytes  Class     Attributes
+</pre>
+<pre class="codeoutput">  Name      Size              Bytes  Class     Attributes
 
   hc        1x2x15              480  double    complex   
   lat       1x2                  16  double              
   lon       1x2                  16  double              
 
-</pre><p>Above we see <tt>lat</tt> and <tt>lon</tt> are both 1x2, while <tt>hc</tt> is 1x2x15, meaning 15 constituents at each geographic location.</p><h2 id="8">Example: Ice shelf flexure</h2><p>For the updated CATS2008 model, we've attempted to model the ice shelf using a simple 1d linear elastic forward model applied to BedMachine ice thickness, with an elastic modulus E=4.8 Gpa and Poisson's ratio nu=0.4.</p><p>This example uses Antarctic Mapping Tools with the BedMachine and ITS_LIVE plugins. (Sorry about all of the extra dependencies, but I think the context is important to aid in understanding, even if it's not worth downloading all the extras to replicate the example on your own.)</p><p>In this example, we calculate an ice flowline starting from a seed location on Pine Island Glacier, then calculate the s2 constituent amplitude along the flowline. This constituent has a wavelength that's much larger than Pine Island Ice Shelf, so we expect it to be relatively constant along the entire ice shelf.</p><pre class="codeinput"><span class="comment">% Flowline from a seed location on Pine Island Glacier:</span>
+</pre>
+<p>Above we see <tt>lat</tt> and <tt>lon</tt> are both 1x2, while <tt>hc</tt> is 1x2x15, meaning 15 constituents at each geographic location.</p>
+<h2 id="8">Example: Ice shelf flexure</h2>
+<p>For the updated CATS2008 model, we've attempted to model the ice shelf using a simple 1d linear elastic forward model applied to BedMachine ice thickness, with an elastic modulus E=4.8 Gpa and Poisson's ratio nu=0.4.</p>
+<p>This example uses Antarctic Mapping Tools with the BedMachine and ITS_LIVE plugins. (Sorry about all of the extra dependencies, but I think the context is important to aid in understanding, even if it's not worth downloading all the extras to replicate the example on your own.)</p>
+<p>In this example, we calculate an ice flowline starting from a seed location on Pine Island Glacier, then calculate the s2 constituent amplitude along the flowline. This constituent has a wavelength that's much larger than Pine Island Ice Shelf, so we expect it to be relatively constant along the entire ice shelf.</p>
+<pre class="codeinput">
+<span class="comment">% Flowline from a seed location on Pine Island Glacier:</span>
 [lati,loni] = itslive_flowline(-75.34,-98.23);
 
 di = pathdistps(lati,loni,<span class="string">'km'</span>); <span class="comment">% distance along flowline</span>
@@ -150,9 +284,19 @@ legend(<span class="string">'NaN (default)'</span>,<span class="string">'unmask'
 subplot(2,1,2)
 bedmachine_profile(lati,loni,<span class="string">'horiz'</span>,di)
 xlim([380 max(di)])
-</pre><pre class="codeoutput">Warning: I am pretty sure I have not finished writing this function yet, but it
-might work. 
-</pre><img vspace="5" hspace="5" src="tmd_interp_documentation_03.png" alt=""> <p>Above, you see that by default <tt>tmd_interp</tt> returns the full amplitude along the floating ice shelf, and NaN where the ice is grounded.</p><p>The <tt>'unmask'</tt> option exists to allow interpolation where the default behavior produces NaNs. This is mainly for cases where a point of interest, like a tide gauge, may lie just slightly landward of valid ocean model data. Above, you see that the unmasked data is pretty smooth up to about 15 km inland of the ocean boundary, which is reasonable for any interpolation close to the coast.</p><p>The third option <tt>'flexure'</tt> attempts to model ice flexure based on a simple 1D forward elastic model. It says that grounded ice has 0 tidal motion, while fully hydostatic ice experiences the full range of tidal motion. The transition from 0 amplitude to full amplitude is fairly smooth, but dips down slightly along the way, as this particular flowline passes next to a bathymetric pinning point in the middle of the ice shelf. You may also notice the flexure model goes just a few percent above neutral near the hydrostatic line, and this represents true ice behavior.</p><h2 id="10">Author Info</h2><p>The <tt>tmd_interp</tt> function and its documentation were written by Chad A. Greene, June 2022.</p><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2021b</a><br></p></div><!--
+</pre>
+<img vspace="5" hspace="5" src="tmd_interp_documentation_03.png" alt=""> <p>Above, you see that by default <tt>tmd_interp</tt> returns the full amplitude along the floating ice shelf, and NaN where the ice is grounded.</p>
+<p>The <tt>'unmask'</tt> option exists to allow interpolation where the default behavior produces NaNs. This is mainly for cases where a point of interest, like a tide gauge, may lie just slightly landward of valid ocean model data. Above, you see that the unmasked data is pretty smooth up to about 15 km inland of the ocean boundary, which is reasonable for any interpolation close to the coast.</p>
+<p>The third option <tt>'flexure'</tt> attempts to model ice flexure based on a simple 1D forward elastic model. It says that grounded ice has 0 tidal motion, while fully hydostatic ice experiences the full range of tidal motion. The transition from 0 amplitude to full amplitude is fairly smooth, but dips down slightly along the way, as this particular flowline passes next to a bathymetric pinning point in the middle of the ice shelf. You may also notice the flexure model goes just a few percent above neutral near the hydrostatic line, and this represents true ice behavior.</p>
+<h2 id="10">Author Info</h2>
+<p>The <tt>tmd_interp</tt> function and its documentation were written by Chad A. Greene, June 2022.</p>
+<p class="footer">
+<br>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2023b</a>
+<br>
+</p>
+</div>
+<!--
 ##### SOURCE BEGIN #####
 %% |tmd_interp| documentation
 % |tmd_interp| interpolates tide model data at specified geographic locations. 
@@ -174,27 +318,27 @@ might work.
 % * |'hRe'| real part of tidal height
 % * |'hIm'| imaginary part of tidal height 
 % * |'hAm'| amplitude of tidal height
-% * |'hPh'| phase of tidal height
+% * |'hPh'| phase of tidal height (radians)
 % * |'u'|   complex zonal velocity (m/s) 
 % * |'uRe'| real part of zonal velocity 
 % * |'uIm'| imaginary part of zonal velocity 
 % * |'uAm'| amplitude of zonal velocity
-% * |'uPh'| phase of zonal velocity
+% * |'uPh'| phase of zonal velocity (radians)
 % * |'U'|   complex zonal transport (m^2/s) 
 % * |'URe'|  real part of zonal transport
 % * |'UIm'| imaginary part of zonal transport
 % * |'UAm'| amplitude of zonal transport
-% * |'UPh'| phase of zonal transport 
+% * |'UPh'| phase of zonal transport (radians) 
 % * |'v'|   complex meridional velocity (m/s) 
 % * |'vRe'| real part of meridional velocity 
 % * |'vIm'| imaginary part of meridional velocity
 % * |'vAm'| amplitude of meridional velocity
-% * |'vPh'| phase of meridional velocity 
+% * |'vPh'| phase of meridional velocity (radians) 
 % * |'V'|   complex meridional transport (m^2/s)
 % * |'VRe'| real part of meridional transport 
 % * |'VIm'| imaginary part of meridional transport
 % * |'VAm'| amplitude of meridional transport
-% * |'VPh'| phase of meridional transport
+% * |'VPh'| phase of meridional transport (radians)
 % * |'wct'| water column thickness (m) 
 % * |'mask'| binary land/ocean mask
 % * |'flexure'| ice shelf flexure coefficient from a linear elastic model applied to BedMachine ice thickness (can slightly exceed 1). Only for CATS model. 
@@ -366,4 +510,6 @@ xlim([380 max(di)])
 % Greene, June 2022. 
 
 ##### SOURCE END #####
---></body></html>
+-->
+</body>
+</html>

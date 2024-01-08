@@ -21,27 +21,27 @@ See also: [`tmd_interp`](tmd_interp_documentation.md) and [`tmd_predict`](tmd_pr
 * `'hRe'` real part of tidal height
 * `'hIm'` imaginary part of tidal height 
 * `'hAm'` amplitude of tidal height
-* `'hPh'` phase of tidal height
+* `'hPh'` phase of tidal height (radians)
 * `'u'`   complex zonal velocity (m/s) 
 * `'uRe'` real part of zonal velocity 
 * `'uIm'` imaginary part of zonal velocity 
 * `'uAm'` amplitude of zonal velocity
-* `'uPh'` phase of zonal velocity
+* `'uPh'` phase of zonal velocity (radians)
 * `'U'`   complex zonal transport (m^2/s) 
 * `'URe'`  real part of zonal transport
 * `'UIm'` imaginary part of zonal transport
 * `'UAm'` amplitude of zonal transport
-* `'UPh'` phase of zonal transport 
+* `'UPh'` phase of zonal transport (radians) 
 * `'v'`   complex meridional velocity (m/s) 
 * `'vRe'` real part of meridional velocity 
 * `'vIm'` imaginary part of meridional velocity
 * `'vAm'` amplitude of meridional velocity
-* `'vPh'` phase of meridional velocity 
+* `'vPh'` phase of meridional velocity (radians) 
 * `'V'`   complex meridional transport (m^2/s)
 * `'VRe'` real part of meridional transport 
 * `'VIm'` imaginary part of meridional transport
 * `'VAm'` amplitude of meridional transport
-* `'VPh'` phase of meridional transport
+* `'VPh'` phase of meridional transport (radians)
 * `'wct'` water column thickness (m) 
 * `'mask'` binary land/ocean mask
 * `'flexure'` ice shelf flexure coefficient from a linear elastic model applied to BedMachine ice thickness (can slightly exceed 1). Only for CATS model. 
