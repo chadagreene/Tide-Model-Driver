@@ -15,7 +15,7 @@ Here's a table of how the new functions compare to previous versions of TMD:
 | TMD3.0 function | Previous name | Major Changes                      |
 |:---------------:|:-----------:|:------------------------------------:|
 |`tmd_predict`  |`tmd_tide_pred   `| Changed the order of function inputs|
-|`tmd_interp`   | `tmd_extract_HC`| Changed function inputs & outputs |
+|`tmd_interp`   | `tmd_extract_HC`| Changed function inputs & outputs. Phase now in radians.|
 |`tmd_data`     | `h_in`, `grd_in`| n/a |
 |`tmd_conlist`  |No direct previous equivalent| n/a |
 |`tmd_ellipse`|`tmd_get_ellipse`| Now allows input geo coordinates |
