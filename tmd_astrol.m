@@ -48,7 +48,7 @@ end
 
 t_mjd = t - datenum(1992,1,1) + 48622;
 
-% Convert time from UTC in decimal MJD to ???
+% Convert time:
 T = t_mjd - 51544.4993;
 
 % Mean longitude of moon:

@@ -9,7 +9,7 @@ function hhat = tmd_harp(t,hc,constituents,p,N,ph,omega)
 %% Description 
 % 
 % hhat = tmd_harp(t,hc,constituents,p,N) returns the time series hhat, which is
-% the sum of tidal constituents given by hc for times t.
+% the sum of tidal constituents given by hc for times t and has the units of hc.
 % 
 % Inputs:
 %    t:  time in Matlab's datenum format (size Tx1, where T is # of timesteps),

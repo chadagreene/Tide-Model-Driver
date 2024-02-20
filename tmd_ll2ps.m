@@ -23,8 +23,8 @@ function [x,y] = tmd_ll2ps(lat,lon,SLAT,SLON,HEMI)
 %                                                                       
 %    Variable     I/O    Description                          
 %                                                                        
-%    lat           I     Geodetic Latitude (degrees, +90 to -90)
-%    lon           I     Geodetic Longitude (degrees, 0 to 360)
+%    lat           I     Geodetic Latitude (degrees, +90 to -90) Any input dimensions are allowed.  
+%    lon           I     Geodetic Longitude (degrees, 0 to 360) Any input dimensions are allowed.  
 %    SLAT          I     Standard latitude (typ. 71, or 70)
 %    SLON          I  
 %    HEMI          I     Hemisphere (char*1: 'N' or 'S' (not

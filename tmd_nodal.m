@@ -15,7 +15,7 @@ function [pu,pf] = tmd_nodal(constituents,p,N)
 % as cell array (1xN constituents). Inputs p and N are the lunar perigee p 
 % and ascending lunar node N given by the tmd_astrol function, and are 
 % dimesnions Mx1, with one row per timestep. Nodal correction outputs pu,pf 
-% have units of radians and are are MxN dimensions, corresponding to M 
+% have units of radians and are MxN dimensions, corresponding to M 
 % timesteps and N constituents. 
 % 
 %% Author Info

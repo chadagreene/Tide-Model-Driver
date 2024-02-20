@@ -1,7 +1,9 @@
 function dh = tmd_InferMinor(hc,constituents,t,s,h,p,N)
-% tmd_InferMinor returns correction for 16 minor tidal constiuents. Zeros 
+% tmd_InferMinor returns correction for 16 minor tidal constituents. Zeros 
 % are returned if not enough input for inference. This is based on Richard
-% Ray's code perth2. 
+% Ray's code perth2. For further description, see Ray, Richard D. "Global 
+% ocean tide models on the eve of TOPEX/POSEIDON." IEEE transactions on 
+% Geoscience and Remote Sensing 31.2 (1993): 355-364.
 % 
 %% Syntax
 % 
