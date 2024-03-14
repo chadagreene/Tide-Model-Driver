@@ -41,7 +41,7 @@ Barotropic ocean models contain complex tidal coefficients for water height and 
 	* **Resolution:** 1 km.
 	* **Constituents:** 8: m2 s2 k1 o1 n2 p1 k2 q1.
 	* **Restrictions:** This work is licensed under the Creative Commons Attribution 4.0 International License.. 
-	* **Data Access:** [Download here](https://www.chadagreene.com/tide_data/Gr1kmTM_v1.nc.zip) [286 MB].
+	* **Data Access:** Available from the Arctic Data Center at [https://doi.org/10.18739/A2J09W58D](https://doi.org/10.18739/A2J09W58D).
 	* **Website:**  [https://arcticdata.io/catalog/portals/ArcticTides]( https://arcticdata.io/catalog/portals/ArcticTides).
 	* **Data Citation:** Howard, S. L., and Padman, L. (2021). Gr1kmTM: Greenland 1 kilometer Tide Model, 2021. Arctic Data Center. [doi:10.18739/A2B853K18](https://doi.org/10.18739/A2B853K18)
 	
