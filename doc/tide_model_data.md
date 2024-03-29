@@ -32,9 +32,8 @@ Barotropic ocean models contain complex tidal coefficients for water height and 
 	* **Resolution:** 2 km.
 	* **Constituents:** 10: m2 s2 n2 k2 k1 o1 p1 q1 mf mm.
 	* **Restrictions:** This work is licensed under the Creative Commons Attribution 4.0 International License. 
-	* **Data Access:** [Download here](https://www.chadagreene.com/tide_data/CATS2008_v2023.nc.zip) [519 MB].
-	* **Website:** .
-	* **Data Citation:** .
+	* **Data Access:** [Download here](https://doi.org/10.15784/601772) [519 MB].
+	* **Data Citation:** Howard, S. L., Greene, C. A., Padman, L., Erofeeva, S., & Sutterley, T. (2024) "CATS2008_v2023: Circum-Antarctic Tidal Simulation 2008, version 2023" U.S. Antarctic Program (USAP) Data Center. doi: https://doi.org/10.15784/601772.
 	
 * **`Gr1kmTM_v1.nc`** by Susan Howard and Laurie Padman is a regional model of Greenland, developed using the Regional Ocean Modeling System (ROMS) on a standard north polar stereographic projection. 
 	* **Variables:** Complex heights (h) and transport coefficients (for u, v, U, V).
