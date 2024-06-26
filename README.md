@@ -70,9 +70,9 @@ Don't like MATLAB? No worries, just try one of these alternatives:
 * **Octave:** It is *possible* that TMD3.0 works with [Octave](https://www.gnu.org/software/octave/index) as it is currently written. I haven't checked, but most of the TMD functions are pretty basic, so Octave's functions might be exact clones. If you use Octave and you want to give TMD3.0 a try, please let me know how it goes! 
 
 # Author Info & Citation Information
-We are working on a proper literature citation. For now, if you use TMD3.0, please cite the following: 
+TMD3.0 was written by [Chad A. Greene](https://github.com/chadagreene), [Svetlana Erofeeva](https://ceoas.oregonstate.edu/svetlana-erofeeva), [Laurie Padman](https://github.com/LPadman), [Susan Howard](https://github.com/slhowardESR), [Tyler Sutterley](https://github.com/tsutterley), and [Gary Egbert](https://ceoas.oregonstate.edu/people/gary-egbert). If you use TMD3.0, please cite: 
 
-[Chad A. Greene](https://github.com/chadagreene), [Svetlana Erofeeva](https://ceoas.oregonstate.edu/svetlana-erofeeva), [Laurie Padman](https://github.com/LPadman), [Susan Howard](https://github.com/slhowardESR), [Tyler Sutterley](https://github.com/tsutterley), and [Gary Egbert](https://ceoas.oregonstate.edu/people/gary-egbert) (2023). The Tide Model Driver for MATLAB, version 3.0. [https://github.com/chadagreene/Tide-Model-Driver](https://github.com/chadagreene/Tide-Model-Driver).
+Greene, Chad A., Svetlana Erofeeva, Laurie Padman, Susan L. Howard, Tyler Sutterley, and Gary Egbert. "Tide Model Driver for MATLAB." *Journal of Open Source Software* 9, no. 95 (2024): 6018, [https://doi.org/10.21105/joss.06018](https://doi.org/10.21105/joss.06018).
 
 # How to contribute
 If you find a bug or have suggestions for how to improve TMD, please [open up an issue](https://github.com/chadagreene/Tide-Model-Driver/issues). 
