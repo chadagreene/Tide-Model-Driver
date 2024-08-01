@@ -49,7 +49,7 @@ Barotropic ocean models contain complex tidal coefficients for water height and 
 	* **Resolution:** 2 km.
 	* **Constituents:** 8: m2 s2 k1 o1 n2 p1 k2 q1.
 	* **Restrictions:** This work is licensed under the Creative Commons Attribution 4.0 International License.
-	* **Data Access:** [Download here](https://www.chadagreene.com/tide_data/Arc2kmTM_v1.nc.zip) [293 MB].
+	* **Data Access:** Available from the Arctic Data Center at [https://doi.org/10.18739/A22N4ZK5G](https://doi.org/10.18739/A22N4ZK5G).
 	* **Website:**  [https://arcticdata.io/catalog/portals/ArcticTides]( https://arcticdata.io/catalog/portals/ArcticTides).
 	* **Data Citation:** Howard, S. L., and Padman, L. (2021). Arc2kmTM: Arctic 2 kilometer Tide Model, 2021. Arctic Data Center. [doi:10.18739/A2D21RK6K](https://doi.org/10.18739/A2D21RK6K).
 	
