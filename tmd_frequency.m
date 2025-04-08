@@ -1,18 +1,20 @@
-function omega = tmd_frequency(constituents, order=1)
+function omega = tmd_frequency(constituents, order=1, tt_ut1=0.0007)
 
 % J2000 (2000-01-01 12:00:00)
-t = [730486.5, 730486.55];
+J2000 = datenum(2000, 1, 1, 12);
+t = J2000 + [0.0, 0.05];
 % time interval in seconds
 deltat = 86400.0*(t(2) - t(1));
 % calculate the mean longitudes of the sun and moon
-[s, h, p, n] = tmd_astrol(t, order=order);
+[s, h, p, n] = tmd_astrol(t, order=order, tt_ut1=tt_ut1);
 % mean longitude of solar perigee
 if order == 1
-    ps = [282.8, 282.8];
+    ps = 282.8 + 0.0*t;
 else
+    % convert to J2000 (dynamic time)
+    T = t - J2000 + tt_ut1;
     % (Simon et al., 1994)
-    T = t - 730486.4993;
-    ps = 282.94 + 1.7192 * T
+    ps = 282.94 + 1.7192 * T;
 end
 
 % initial time conversions
@@ -20,7 +22,7 @@ hour = 24.0*mod(t, 1);
 % convert from hours solar time into mean lunar time in degrees
 tau = 15.0*hour - s + h;
 % variable for multiples of 90 degrees (Ray technical note 2017)
-k = [90.0, 90.0];
+k = 90.0 + 0.0*t;
 
 % determine differential in equilibrium arguments
 astro = [tau; s; h; p; n; ps; k];

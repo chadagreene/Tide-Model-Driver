@@ -1,4 +1,4 @@
-function [s,h,p,N] = tmd_astrol(t, order=1)
+function [s,h,p,N] = tmd_astrol(t, order=1, tt_ut1=0.0007)
 % tmd_astrol computes the basic astronomical mean longitudes s, h, p, N, 
 % following Foreman & Henry (1989). 
 % 
@@ -46,11 +46,9 @@ if isdatetime(t)
    t = datenum(t); 
 end
 
-t_mjd = t - datenum(1992,1,1) + 48622;
-
-% Convert time:
-% use tt_ut1 value for 2000-01-01
-T = t_mjd - 51544.4993;
+% convert to J2000 (dynamic time)
+J2000 = datenum(2000, 1, 1, 12);
+T = t - J2000 + tt_ut1;
 
 if (order == 1)
 
