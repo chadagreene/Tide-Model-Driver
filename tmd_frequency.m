@@ -1,4 +1,27 @@
 function omega = tmd_frequency(constituents, order=1, tt_ut1=0.0007)
+% Calculates the angular frequency for tidal constituents
+% 
+%% Syntax 
+% 
+%  omega = tmd_frequency(constituents) 
+%
+%% Description 
+% 
+% omega = tmd_frequency(constituents) takes input constituents 
+% as cell array (1xN constituents). Option order is the minimum polynomial order
+% for calculating the astronomical mean longitudes. Option tt_ut1 is the delta
+% time between Terrestrial Time (TT) and Universal Time (UT1). Output angular
+% frequencies omega are in radians per second.
+%
+%% References 
+%
+% Doodson, A. T. (1941). Admiralty manual of tides. His Majesty's Stationery Office.
+%
+%% Author Info
+% This function is part of the Tide Model Driver (TMD), which was written by Lana Erofeeva
+% and is maintained by Laurie Padman. 
+% 
+% See also tmd_arguments.
 
 % J2000 (2000-01-01 12:00:00)
 J2000 = datenum(2000, 1, 1, 12);

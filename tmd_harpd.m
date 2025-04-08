@@ -16,10 +16,23 @@ function hhat = tmd_harpd(t, hc, constituents, tt_ut1=0.0007)
 %    t:  time in Matlab's datenum format (size Tx1, where T is # of timesteps),
 %    hc: complex harmonic constants (size Cx1, where C is # of constituents), 
 %    constituents: cell array, e.g., {'m2','k1'} (size 1xC), 
+%    tt_ut1: delta time (in days) between Terrestrial Time (TT) and Universal Time (UT1).
 % 
-% Outpus: 
+% Outputs: 
 %    hhat: reconstructed tide (size Tx1).
-% 
+%
+%% References 
+%
+% Doodson, A. T. (1941). Admiralty manual of tides. His Majesty's Stationery Office.
+%
+% Schureman, P. (1958). Manual of harmonic analysis and prediction of tides.
+% Special Edition No. 98. US Coast and Geodetic Survey, United States Government
+% Printing Office, Washington, DC.
+%
+% Foreman, M. G. G., & Henry, R. F. (1989). The harmonic analysis of tidal 
+% model time series. Advances in water resources, 12(3), 109-120.
+% https://doi.org/10.1016/0309-1708(89)90017-1
+%
 %% Author Info
 % TMD was written by Lana Erofeeva (serofeev@coas.oregonstate.edu) and is maintained by
 % Laurie Padman (padman@esr.org). 

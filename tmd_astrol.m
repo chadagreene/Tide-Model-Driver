@@ -15,6 +15,10 @@ function [s,h,p,N] = tmd_astrol(t, order=1, tt_ut1=0.0007)
 %   p: lunar perigee
 %   N: ascending lunar node. Note N is not N', i.e. N is decreasing with time.
 % 
+% Option order is the minimum polynomial order for calculating the astronomical
+% mean longitudes. Option tt_ut1 is the delta time (in days) between Terrestrial
+% Time (TT) and Universal Time (UT1). 
+%
 % Some guidance from Laurie Padman (because I asked for an explanation, June 2022):
 % "The variable names are exactly as used in the Foreman & Henry (1989, FH89)
 % paper. The statement about N not being N' can be explained looking at the 
@@ -28,6 +32,8 @@ function [s,h,p,N] = tmd_astrol(t, order=1, tt_ut1=0.0007)
 % model time series. Advances in water resources, 12(3), 109-120.
 % https://doi.org/10.1016/0309-1708(89)90017-1
 % 
+% Meeus, J. H. (1991). Astronomical Algorithms. Richmond, VA: Willmann-Bell, Inc.
+%
 %% Version History: 
 % These formulae are for the period 1990 - 2010, and were derived
 % by David Cartwright (personal comm., Nov. 1990).

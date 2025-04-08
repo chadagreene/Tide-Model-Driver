@@ -1,4 +1,41 @@
 function h = tmd_lpet(t, lat, order=1, tt_ut1=0.0007)
+% tmd_lpet predicts tidal time series for long-period times assuming an
+% equilibrium tide response. 
+% 
+%% Syntax
+% 
+%  h = tmd_lpet(t, lat)
+% 
+%% Description 
+% 
+% h = tmd_lpet(t,lat) returns the time series h, which is
+% the sum of tidal constituents for long-period equilibrium tides.
+% 
+% Inputs:
+%    t:  time in Matlab's datenum format (size Tx1, where T is # of timesteps),
+%    lat: latitudes in degrees north (size Tx1), 
+%    order: minimum polynomial order for calculating the astronomical mean longitudes, 
+%    tt_ut1: delta time (in days) between Terrestrial Time (TT) and Universal Time (UT1).
+% 
+% Outputs: 
+%    h:  long-period tide (size Tx1).
+%
+%% References 
+%
+% Cartwright, D. E., & Tayler, R. J. (1971). New computations of the tide-generating potential.
+% Geophysical Journal of the Royal Astronomical Society, 23(1), 45-73.
+% https://doi.org/10.1111/j.1365-246X.1971.tb01803.x
+%
+% Cartwright, D. E., & Edden, A. C. (1973). Corrected tables of tidal harmonics.
+% Geophysical Journal International, 33(3), 253-264.
+% https://doi.org/10.1111/j.1365-246x.1973.tb03420.x
+%
+%% Author Info
+% TMD was written by Lana Erofeeva (serofeev@coas.oregonstate.edu) and is maintained by
+% Laurie Padman (padman@esr.org). 
+%
+% See also tmd_arguments, and tmd_harp.
+
 % long period constituents
 c_data = {'node'; 'sa'; 'ssa'; 'msm'; '065.445'; 'mm';
     '065.465'; 'msf'; '075.355'; 'mf'; 'mf+'; '075.575';

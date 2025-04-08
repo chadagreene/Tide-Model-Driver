@@ -1,4 +1,37 @@
 function [pu, pf, G] = tmd_arguments(t, constituents, order=1, tt_ut1=0.0007)
+% Calculates the nodal arguments for the tidal constituents. 
+% 
+%% Syntax 
+% 
+%  [pu,pf,G] = tmd_arguments(t, constituents) 
+%
+%% Description 
+% 
+% [pu,pf,G] = tmd_arguments(t, constituents) takes input constituents 
+% as cell array (1xN constituents). Option order is the minimum polynomial order
+% for calculating the astronomical mean longitudes. Option tt_ut1 is the delta
+% time between Terrestrial Time (TT) and Universal Time (UT1). Nodal correction
+% outputs pu,pf have units of radians and are MxN dimensions, corresponding to M 
+% timesteps and N constituents. Arguments G are similarly sizes as the nodal
+% corrections and have units of degrees. 
+%
+%% References 
+%
+% Doodson, A. T. (1941). Admiralty manual of tides. His Majesty's Stationery Office.
+%
+% Schureman, P. (1958). Manual of harmonic analysis and prediction of tides.
+% Special Edition No. 98. US Coast and Geodetic Survey, United States Government
+% Printing Office, Washington, DC.
+%
+% Foreman, M. G. G., & Henry, R. F. (1989). The harmonic analysis of tidal 
+% model time series. Advances in water resources, 12(3), 109-120.
+% https://doi.org/10.1016/0309-1708(89)90017-1
+%
+%% Author Info
+% This function is part of the Tide Model Driver (TMD), which was written by Lana Erofeeva
+% and is maintained by Laurie Padman. 
+% 
+% See also tmd_nodal. 
 
 if isdatetime(t)
    t = datenum(t); 

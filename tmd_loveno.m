@@ -1,4 +1,32 @@
 function [h2, k2, l2] = tmd_loveno(omega)
+% Compute the body tide Love/Shida numbers for a given frequency. 
+% 
+%% Syntax 
+% 
+%  [h2, k2, l2] = tmd_loveno(omega) 
+%
+%% Description 
+% 
+% [h2,k2,l2] = tmd_loveno(omega) takes input angular frequencies in radians per second.
+% The output Love numbers h2, k2, l2 are dimensionless.
+%
+%% References 
+%
+% Wahr, J. M., & Sasao, T. (1981). A diurnal resonance in the ocean tide and in the
+% Earth's load response due to the resonant free `core nutation'. Geophysical Journal
+% of the Royal Astronomical Society, 64(3), 747-765.
+% https://doi.org/10.1111/j.1365-246x.1981.tb02693.x
+%
+% Mathews, P. M., Buffett, B. A., & Shapiro, I. I. (1995). Love numbers for diurnal
+% tides: Relation to wobble admittances and resonance expansions. Journal of
+% Geophysical Research: Solid Earth, 100(B6), 9935-9948.
+% https://doi.org/10.1029/95jb00670
+%
+%% Author Info
+% This function is part of the Tide Model Driver (TMD), which was written by Lana Erofeeva
+% and is maintained by Laurie Padman. 
+% 
+% See also tmd_nodal. 
 
 % Love numbers for different frequency bands
 if (omega > 1e-4)

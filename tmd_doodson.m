@@ -1,4 +1,39 @@
 function doodson = tmd_doodson(constituents)
+% tmd_doodson returns a table of Doodson coefficients for tidal constituents
+% 
+%% Syntax
+% 
+%  coef = tmd_doodson(constituents)
+% 
+%% Description 
+% 
+% coef = tmd_doodson(constituentst) returns the Doodson coefficients
+% (Cartwright numbers) for tidal constituents.
+% 
+% Inputs:
+%    constituents: cell array, e.g., {'m2','k1'} (size 1xC), 
+% 
+%% References 
+%
+% Doodson, A. T., & Lamb, H. (1921). The harmonic development of the tide-generating potential.
+% Proceedings of the Royal Society of London. Series A, Containing Papers of a Mathematical
+% and Physical Character, 100(704), 305-329. https://doi.org/10.1098/rspa.1921.0088
+%
+% Doodson, A. T. (1941). Admiralty manual of tides. His Majesty's Stationery Office.
+%
+% Cartwright, D. E., & Tayler, R. J. (1971). New computations of the tide-generating potential.
+% Geophysical Journal of the Royal Astronomical Society, 23(1), 45-73.
+% https://doi.org/10.1111/j.1365-246X.1971.tb01803.x
+%
+% Cartwright, D. E., & Edden, A. C. (1973). Corrected tables of tidal harmonics.
+% Geophysical Journal International, 33(3), 253-264.
+% https://doi.org/10.1111/j.1365-246x.1973.tb03420.x
+%
+%% Author Info
+% TMD was written by Lana Erofeeva (serofeev@coas.oregonstate.edu) and is maintained by
+% Laurie Padman (padman@esr.org). 
+%
+% See also tmd_arguments, and tmd_harpd.
 
 c_data = {'sa'; 'ssa'; 'mm'; 'msf'; 'mf'; 'mt'; 'alpha1'; '2q1'; 'sigma1';
     'q1'; 'rho1'; 'o1'; 'tau1'; 'm1'; 'chi1'; 'pi1'; 'p1'; 's1'; 'k1';
@@ -22,6 +57,14 @@ end
 end
 
 function coef = tmd_major_table()
+% tmd_major_table returns a table of Doodson coefficients for 60 tidal constituents
+%
+%% Author Info
+% TMD was written by Lana Erofeeva (serofeev@coas.oregonstate.edu) and is maintained by
+% Laurie Padman (padman@esr.org). 
+%
+% See also tmd_doodson.
+
    % modified Doodson coefficients
    % using 7 index variables: tau, s, h, p, n, pp, k
    % tau: mean lunar time
@@ -95,6 +138,14 @@ function coef = tmd_major_table()
 end
 
 function coef = tmd_minor_table()
+% tmd_minor_table returns a table of Doodson coefficients for 18 minor tidal constituents
+%
+%% Author Info
+% TMD was written by Lana Erofeeva (serofeev@coas.oregonstate.edu) and is maintained by
+% Laurie Padman (padman@esr.org). 
+%
+% See also tmd_doodson.
+
    % modified Doodson coefficients for constituents
    % using 7 index variables: tau, s, h, p, n, pp, k
    % tau: mean lunar time
