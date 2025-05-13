@@ -39,8 +39,7 @@ cid0 = {'sa';'ssa';'mm';'msf';'mf';'mt';'alpha1';'2q1';'sigma1';'q1';
         'rho1';'o1';'tau1';'m1';'chi1';'pi1';'p1';'s1';'k1';'psi1';'phi1';
         'theta1';'j1';'oo1';'2n2';'mu2';'n2';'nu2';'m2a';'m2';'m2b';'lambda2';
         'l2';'t2';'s2';'r2';'k2';'eta2';'mns2';'2sm2';'m3';'mk3';'s3';'mn4';
-        'm4';'ms4';'mk4';'s4';'s5';'m6';'s6';'s7';'s8';'m8';'mks2';'msqm';
-        'mtm';'n4';'eps2';'z0'};
+        'm4';'ms4';'mk4';'s4';'s5';'m6';'s6';'s7';'s8'};
  
 % Determine equilibrium arguments
 rad=pi/180;
@@ -56,7 +55,7 @@ sin3n = sin(3*N*rad);
 
 %% Define constants
 
-f=ones(nT,60);
+f=ones(nT,53);
 % f(:,1) = 1;                                     % Sa
 % f(:,2) = 1;                                     % Ssa
 f(:,3) = 1 - 0.130*cosn;                        % Mm
@@ -123,15 +122,8 @@ f(:,50) = f(:,30).^3;                           % M6
 % f(:,51) = 1;                                    % S6
 % f(:,52) = 1;                                    % S7
 % f(:,53) = 1;                                    % S8
-f(:,54) = f(:,30).^4;                             % m8
-f(:,55) = f(:,30).*f(:,37);                       % mks2
-f(:,56) = f(:,5);                                 % msqm
-f(:,57) = f(:,5);                                 % mtm
-f(:,58) = f(:,30).^2;                             % n4
-f(:,59) = f(:,30);                                % eps2
-%f(:,60) = 1;                                    % Z0 (mean sea level)
 
-u=zeros(nT,60);
+u=zeros(nT,53);
 % u(:, 1) = 0;                                       % Sa
 % u(:, 2) = 0;                                       % Ssa
 % u(:, 3) = 0;                                       % Mm
@@ -190,13 +182,6 @@ u(:,50) = u(:,30)*3;                               % M6
 % u(:,51) = 0;                                       % S6
 % u(:,52) = 0;                                       % S7
 % u(:,53) = 0;                                       % S8
-u(:,54) = 4.0*u(:,30);                               % m8
-u(:,55) = u(:,30) + u(:,37);                         % mks2
-u(:,56) = u(:,5);                                    % msqm
-u(:,57) = u(:,5);                                    % mtm
-u(:,58) = 2.0*u(:,30);                               % n4
-u(:,59) = u(:,30);                                   % eps2
-%u(:,60) = 0;                                       % Z0 (mean sea level)
 
 %% Trim to only the user-requested constituents
 
